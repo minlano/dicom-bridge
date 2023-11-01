@@ -1,57 +1,37 @@
 package com.example.dicombridge.service;
 
-import com.google.gson.Gson;
-import lombok.RequiredArgsConstructor;
-import org.dcm4che3.data.Attributes;
-import org.dcm4che3.data.Tag;
-import org.dcm4che3.io.DicomInputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-
 @Service
-@RequiredArgsConstructor
 public class ImageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
-    private final StorageService storageService;
-
-    public String getImages() throws IOException {
-        String projectPath = System.getProperty("user.home") + "\\Desktop";
-        String filePath = projectPath + "\\dicom\\DCM-Sample4KDT\\CR-Chest PA\\1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
-
-
-
-        logger.info("FilePath : {}", filePath);
-
-        File file = new File(filePath);
-        DicomInputStream dis = new DicomInputStream(file);
-
-        // metadata 확인
-        Attributes metadata = dis.getFileMetaInformation();
-        logger.info("Metadata : {}", metadata.toString());
-
-        // tag 확인
-        Attributes dataset = dis.readDataset();
-        int[] tags = dataset.tags();
-        logger.info("Total tag found in dicom file: {}", tags);
-//        for(int tag: tags) {
-//            logger.info("VR : {}", dataset.getVR(tag).toString());
+//    public void displayDicomImage() {
+//        String dicomFilePath = "C:/Users/TJ/Documents/선소현/DCM-Sample4KDT/CT-Abdomen/1.3.12.2.1107.5.1.4.65266.30000018122721584475300010337.dcm";
+//
+//        try (DicomInputStream din = new DicomInputStream(new File(dicomFilePath))) {
+//            Attributes attributes = din.readFileMetaInformation();
+//            int width = attributes.getInt(org.dcm4che3.data.Tag.Columns, 1);
+//            int height = attributes.getInt(org.dcm4che3.data.Tag.Rows, 1);
+//
+//
+//
+//            // 이미지를 100x100 크기로 스케일링
+//            if (dicomImage != null) {
+//                dicomImage = scaleImage(dicomImage, 100, 100);
+//
+//                // 스케일링된 이미지를 화면에 출력
+//                ImageIO.write(dicomImage, "png", new File("scaled_image.png"));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.err.println("Error reading DICOM file.");
 //        }
+//    }
+//
+//    private BufferedImage scaleImage(BufferedImage sourceImage, int width, int height) {
+//        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+//        scaledImage.getGraphics().drawImage(sourceImage.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+//        return scaledImage;
+//    }
 
-        // pixeldata -> json 변환
-        Object pixelData = dataset.getValue(Tag.PixelData);
-        Gson gson = new Gson();
-        String pixelDataJson = gson.toJson(pixelData);
-
-//        Object sopClassUid = dataset.getValue(Tag.SOPClassUID);
-//        Object sopInstanceUid =  dataset.getValue(Tag.SOPInstanceUID);
-//        logger.info("SOPClassUID: {}", sopClassUid.toString());
-//        logger.info("SOPInstanceUID: {}", sopInstanceUid.toString());
-
-        // dicom 이미지 확인
-        return pixelDataJson;
 }
