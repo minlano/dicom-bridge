@@ -5,33 +5,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImageService {
 
-//    public void displayDicomImage() {
-//        String dicomFilePath = "C:/Users/TJ/Documents/선소현/DCM-Sample4KDT/CT-Abdomen/1.3.12.2.1107.5.1.4.65266.30000018122721584475300010337.dcm";
+//    public byte[] getUID(String referencedSOPInstanceUID) throws IOException {
+//        // DICOM 파일 경로
+//        String dicomFilePath = "C:/Users/TJ/Documents/선소현/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
 //
-//        try (DicomInputStream din = new DicomInputStream(new File(dicomFilePath))) {
-//            Attributes attributes = din.readFileMetaInformation();
-//            int width = attributes.getInt(org.dcm4che3.data.Tag.Columns, 1);
-//            int height = attributes.getInt(org.dcm4che3.data.Tag.Rows, 1);
+//        File dicomFile = new File(dicomFilePath);
 //
-//
-//
-//            // 이미지를 100x100 크기로 스케일링
-//            if (dicomImage != null) {
-//                dicomImage = scaleImage(dicomImage, 100, 100);
-//
-//                // 스케일링된 이미지를 화면에 출력
-//                ImageIO.write(dicomImage, "png", new File("scaled_image.png"));
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.err.println("Error reading DICOM file.");
-//        }
-//    }
-//
-//    private BufferedImage scaleImage(BufferedImage sourceImage, int width, int height) {
-//        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-//        scaledImage.getGraphics().drawImage(sourceImage.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
-//        return scaledImage;
-//    }
+//        Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
 
+
+//        Attributes attrs = dcm2Jpg.loadDicomObject(dicomFile);
+//
+//        String sopInstanceUID = attrs.getString(Attributes.Tags.SOPInstanceUID);
+
+//        if (referencedSOPInstanceUID.equals(sopInstanceUID)) {
+//            // 참조된 이미지를 찾았을 경우
+//
+//            BufferedImage image = dcm2Jpg.readImageFromDicomInputStream(dicomFile);
+//
+//            // 이미지를 JPEG로 변환
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            ImageIO.write(image, "jpeg", baos);
+//
+//            return baos.toByteArray();
+//        }
+
+//        return null; // 참조된 이미지를 찾지 못한 경우 또는 오류 발생시
+//    }
 }
