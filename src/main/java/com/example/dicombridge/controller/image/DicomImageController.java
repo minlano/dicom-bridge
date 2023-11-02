@@ -1,4 +1,4 @@
-package com.example.dicombridge.controller;
+package com.example.dicombridge.controller.image;
 
 import org.dcm4che3.data.Attributes;
 

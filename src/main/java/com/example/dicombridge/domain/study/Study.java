@@ -1,4 +1,4 @@
-package com.example.dicombridge.domain;
+package com.example.dicombridge.domain.study;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,4 +57,23 @@ public class Study {
     private Integer ai_number_of_findings;
     private String ai_abnormal_yn;
     private String ai_finding;
+    private Integer delflag;
+
+    public Study(StudyRequestDto studytabRequestDto) {
+        this.studyinsuid = studytabRequestDto.getStudyinsuid();
+        this.studydate = studytabRequestDto.getStudydate();
+        this.accessnum = studytabRequestDto.getAccessnum();
+        this.studyid = studytabRequestDto.getStudyid();
+        this.studydesc = studytabRequestDto.getStudydesc();
+        this.modality = studytabRequestDto.getModality();
+        this.bodypart = studytabRequestDto.getBodypart();
+        this.pid = studytabRequestDto.getPid();
+        this.pname = studytabRequestDto.getPname();
+        this.psex = studytabRequestDto.getPsex();
+        this.pbirthdatetime = studytabRequestDto.getPbirthdatetime();
+        this.patage = studytabRequestDto.getPatage();
+        this.seriescnt = studytabRequestDto.getSeriescnt();
+        this.imagecnt = studytabRequestDto.getImagecnt();
+        this.delflag = studytabRequestDto.getDelflag();
+    }
 }

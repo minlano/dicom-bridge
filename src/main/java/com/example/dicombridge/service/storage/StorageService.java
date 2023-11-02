@@ -1,4 +1,4 @@
-package com.example.dicombridge.service;
+package com.example.dicombridge.service.storage;
 
 import org.springframework.stereotype.Service;
 import jcifs.smb.*;

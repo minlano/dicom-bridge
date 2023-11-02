@@ -1,4 +1,4 @@
-package com.example.dicombridge.controller;
+package com.example.dicombridge.controller.image;
 import org.dcm4che3.io.DicomInputStream;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

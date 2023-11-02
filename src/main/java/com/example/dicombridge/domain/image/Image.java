@@ -1,4 +1,4 @@
-package com.example.dicombridge.domain;
+package com.example.dicombridge.domain.image;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

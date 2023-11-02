@@ -1,6 +1,6 @@
-package com.example.dicombridge.controller;
+package com.example.dicombridge.controller.image;
 
-import com.example.dicombridge.service.ImageService;
+import com.example.dicombridge.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 

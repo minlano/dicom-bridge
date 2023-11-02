@@ -1,5 +1,6 @@
 package com.example.dicombridge.controller.storage;
 
+import com.example.dicombridge.service.image.DicomImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 public class testController {

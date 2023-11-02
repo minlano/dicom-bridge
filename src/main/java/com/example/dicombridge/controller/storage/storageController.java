@@ -1,7 +1,8 @@
 package com.example.dicombridge.controller.storage;
 
-import com.example.dicombridge.domain.study.Studytab;
-import com.example.dicombridge.domain.study.StudytabRepository;
+import com.example.dicombridge.domain.study.Study;
+import com.example.dicombridge.repository.StudyRepository;
+import com.example.dicombridge.service.image.DicomImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +25,12 @@ public class storageController {
     @Autowired
     private DicomImageService dicomImageService;
 
-    private final StudytabRepository studytabRepository;
+    private final StudyRepository studytabRepository;
 
     @GetMapping("/findStudykey/{studykey}")
     //public Studytab getStudyByStudykey(@RequestBody StudytabRequestDto studytabRequestDto){
-    public Studytab getStudy(@PathVariable int studykey){
-        Studytab studytab = null;
+    public Study getStudy(@PathVariable int studykey){
+        Study studytab = null;
         // int studykey = studytabRequestDto.getStudykey();
         studytab = studytabRepository.findByStudykey(studykey);
         return studytab;
@@ -37,7 +38,7 @@ public class storageController {
     }
 
     @GetMapping("/list")
-    public List<Studytab> getUserAll() {
+    public List<Study> getUserAll() {
         return studytabRepository.findAll();
     }
 
