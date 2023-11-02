@@ -4,22 +4,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "IMAGETAB")
-public class Image {
-    @Id
-    private Integer studykey;
-    @Id
-    private Integer serieskey;
-    @Id
-    private Integer imagekey;
+public class Image implements Serializable {
+//    @Id
+//    private Integer studykey;
+//    @Id
+//    private Integer serieskey;
+//    @Id
+//    private Integer imagekey;
+    @EmbeddedId
+    private ImageId imageId;
     private String studyinsuid;
     private String seriesinsuid;
     private String sopinstanceuid;
