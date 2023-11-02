@@ -1,6 +1,6 @@
-package com.example.dicombridge.controller;
+package com.example.dicombridge.controller.storage;
 
-import com.example.dicombridge.service.ImageService;
+import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

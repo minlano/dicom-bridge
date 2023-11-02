@@ -1,4 +1,4 @@
-package com.example.dicombridge.controller.storage;
+package com.example.dicombridge.service.image;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.example.dicombridge.service;
+package com.example.dicombridge.service.image;
 
 import org.springframework.stereotype.Service;
 
