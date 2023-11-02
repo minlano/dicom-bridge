@@ -7,13 +7,14 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "IMAGETAB")
-public class Image {
+public class Image implements Serializable {
     @Id
     private Integer studykey;
     @Id

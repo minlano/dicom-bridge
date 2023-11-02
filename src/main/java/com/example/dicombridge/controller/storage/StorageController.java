@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/v1/test")
 @RequiredArgsConstructor
 @RestController
-public class storageController {
+public class StorageController {
 
     @Autowired
     private DicomImageService dicomImageService;

@@ -15,9 +15,9 @@ public class StorageRestController {
 
     private final ImageService imageService;
 
-    @GetMapping("/images")
-    public String getImagesData() throws IOException {
-        String pixelDataToJson = imageService.getImages();
-        return pixelDataToJson;
-    }
+//    @GetMapping("/images")
+//    public String getImagesData() throws IOException {
+//        String pixelDataToJson = imageService.getImages();
+//        return pixelDataToJson;
+//    }
 }

@@ -5,6 +5,6 @@
 </head>
 <body>
     <h1>DICOM Image</h1>
-    <img src="/displayImage" alt="DICOM Image">
+    <img src="data:image/jpeg;base64,${dicomImage}" alt="DICOM Image">
 </body>
 </html>
