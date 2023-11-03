@@ -12,9 +12,7 @@ public class MainController {
     public String index(){return "index";}
 
 
-@GetMapping("/test")
-public String test() {
-        return  "test";
-    }
+@GetMapping("/testImageMJ")
+public String testImageMJ(){return "testImageMJ";}
 
 }
