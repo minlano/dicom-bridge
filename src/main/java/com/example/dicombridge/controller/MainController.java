@@ -15,10 +15,4 @@ public class MainController {
 @GetMapping("/testImageMJ")
 public String testImageMJ(){return "testImageMJ";}
 
-@GetMapping("/test2")
-public String test2(){return "test2";}
-
-    @GetMapping("/list")
-    public String list(){return "list";}
-
 }
