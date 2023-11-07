@@ -17,6 +17,10 @@ public class UserController {
         return "showImage";
     }
 
+    @GetMapping("/viewer")
+    public String viewer(){
+        return "viewer";
+    }
 
 
 //    @GetMapping("/showDcm")
