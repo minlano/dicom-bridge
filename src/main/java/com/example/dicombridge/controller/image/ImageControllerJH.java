@@ -1,45 +1,14 @@
 package com.example.dicombridge.controller.image;
 
 
-import org.apache.commons.io.IOUtils;
-import org.apache.tomcat.util.file.ConfigurationSource;
-import org.dcm4che3.data.Attributes;
-import org.dcm4che3.data.Tag;
-import org.dcm4che3.imageio.plugins.dcm.DicomImageReadParam;
-import org.dcm4che3.imageio.plugins.dcm.DicomImageReader;
-import org.dcm4che3.imageio.plugins.dcm.DicomImageReaderSpi;
-import org.dcm4che3.io.DicomInputStream;
-import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.spi.IIORegistry;
-import javax.imageio.stream.FileImageInputStream;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
-import java.util.Iterator;
-
 
 @Controller
-public class DicomImageController {
+public class ImageControllerJH {
 //    @GetMapping("/viewDicomImage")
 //    public String viewDicomImage(Model model) {
 //        System.out.println("controller 확인");
@@ -270,9 +239,6 @@ public class DicomImageController {
 
         return "viewPage"; // JSP 페이지 이름 (이를 사용하여 메타데이터를 표시)
     }
-
-
-
 }
 
     
