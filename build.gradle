@@ -54,6 +54,10 @@ dependencies {
     /* Test */
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'
+
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0' // 원하는 버전을 지정
+
+
 }
 
 tasks.named('test') {

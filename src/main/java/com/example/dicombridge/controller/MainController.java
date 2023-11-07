@@ -15,4 +15,7 @@ public class MainController {
 @GetMapping("/testImageMJ")
 public String testImageMJ(){return "testImageMJ";}
 
+    @GetMapping("/viewPage")
+    public String viewPage(){return  "viewPage";}
+
 }
