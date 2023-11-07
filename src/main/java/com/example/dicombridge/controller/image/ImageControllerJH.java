@@ -1,30 +1,21 @@
 package com.example.dicombridge.controller.image;
 
 
-import org.dcm4che3.data.Attributes;
-import org.dcm4che3.data.Tag;
-import org.dcm4che3.imageio.plugins.dcm.DicomImageReadParam;
-import org.dcm4che3.imageio.plugins.dcm.DicomImageReader;
-import org.dcm4che3.io.DicomInputStream;
 import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.FileImageInputStream;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Iterator;
 
 
 @Controller
-public class DicomImageController {
+public class ImageControllerJH {
 //    @GetMapping("/viewDicomImage")
 //    public String viewDicomImage(Model model) {
 //        System.out.println("controller 확인");
