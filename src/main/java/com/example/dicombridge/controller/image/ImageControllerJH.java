@@ -1,18 +1,11 @@
 package com.example.dicombridge.controller.image;
 
 
-import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.Base64;
-
 
 @Controller
 public class ImageControllerJH {
@@ -69,29 +62,29 @@ public class ImageControllerJH {
 //
 //        return "dicomImageView";
 //    }
-    @GetMapping("/viewDicomImage")
-    public String showDicomImage(Model model) {
-        String dicomImagePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
-
-        try {
-            File dicomFile = new File(dicomImagePath);
-
-            Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
-
-            BufferedImage image = dcm2Jpg.readImageFromDicomInputStream(dicomFile);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(image, "jpg", baos);
-            byte[] imageBytes = baos.toByteArray();
-            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
-            model.addAttribute("dicomImageBase64", base64Image);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return "dicomImageView";
-    }
+//    @GetMapping("/viewDicomImage")
+//    public String showDicomImage(Model model) {
+//        String dicomImagePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+//
+//        try {
+//            File dicomFile = new File(dicomImagePath);
+//
+//            Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
+//
+//            BufferedImage image = dcm2Jpg.readImageFromDicomInputStream(dicomFile);
+//
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            ImageIO.write(image, "jpg", baos);
+//            byte[] imageBytes = baos.toByteArray();
+//            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+//
+//            model.addAttribute("dicomImageBase64", base64Image);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return "viewPage";
+//    }
 //    @GetMapping("/viewDicomImage")
 //    public String showDicomImage(Model model) {
 //        String dicomImagePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
@@ -204,6 +197,48 @@ public class ImageControllerJH {
 //
 //        return "dicomImageView";
 //    }
+
+//    @GetMapping("/viewDicomImage")
+//    public String showDicomImage(Model model) {
+//        String dicomImagePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+//
+//        try {
+//            File dicomFile = new File(dicomImagePath);
+//
+//            Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
+//            BufferedImage image = dcm2Jpg.readImageFromDicomInputStream(dicomFile);
+//
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            ImageIO.write(image, "jpg", baos);
+//            byte[] imageBytes = baos.toByteArray();
+//
+//            // 이미지를 Base64로 인코딩
+//            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+//
+//            // Base64 인코딩된 이미지를 모델에 추가
+//            model.addAttribute("dicomImageBase64", base64Image);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return "viewPage";
+//    }
+    @GetMapping("/viewDicomImage")
+    public String viewDicomImage(Model model) {
+        // DICOM 이미지 파일 경로
+        String dicomFilePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+
+        File dicomFile = new File(dicomFilePath);
+//
+//            // DICOM 파일 메타데이터 읽기
+//            DicomInputStream dis = new DicomInputStream(dicomFile);
+//            Attributes attributes = dis.readDataset();
+
+        // DICOM 메타데이터를 모델에 추가
+        model.addAttribute("dicomMetadata", dicomFile);
+
+        return "viewPage"; // JSP 페이지 이름 (이를 사용하여 메타데이터를 표시)
+    }
 }
 
     
