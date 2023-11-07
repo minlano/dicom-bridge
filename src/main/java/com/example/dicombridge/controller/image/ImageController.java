@@ -17,10 +17,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.Attributes;
 
 
@@ -31,7 +28,18 @@ public class ImageController {
     @GetMapping("/showDicomImage")
     public String showDicomImage(HttpServletResponse response) {
         // 이미지 파일 경로
-        String dicomImagePath = "C:/Users/TJ/Documents/선소현/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+        String dicomImagePath = "C:/Users/TJ/Desktop/dicom/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+
+//        Properties properties =
+//        System.setProperties("C:/Users/TJ/pacs/dcm4che-5.31.0/lib/windows-x86-64");
+        System.setProperty("java.library.path", "C:/Users/TJ/pacs/dcm4che-5.31.0/lib/windows-x86-64");
+
+        String libraryPath = System.getProperty("java.library.path");
+        String[] libraryPath2 = libraryPath.split(System.getProperty("path.separator"));
+
+        for(String path : libraryPath2) {
+            System.out.println(path);
+        }
 
         try {
             File dicomFile = new File(dicomImagePath);
