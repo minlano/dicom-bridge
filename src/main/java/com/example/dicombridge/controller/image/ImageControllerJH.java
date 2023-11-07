@@ -260,7 +260,7 @@ public class DicomImageController {
         String dicomFilePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
 
         File dicomFile = new File(dicomFilePath);
-
+//
 //            // DICOM 파일 메타데이터 읽기
 //            DicomInputStream dis = new DicomInputStream(dicomFile);
 //            Attributes attributes = dis.readDataset();
