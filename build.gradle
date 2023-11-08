@@ -3,7 +3,6 @@ plugins {
     id 'war'
     id 'org.springframework.boot' version '2.7.17'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-
 }
 
 group = 'com.example'
@@ -44,10 +43,6 @@ dependencies {
     /* dcm4che */
     implementation fileTree(dir: '../dcm4che-5.31.0/lib')
 
-
-    /* GSON */
-    implementation 'com.google.code.gson:gson:2.9.1'
-
     /* JCIFS */
     implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
 
@@ -55,9 +50,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0' // 원하는 버전을 지정
-
-
+    /* DevTools */
+    implementation  'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {

@@ -1,0 +1,220 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#viewer {
+	background: #423F3E;
+	display: grid;
+	grid-template-columns: 0.5fr 9.5fr;
+	grid-template-rows: 1fr 9fr;
+	grid-template-areas:
+    "header header"
+    "nav contents"
+    "nav contents";
+
+	height: 100vh;
+}
+#nav {
+	height: 100%;
+}
+
+#image-container, #thumbnail-container{
+	height: calc(100% - 101px);
+}
+
+header {
+	grid-area: header;
+	background-color: #423F3E;
+	align-items: center;
+	display: flex;
+	margin: 20px 40px 20px ;
+}
+
+h1 {
+	font-size: 40pt;
+	margin-left: 20px;
+	color: white;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+nav {
+	border-radius: 15px;
+	grid-area: nav;
+	background-color: #2B2B2B;
+	margin: 0px 15px 40px 40px;
+}
+
+#viewer-contents {
+	grid-area: contents;
+	margin: 0px 15px 40px 0px;
+}
+
+
+aside {
+	border-radius: 15px;
+	background-color: #2B2B2B;
+	margin: 0px 40px 0px 0px;
+}
+
+aside ul {
+	display: flex;
+	margin : 0px 20px;
+	flex-wrap: wrap;
+	list-style: none;
+	padding: 0;
+}
+
+aside ul li {
+	text-align: center;
+	margin: 5px;
+	padding: 10px;
+}
+
+aside li div, nav li div {
+	display: block;
+	text-align: center;
+	margin-top: 5px;
+}
+
+aside ul li:hover {
+	background-color: black;
+}
+
+
+ul {
+	margin: 20px;
+	list-style: none;
+	color: white;
+	font-size: 20px;
+}
+
+li {
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+
+nav li img {
+	width: 40px; /* 원하는 너비 설정 */
+	height: auto; /* 높이를 자동으로 조정하여 가로 세로 비율 유지 */
+}
+
+nav li {
+	margin-bottom: 50px;
+}
+
+
+
+
+.image-container .hover-image {
+	display: none;
+}
+
+.image-container .normal-image {
+	display: block;
+}
+
+.nav_li:hover .hover-image {
+	display: block;
+}
+
+.nav_li:hover .normal-image {
+	display: none;
+}
+
+.image-container:hover .hover-image {
+	display: block;
+}
+
+.image-container:hover .normal-image {
+	display: none;
+}
+
+.image-container {
+	display: flex;
+	align-items: center; /* 수직 가운데 정렬 */
+	justify-content: center; /* 수평 가운데 정렬 */
+}
+
+
+nav ul li:nth-child(5),
+nav ul li:nth-child(6) {
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	margin-top: auto;
+}
+
+nav ul li:nth-child(5){
+	padding-top: 520px;
+}
+nav ul li:nth-child(1){
+	padding-top: 20px;
+}
+
+
+/* thumbnail */
+section#thumbnail-container {
+	max-width: 350px;
+	border-radius: 15px;
+	background-color: #2B2B2B;
+	margin: 15px 15px 40px 0px;
+	display: flex;
+	float: left;
+}
+
+#thumbnail-container table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed; /* 테이블의 너비를 고정합니다. */
+}
+
+#thumbnail-container thead {
+	color: white;
+	text-align: center;
+	font-weight: bold;
+	border-bottom: 1px solid white;
+	height: 80px;
+	font-size: 20pt
+}
+
+#thumbnail-container tbody {
+	text-align: center;
+}
+
+#thumbnail-container tbody td {
+
+}
+
+#thumbnail-container img {
+	max-width: 90%; /* 이미지의 최대 너비를 부모 요소의 너비에 맞춥니다. */
+	height: auto; /* 이미지의 높이를 자동으로 조정하여 이미지 비율을 유지합니다. */
+	/*margin: 7px 10px 0px 10px;*/
+	border: 2px solid gray;
+}
+
+
+section#image-container {
+	background-color: #2B2B2B;
+	margin: 15px 40px 40px 15px;
+
+	display: grid; /* 이미지 컨테이너를 그리드 컨테이너로 설정합니다. */
+	grid-template-columns: repeat(2, 1fr); /* 2개의 열을 만듭니다. */
+	grid-template-rows: repeat(2, 1fr); /* 2개의 행을 만듭니다. */
+	gap: 5px; /* 이미지 사이의 간격을 조절합니다. */
+}
+
+#image-container .image {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: lightgray;
+	border: 2px solid gray;
+	max-width: 100%;
+	/*max-height: calc(100% - 101px);*/
+}
+
+#image-container .image img{
+	height: 100%;
+}
