@@ -86,6 +86,10 @@
         max-width: 100%;
         max-height: 100%;
     }
+    .cornerstone-element {
+        width: 100%;
+        height: 100%;
+    }
 
 </style>
 <head>
@@ -134,8 +138,8 @@
                     <div>이미지레이아웃</div>
                 </div>
                 <div class="contents">
-                    <div id="dicomImage">
-
+                    <div class="image-canvas-wrapper">
+                        <div id="element" class="cornerstone-element"></div>
                     </div>
                 </div>
             </div>
@@ -149,16 +153,40 @@
     <!-- JavaScript 코드를 포함하여 DICOM 이미지를 표시합니다 -->
 
         // DICOM 이미지를 표시할 요소를 가져옵니다
-        const dicomImageElement = document.getElementById('dicomImage');
+        const element = document.getElementById('element');
 
-        // DICOM 이미지를 렌더링하기 위한 코드를 작성합니다
-        // 예: CornerstoneJS를 사용하여 DICOM 이미지를 표시
-        cornerstone.enable(dicomImageElement);
+        // CornerstoneWADOImageLoader를 설정합니다
+        cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
+        cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
+        cornerstoneWADOImageLoader.configure({
+            beforeSend: function(xhr) {
+                // 필요한 경우 인증 또는 헤더를 추가할 수 있습니다.
+                // xhr.setRequestHeader('Authorization', 'Bearer YOUR_TOKEN');
+            },
+        });
 
-        // 이미지를 로드하고 표시합니다
-        const imageId = '/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm'; // DICOM 이미지 파일 경로
-        cornerstone.loadImage(imageId).then(image => {
-        cornerstone.displayImage(dicomImageElement, image);
+
+    // 이미지를 로드하고 표시합니다
+    const imageId = 'wadouri:/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm'; // DICOM 이미지 파일 경로
+
+    // 이미지를 표시
+    cornerstone.loadImage(imageId).then(image => {
+        cornerstone.displayImage(element, image);
+        let viewport = {
+            invert: false,
+            pixelReplication: false,
+            voi: {
+                windowWidth: 400,
+                windowCenter: 200
+            },
+            scale: 1.4,
+            translation: {
+                x: 0,
+                y: 0
+            },
+        };
+        cornerstone.setViewport(element, viewport);
+        cornerstone.updateImage(element);
     });
 
 </script>
