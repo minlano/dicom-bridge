@@ -226,7 +226,7 @@ public class ImageControllerJH {
     @GetMapping("/viewDicomImage")
     public String viewDicomImage(Model model) {
         // DICOM 이미지 파일 경로
-        String dicomFilePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+        String dicomFilePath = "/Users/kimminjae/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
 
         File dicomFile = new File(dicomFilePath);
 //
