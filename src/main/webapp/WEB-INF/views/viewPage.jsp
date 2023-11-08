@@ -91,6 +91,12 @@
 <head>
 
     <title>Title</title>
+    <script src="https://unpkg.com/cornerstone-core/dist/cornerstone.js"></script>
+    <script src="https://unpkg.com/cornerstone-core/dist/cornerstone.min.js"></script>
+    <script src="https://unpkg.com/dicom-parser@1.8.21/dist/dicomParser.js"></script>
+
+<%--    <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>--%>
+<%--    <script src="https://unpkg.com/cornerstone-core"></script>--%>
 </head>
 <body>
 <div id = "view">
@@ -134,34 +140,13 @@
                     <div>이미지레이아웃</div>
                 </div>
                 <div class="contents">
-                    <div id="dicomImage">
-
-                    </div>
+                    <button id="dicomImage" height="20" width="20">Hi</button>
+                    <img id="dicom">
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="https://unpkg.com/cornerstone-core"></script>
-<script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
-<script src="https://cdn.jsdelivr.net/npm/dicom-parser"></script>
-<script>
-    <!-- JavaScript 코드를 포함하여 DICOM 이미지를 표시합니다 -->
-
-        // DICOM 이미지를 표시할 요소를 가져옵니다
-        const dicomImageElement = document.getElementById('dicomImage');
-
-        // DICOM 이미지를 렌더링하기 위한 코드를 작성합니다
-        // 예: CornerstoneJS를 사용하여 DICOM 이미지를 표시
-        cornerstone.enable(dicomImageElement);
-
-        // 이미지를 로드하고 표시합니다
-        const imageId = '/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm'; // DICOM 이미지 파일 경로
-        cornerstone.loadImage(imageId).then(image => {
-        cornerstone.displayImage(dicomImageElement, image);
-    });
-
-</script>
 
 </body>
 </html>

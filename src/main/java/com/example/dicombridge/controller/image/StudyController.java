@@ -13,6 +13,6 @@ public class StudyController {
     @GetMapping("/testImageMJ")
     public String testImageMJ(){return "testImageMJ";}
 
-    @GetMapping("/viewPageMJ")
-    public String viewPageMJ(){return "viewPageMJ";}
+    @GetMapping("/list")
+    public String list(){return "list";}
 }

@@ -76,7 +76,7 @@ public class ImageService {
     }
 
     private SmbFileInputStream getSmbFileInputStream(Image image) throws MalformedURLException, SmbException {
-        SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, image.getPath().replace('\\', '/') + "/" + image.getFname()), cifsContext);
+        SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, image.getPath().replace('/', '/') + "/" + image.getFname()), cifsContext);
         return new SmbFileInputStream(file);
     }
 
