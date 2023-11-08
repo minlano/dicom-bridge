@@ -1,11 +1,21 @@
 package com.example.dicombridge.controller.image;
 
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 public class ImageControllerJH {
@@ -223,21 +233,42 @@ public class ImageControllerJH {
 //
 //        return "viewPage";
 //    }
+//    @GetMapping("/viewDicomImage")
+//    public String viewDicomImage(Model model) {
+//        // DICOM 이미지 파일 경로
+//        String dicomFilePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+//
+//        File dicomFile = new File(dicomFilePath);
+////
+////            // DICOM 파일 메타데이터 읽기
+////            DicomInputStream dis = new DicomInputStream(dicomFile);
+////            Attributes attributes = dis.readDataset();
+//
+//        // DICOM 메타데이터를 모델에 추가
+//        model.addAttribute("dicomMetadata", dicomFile);
+//
+//        return "viewPage"; // JSP 페이지 이름 (이를 사용하여 메타데이터를 표시)
+//    }
+//    @GetMapping("/viewDicomImage")
+//    public String viewDicomImage(Model model) {
+//
+//        // DICOM 이미지 URL 생성
+//        String dicomImageUrl = "/"+ "dicom-images/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+//
+//        // DICOM 이미지 URL을 모델에 추가
+//        model.addAttribute("dicomImageUrl", dicomImageUrl);
+//
+//        return "viewPage"; // JSP 페이지 이름
+//    }
     @GetMapping("/viewDicomImage")
     public String viewDicomImage(Model model) {
-        // DICOM 이미지 파일 경로
-        String dicomFilePath = "/Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+        // DICOM 이미지의 wadouri URI를 설정
+        String dicomImageUri = "wadouri://localhost:8083/dicom-images/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+        //String dicomImageUri = "wadouri://Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+        // DICOM 이미지의 URI를 모델에 추가
+        model.addAttribute("dicomImageUri", dicomImageUri);
 
-        File dicomFile = new File(dicomFilePath);
-//
-//            // DICOM 파일 메타데이터 읽기
-//            DicomInputStream dis = new DicomInputStream(dicomFile);
-//            Attributes attributes = dis.readDataset();
-
-        // DICOM 메타데이터를 모델에 추가
-        model.addAttribute("dicomMetadata", dicomFile);
-
-        return "viewPage"; // JSP 페이지 이름 (이를 사용하여 메타데이터를 표시)
+        return "viewPage"; // JSP 페이지 이름
     }
 }
 
