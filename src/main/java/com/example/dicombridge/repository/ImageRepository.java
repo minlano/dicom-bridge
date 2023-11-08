@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, ImageId> {
     List<Image> findByImageIdStudykey(int studykey);
+    List<Image> findBystudyinsuid(String studyinsuid);//studyinsuid로 imagetab 조회
 
 }

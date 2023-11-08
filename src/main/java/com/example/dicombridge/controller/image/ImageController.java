@@ -17,4 +17,7 @@ public class ImageController {
     public String getTestPage() {
         return "test";
     }
+
+    @GetMapping("/testMJ")
+    public String getTestMJPage() {return "testMJ"; }
 }

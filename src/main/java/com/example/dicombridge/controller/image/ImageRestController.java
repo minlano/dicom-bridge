@@ -2,22 +2,13 @@ package com.example.dicombridge.controller.image;
 
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static org.dcm4che3.dict.GE_1_2_840_113708_794_1_1_2_0.PrivateTag.MediaType;
 
 @RestController
 @RequestMapping("/studies")
@@ -35,4 +26,22 @@ public class ImageRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    /*****************************************************************************************
+     ***************리스트에 들어가면 studyinsuid가 전부 동일, studyinsuid가 같은 파일 찾기**********
+     ****************리스트에서 클릭시 출력되는 전체 image*****************************************
+     *****************************************************************************************/
+
+    @PostMapping("/takeuidgiveseriesnum/{studyinsuid}")
+    public ResponseEntity<Map<String, String>> getSeriesNum(@PathVariable String studyinsuid, Model model) throws IOException{
+        //List list = imageService.getSeriesNum(studyinsuid);
+        //System.out.println(list.size());
+        Map<String, String> images = imageService.getSeriesNum(studyinsuid);
+        if(!images.isEmpty()) {
+            return new ResponseEntity<>(images, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
