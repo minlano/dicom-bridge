@@ -58,6 +58,7 @@ public class Study {
     private String ai_abnormal_yn;
     private String ai_finding;
     private Integer delflag;
+    private Integer verifyflag;
 
     public Study(StudyRequestDto studytabRequestDto) {
         this.studyinsuid = studytabRequestDto.getStudyinsuid();

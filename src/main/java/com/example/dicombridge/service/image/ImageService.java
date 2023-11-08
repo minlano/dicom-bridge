@@ -134,4 +134,34 @@ public class ImageService {
                                                         ));
         return fileRead(map);
     }
+    /*****************************************************************************************
+     ***************studyinsuid를 이용하여 image 조회 및 map에 정보를 담고 fileRead(map)**********
+     *****************************************************************************************/
+    public Map<String, String> getSeriesNum(String studyinsuid) throws IOException  {
+        List<Image> images = imageRepository.findBystudyinsuid(studyinsuid);
+
+        Map<String, Image> map = images.stream().collect(Collectors.toMap(
+                i -> i.getFname(),
+                i -> i
+        ));
+        return fileRead(map);
+    }
+
+    /* thumbnail */
+    public Map<String, String> getThumbnail(int studyKey) throws IOException {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            if (image.getImageId().getImagekey() == 1) {
+                map.put(image.getFname(), image);
+            }
+        }
+
+        return fileRead(map);
+    }
+
+
+
 }

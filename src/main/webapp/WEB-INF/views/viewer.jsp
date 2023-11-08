@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>DicomBridge</title>
     <link rel="stylesheet" href="/style/viewergrid.css">
 </head>
 <body>
@@ -120,26 +120,10 @@
             </ul>
         </aside>
 
-        <section id="thumbnail-container">
+        <section id="thumbnail-container" style="display: none">
             <table>
                 <thead><tr><th>썸네일</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td><img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지1 설명"></td>
-                    </tr>
-                    <tr>
-                        <td><img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지1 설명"></td>
-                    </tr>
-                    <tr>
-                        <td><img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지1 설명"></td>
-                    </tr>
-                    <tr>
-                        <td><img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지1 설명"></td>
-                    </tr>
-    <%--                <tr>--%>
-    <%--                    <td><img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지1 설명"></td>--%>
-    <%--                </tr>--%>
-                </tbody>
+                <tbody></tbody>
             </table>
         </section>
 
@@ -157,7 +141,6 @@
                 <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지4">
             </div>
         </section>
-
     </section>
 </div>
 </body>

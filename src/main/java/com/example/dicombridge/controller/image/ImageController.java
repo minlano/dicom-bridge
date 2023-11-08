@@ -10,4 +10,10 @@ public class ImageController {
     public String getTestPage() {
         return "test";
     }
+
+    @GetMapping("/viewer")
+    public String viewer() {
+        return "viewer";
+    }
+
 }

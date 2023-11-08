@@ -46,6 +46,8 @@ dependencies {
     /* JCIFS */
     implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
 
+    implementation  'org.springframework.boot:spring-boot-devtools'
+
     /* Test */
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'
