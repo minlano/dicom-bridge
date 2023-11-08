@@ -76,7 +76,7 @@ public class ImageService {
     }
 
     private SmbFileInputStream getSmbFileInputStream(Image image) throws MalformedURLException, SmbException {
-        SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, image.getPath().replace('/', '/') + "/" + image.getFname()), cifsContext);
+        SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, image.getPath().replace('\\', '/') + "/" + image.getFname()), cifsContext);
         return new SmbFileInputStream(file);
     }
 
@@ -146,4 +146,22 @@ public class ImageService {
         ));
         return fileRead(map);
     }
+
+    /* thumbnail */
+    public Map<String, String> getThumbnail(int studyKey) throws IOException {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            if (image.getImageId().getImagekey() == 1) {
+                map.put(image.getFname(), image);
+            }
+        }
+
+        return fileRead(map);
+    }
+
+
+
 }

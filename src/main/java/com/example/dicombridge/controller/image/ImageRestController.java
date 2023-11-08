@@ -27,6 +27,18 @@ public class ImageRestController {
         }
     }
 
+    @PostMapping("/getThumbnail/{studyKey}")
+    public ResponseEntity<Map<String, String>> getThumbnailData(@PathVariable String studyKey, Model model) throws IOException {
+        Map<String, String> images = imageService.getThumbnail(Integer.valueOf(studyKey));
+
+        if(!images.isEmpty()) {
+            return new ResponseEntity<>(images, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     /*****************************************************************************************
      ***************리스트에 들어가면 studyinsuid가 전부 동일, studyinsuid가 같은 파일 찾기**********
      ****************리스트에서 클릭시 출력되는 전체 image*****************************************
