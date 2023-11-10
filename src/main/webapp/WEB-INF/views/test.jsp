@@ -4,12 +4,19 @@
 <head>
     <title>Title</title>
     <script src="/script/showImage.js"></script>
-    <script src="https://unpkg.com/cornerstone-core/dist/cornerstone.js"></script>
+    <script src="https://unpkg.com/cornerstone-core"></script>
+    <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
+    <script src="https://unpkg.com/dicom-parser@1.8.21/dist/dicomParser.js"></script>
+    <script src="https://unpkg.com/cornerstone-core"></script>
+    <script src="https://unpkg.com/cornerstone-math"></script>
+    <script src="https://unpkg.com/cornerstone-tools"></script>
+    <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
 </head>
 <body>
     <div>
-        <a href="#" onclick="showDicomImages('4')">Convert DCM to Images</a>
+        <a href="#" onclick="showDicomImages('18')">Convert DCM to Images</a>
     </div>
     <div id="imagesContainer"></div>
+
 </body>
 </html>

@@ -13,9 +13,8 @@ public class ImageController {
         return "test";
     }
 
-    @GetMapping("/viewer/{studyinsuid}")
-    public String viewer(@PathVariable String studyinsuid) {
-        System.out.println("studyinsuid --> " + studyinsuid);
+    @GetMapping("/viewer")
+    public String viewer() {
         return "viewer";
     }
     @GetMapping("/testMJ")
@@ -31,5 +30,7 @@ public class ImageController {
     public String viewPageMJ4() {
         return "viewPageMJ4";
     }
+
+
 
 }
