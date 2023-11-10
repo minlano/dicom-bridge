@@ -7,20 +7,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StudyService {
+    private final StudyRepository studyRepository;
 
-//    private StudyRepository studyRepository;
-//    public List<StudyResponseDto> getStudies() {
-//        List<Study> studyList = studyRepository.findAll();
-//
-//        List<StudyResponseDto> responseDtos = studyList.stream().forEach(study -> {
-//            new StudyResponseDto(study);
-//        });
-//
-//
-//        return ;
-//    }
+//    public StudyService(StudyRepository studyRepository) { this.studyRepository = studyRepository; }
+
+    public List<StudyResponseDto> getStudies() {
+        List<Study> studyList = studyRepository.findAll();
+        return studyList.stream()
+                        .map(StudyResponseDto::new)
+                        .collect(Collectors.toList());
+    }
 }

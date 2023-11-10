@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class StudyResponseDto {
+    private String studyinsuid;
     private String pid;
     private String pname;
     private String modality;
@@ -17,6 +18,7 @@ public class StudyResponseDto {
     private Integer verifyflag;
 
     public StudyResponseDto(Study study) {
+        this.studyinsuid = study.getStudyinsuid();
         this.pid = study.getPid();
         this.pname = study.getPname();
         this.modality = study.getModality();
