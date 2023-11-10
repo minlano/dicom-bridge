@@ -381,6 +381,10 @@ nav img {
     font-weight: bold;
 }
 
+.subTr:hover {
+    cursor: pointer;
+    background-color: darkolivegreen;
+}
 
 html {
     height: 100%;

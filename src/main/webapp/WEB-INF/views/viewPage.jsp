@@ -144,15 +144,98 @@
         </div>
     </div>
 </div>
-<script src="https://unpkg.com/cornerstone-core"></script>
-<script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://unpkg.com/cornerstone-core@2.6.1/dist/cornerstone.js"></script>
+<%--<script src="https://unpkg.com/cornerstone-core"></script>--%>
+<script src="https://unpkg.com/cornerstone-wado-image-loader@4.13.2/dist/cornerstoneWADOImageLoader.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dicom-parser@1.8.0/dist/dicomParser.js"></script>
+<scirpt src="https://unpkg.com/dicom-parser@1.8.21/dist/dicomParser.js"></scirpt>
+<%--<script src="https://unpkg.com/dicom-parser@1.8.21/dist/dicomParser.min.js"></script>--%>
 
 <!-- JavaScript 코드를 포함하여 DICOM 이미지를 표시합니다 -->
 <script>
     // DICOM 이미지를 표시할 요소를 가져옵니다
-    const element = document.getElementById('dicomImage');
+    $(document).ready(function() {
+        $.ajax({
+            url: "/studies/1",
+            type: "GET",
+            success: function(response) {
+                let val;
+                for(let key in response) {
+                    val = response[key];
+                }
 
+                // Base64 디코딩
+                var decodedData = atob(val);
+
+                // 바이너리 데이터로 변환
+                var binaryData = new Uint8Array(decodedData.length);
+                for (var i = 0; i < decodedData.length; i++) {
+                    binaryData[i] = decodedData.charCodeAt(i);
+                }
+
+                // cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
+                // cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
+
+                // var byteArray = new Uint8Array(binaryData.buffer);
+                const options = { TransferSyntaxUID: '1.2.840.10008.1.2' };
+                var dicomDataSet = dicomParser.parseDicom(binaryData, options);
+                console.log(dicomDataSet);
+                var studyInstanceUid = dicomDataSet.string('x0020000d');
+
+                 var rows = dicomDataSet.uint16('x00280010');
+                 var cols = dicomDataSet.uint16('x00280011');
+
+                 var windowCenter = dicomDataSet.floatString('x00281050');
+                 var windowWidth = dicomDataSet.floatString('x00281051');
+
+                 //gg
+                // var pixelData = dicomDataSet.getPixelData;
+                // console.log(pixelData);
+
+                 var minPixelValue = dicomDataSet.uint16('x00280106');
+                 var maxPixelValue = dicomDataSet.uint16('x00280107');
+                 var pixelDataElement = dicomDataSet.elements.x7fe00010;
+
+                 var pixelArray = new Uint16Array(dicomDataSet.byteArray.buffer, pixelDataElement.dataOffset, pixelDataElement.length / 2);
+                 // var pixelArray = new Uint16Array(dicomDataSet.byteArray.buffer);
+                console.log(pixelArray);
+
+                 var image = {
+                     // imageId: imageId,
+                     minPixelValue: minPixelValue,
+                     maxPixelValue: maxPixelValue,
+                     slope: 1.0,
+                     intercept: 0,
+                     windowCenter: windowCenter,
+                     windowWidth: windowWidth,
+                     render: cornerstone.renderGrayscaleImage,
+                     // getPixelData: pixelData,
+                     rows: rows,
+                     columns: cols,
+                     height: rows,
+                     width: cols,
+                     color: false,
+                     columnPixelSpacing: 1.09375,
+                     rowPixelSpacing: 1.09375,
+                     sizeInBytes: rows * cols * 2
+                 };
+
+                const element = document.getElementById('dicomImage');
+                element.style.width = '100%';
+                element.style.height = '500px';
+
+                cornerstone.enable(element);
+
+                cornerstone.displayImage(element, image);
+            },
+            error: function() {
+                alert("Error Occurred!");
+            }
+        });
+    });
+
+/*
     // CornerstoneWADOImageLoader를 설정합니다
     cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
     cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
@@ -231,7 +314,7 @@
         console.log('Study ID:', studyID);
         console.log('Series Number:', seriesNumber);
     });
-
+*/
 </script>
 
 </body>

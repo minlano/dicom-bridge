@@ -125,9 +125,28 @@ public class ImageService {
         return null;
     }
 
+    private Map<String, byte[]> fileByteRead(Map<String, Image> imageMap) throws SmbException, MalformedURLException {
+        Map<String, byte[]> fileByteMap = new HashMap<>();
+        for(String fname : imageMap.keySet()) {
+            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
+            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+            fileByteMap.put(fname, byteArrayOutputStream.toByteArray());
+        }
+        return fileByteMap;
+    }
+
+    /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
+    public Map<String, byte[]> getImageBytes(int studyKey) throws SmbException, MalformedURLException {
+        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
+        Map<String, Image> map = images.stream().collect(Collectors.toMap(
+                i -> i.getFname(),
+                i -> i
+        ));
+        return fileByteRead(map);
+    }
+
     public Map<String, String> getImages(int studyKey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
-
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
                                                             i -> i.getFname(),
                                                             i -> i

@@ -11,14 +11,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style/listgrid.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Dicom-bridge</title>
 </head>
 <body>
 <div id="container">
     <header>
         <h1>Dicom-bridge</h1>
-
     </header>
     <nav>
         <ul>
@@ -67,7 +65,7 @@
     </aside>
     <section id="mainContent">
         <table  id="mainTable">
-            <tr>
+            <tr id="trTitle">
                 <th>/</th>
                 <th>환자 아이디</th>
                 <th>환자 이름</th>
@@ -79,7 +77,6 @@
                 <th>이미지</th>
                 <th>Verify</th>
             </tr>
-            <!-- 두 번째 행과 데이터를 여기에 추가할 수 있습니다 -->
         </table>
     </section>
     <footer>
@@ -167,6 +164,7 @@
     </footer>
 </div>
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="/script/list.js"></script>
 </body>
 </html>

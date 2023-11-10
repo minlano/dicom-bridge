@@ -7,7 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -25,6 +28,20 @@ public class ImageRestController {
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
+    @GetMapping("/{studyKey}")
+    public ResponseEntity<Map<String, String>> getImagesData2(@PathVariable String studyKey) throws IOException {
+        Map<String, byte[]> dicomDatas = imageService.getImageBytes(Integer.valueOf(studyKey));
+
+        // DICOM 데이터를 Base64로 인코딩
+        Map<String, String> res = new HashMap<>();
+        for(String dicomData : dicomDatas.keySet()) {
+            String base64Encoded = Base64.getEncoder().encodeToString(dicomDatas.get(dicomData));
+            res.put(dicomData, base64Encoded);
+        }
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/getThumbnail/{studyKey}")
