@@ -1,4 +1,4 @@
-
+<%@ page import="java.util.Arrays" %>
 <%--
   Created by IntelliJ IDEA.
   User: jeonghoonoh
@@ -89,8 +89,6 @@
         max-height: 100%;
     }
 
-
-
 </style>
 <head>
 
@@ -138,7 +136,9 @@
                     <div>이미지레이아웃</div>
                 </div>
                 <div class="contents">
-                    <div id="dicomImage"></div>
+                    <div id="dicomImage">
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -146,91 +146,81 @@
 </div>
 <script src="https://unpkg.com/cornerstone-core"></script>
 <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
-<script src="https://cdn.jsdelivr.net/npm/dicom-parser@1.8.0/dist/dicomParser.js"></script>
+<script src="https://unpkg.com/dicom-parser@1.8.0/dist/dicomParser.js"></script>
+
+
 
 <!-- JavaScript 코드를 포함하여 DICOM 이미지를 표시합니다 -->
 <script>
-    // DICOM 이미지를 표시할 요소를 가져옵니다
-    const element = document.getElementById('dicomImage');
+    loadDICOMImageAndUpdateMetadata();
+    // DICOM 이미지와 메타데이터를 로드하고 업데이트하는 함수
+    function loadDICOMImageAndUpdateMetadata() {
 
-    // CornerstoneWADOImageLoader를 설정합니다
-    cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
-    cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
+        // DICOM 이미지를 표시할 요소를 가져옵니다
+        const element = document.getElementById('dicomImage');
 
-    // DICOM 이미지의 URI를 JSP 모델에서 가져옵니다
-    const dicomImageUri = "${dicomImageUri}"; // JSP 모델에서 DICOM 이미지 URI 가져오기
-    element.style.width = '100%'; // 원하는 너비 설정
-    element.style.height = '500px'; // 원하는 높이 설정
+        // CornerstoneWADOImageLoader를 설정합니다
+        cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
+        cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
 
-    cornerstone.enable(element);
-    cornerstone.loadImage(dicomImageUri).then(image => {
-        cornerstone.displayImage(element, image);
+        // DICOM 이미지의 URI를 JSP 모델에서 가져옵니다
+        const dicomImageUri = "${dicomImageUri}"; // JSP 모델에서 DICOM 이미지 URI 가져오기
+        console.log("dicomImageUri:"+dicomImageUri);
+        element.style.width = '100%'; // 원하는 너비 설정
+        element.style.height = '500px'; // 원하는 높이 설정
 
-        // DICOM 이미지 메타데이터를 추출
-        const arrayBuffer = image.data.byteArray.buffer;
-        const byteArray = new Uint8Array(arrayBuffer);
-        const dataSet = dicomParser.parseDicom(byteArray);
+        cornerstone.enable(element);
+        cornerstone.loadImage(dicomImageUri).then(image => {
+            cornerstone.displayImage(element, image);
 
-        // DICOM 태그에 대한 메타데이터 변수 할당 및 출력
-        const studyDate = dataSet.string('x00080020'); // Study Date
-        const patientName = dataSet.string('x00100010'); // Patient Name
-        const patientID = dataSet.string('x00100020'); // Patient ID
-        const patientBirthDate = dataSet.string('x00100030'); // Patient Birth Date
-        const patientSex = dataSet.string('x00100040'); // Patient Sex
-        const otherPatientIDs = dataSet.string('x00101000'); // Other Patient IDs
-        const patientAge = dataSet.string('x00101010'); // Patient Age
-        const patientComments = dataSet.string('x00104000'); // Patient Comments
-        const bodyPartExamined = dataSet.string('x00180015'); // Body Part Examined
-        const kvp = dataSet.string('x00180060'); // KVP
-        const exposureTime = dataSet.string('x00181150'); // Exposure Time
-        const xRayTubeCurrent = dataSet.string('x00181151'); // X-Ray Tube Current
-        const exposure = dataSet.string('x00181152'); // Exposure
-        const radiationSetting = dataSet.string('x00181155'); // Radiation Setting
-        const imagerPixelSpacing = dataSet.string('x00181164'); // Imager Pixel Spacing
-        const viewPosition = dataSet.string('x00185101'); // View Position
-        const studyInstanceUID = dataSet.string('x0020000D'); // Study Instance UID
-        const seriesInstanceUID = dataSet.string('x0020000E'); // Series Instance UID
-        const studyID = dataSet.string('x00200010'); // Study ID
-        const seriesNumber = dataSet.string('x00200011'); // Series Number
 
-        // 메타데이터 값을 출력할 DOM 요소를 생성
+            const element = document.getElementById('dicomImage');
+            element.style.width = '100%';
+            element.style.height = '500px';
+
+            cornerstone.enable(element);
+            cornerstone.loadImage(dicomImageUri).then(image => {
+                cornerstone.displayImage(element, image);
+            // DICOM 이미지 메타데이터를 추출
+            const arrayBuffer = image.data.byteArray.buffer;
+            const byteArray = new Uint8Array(arrayBuffer);
+            const dataSet = dicomParser.parseDicom(byteArray);
+
+            // DICOM 태그에 대한 메타데이터 변수 할당
+            const studyDate = dataSet.string('x00080020'); // Study Date
+            const patientName = dataSet.string('x00100010'); // Patient Name
+            const patientID = dataSet.string('x00100020'); // Patient ID
+
+            // 메타데이터 값을 업데이트
+            const metadataText = 'Study Date: ' + studyDate + ', Patient Name: ' + patientName + ', Patient ID: ' + patientID;
+            updateMetadata(metadataText, element);
+
+            // 각 메타데이터 항목을 출력
+            console.log('Study Date:', studyDate);
+            console.log('Patient Name:', patientName);
+            console.log('Patient ID:', patientID);
+
+            });
+        });
+    }
+    // 메타데이터를 업데이트하는 함수
+    function updateMetadata(metadataText, element) {
         const metadataDiv = document.createElement('div');
         metadataDiv.style.position = 'absolute';
-        metadataDiv.style.top = '0px'; // 원하는 위치로 조정
-        metadataDiv.style.left = '10px'; // 원하는 위치로 조정
+        metadataDiv.style.top = '0px';
+        metadataDiv.style.left = '10px';
         metadataDiv.style.backgroundColor = 'black';
         metadataDiv.style.color = 'white';
         metadataDiv.style.padding = '5px';
-
-
-        // 메타데이터를 표시할 형식 설정
-        metadataDiv.textContent = 'Study Date: ' + studyDate + ', ' + 'Patient Name: ' + patientName + ', Patient ID: ' + patientID ;
-
+        metadataDiv.textContent = metadataText;
+        metadataDiv.style.zIndex = '1'; // 다른 엘리먼트 위에 표시되도록 함
+        metadataDiv.style.display = 'block';
+        metadataDiv.style.visibility = 'visible';
         // 이미지 요소의 부모에 메타데이터 요소 추가
         element.parentElement.appendChild(metadataDiv);
 
-        // 각 메타데이터 항목을 출력
-        console.log('Study Date:', studyDate);
-        console.log('Patient Name:', patientName);
-        console.log('Patient ID:', patientID);
-        console.log('Patient Birth Date:', patientBirthDate);
-        console.log('Patient Sex:', patientSex);
-        console.log('Other Patient IDs:', otherPatientIDs);
-        console.log('Patient Age:', patientAge);
-        console.log('Patient Comments:', patientComments);
-        console.log('Body Part Examined:', bodyPartExamined);
-        console.log('KVP:', kvp);
-        console.log('Exposure Time:', exposureTime);
-        console.log('X-Ray Tube Current:', xRayTubeCurrent);
-        console.log('Exposure:', exposure);
-        console.log('Radiation Setting:', radiationSetting);
-        console.log('Imager Pixel Spacing:', imagerPixelSpacing);
-        console.log('View Position:', viewPosition);
-        console.log('Study Instance UID:', studyInstanceUID);
-        console.log('Series Instance UID:', seriesInstanceUID);
-        console.log('Study ID:', studyID);
-        console.log('Series Number:', seriesNumber);
-    });
+    }
+
 
 </script>
 
