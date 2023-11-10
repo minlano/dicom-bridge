@@ -1,21 +1,9 @@
 package com.example.dicombridge.controller.image;
 
 
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Controller
 public class ImageControllerJH {
@@ -269,6 +257,17 @@ public class ImageControllerJH {
         model.addAttribute("dicomImageUri", dicomImageUri);
 
         return "viewPage"; // JSP 페이지 이름
+    }
+
+    @GetMapping("/viewDicomImageJong")
+    public String viewDicomImageJong(Model model) {
+        // DICOM 이미지의 wadouri URI를 설정
+        String dicomImageUri = "wadouri://localhost:8083/dcmfile/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+        //String dicomImageUri = "wadouri://Users/jeonghoonoh/Downloads/DCM-Sample4KDT/CR-Chest PA/1.2.410.200013.1.510.1.20210310170346701.0009.dcm";
+        // DICOM 이미지의 URI를 모델에 추가
+        model.addAttribute("dicomImageUri", dicomImageUri);
+
+        return "viewPageJong"; // JSP 페이지 이름
     }
 }
 
