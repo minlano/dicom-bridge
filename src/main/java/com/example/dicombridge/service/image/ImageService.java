@@ -11,9 +11,12 @@ import jcifs.smb.NtlmPasswordAuthenticator;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
+
+import org.dcm4che3.io.DicomInputStream;
 import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
@@ -74,6 +77,7 @@ public class ImageService {
         }
         return fileMap;
     }
+
 
     private SmbFileInputStream getSmbFileInputStream(Image image) throws MalformedURLException, SmbException {
         SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, image.getPath().replace('\\', '/') + "/" + image.getFname()), cifsContext);
@@ -156,15 +160,24 @@ public class ImageService {
     /*****************************************************************************************
      ***************studyinsuid를 이용하여 image 조회 및 map에 정보를 담고 fileRead(map)**********
      *****************************************************************************************/
-    public Map<String, String> getSeriesNum(String studyinsuid) throws IOException  {
-        List<Image> images = imageRepository.findBystudyinsuid(studyinsuid);
+    public File getSeriesNum(String seriesinsuid) throws IOException  {
+        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
 
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
                 i -> i.getFname(),
                 i -> i
         ));
-        return fileRead(map);
+        return fileRead2(map);
     }
+
+    public int seriesinsuidCount(String seriesinsuid) {
+
+        return imageRepository.countByseriesinsuid(seriesinsuid);
+
+
+    }
+
+
 
     /* thumbnail */
     public Map<String, String> getThumbnail(int studyKey) throws IOException {
@@ -181,6 +194,25 @@ public class ImageService {
         return fileRead(map);
     }
 
+    public File getFile(int studykey) throws IOException  {
+        List<Image> images = imageRepository.findByImageIdStudykey(studykey);
 
+        Map<String, Image> map = images.stream().collect(Collectors.toMap(
+                i -> i.getFname(),
+                i -> i
+        ));
+        return fileRead2(map);
+    }
+
+    private File fileRead2(Map<String, Image> imageMap) throws IOException {
+        Map<String, String> fileMap = new HashMap<>();
+        for(String fname : imageMap.keySet()) {
+            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
+            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
+            return tempDcmFile;
+        }
+        return null;
+    }
 
 }

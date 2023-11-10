@@ -18,5 +18,18 @@ public class ImageController {
         System.out.println("studyinsuid --> " + studyinsuid);
         return "viewer";
     }
+    @GetMapping("/testMJ")
+    public String testMJ() {
+        return "testMJ";
+    }
+    @GetMapping("/viewPageMJ")
+    public String viewPageMJ() {
+        return "viewPageMJ";
+    }
+
+    @GetMapping("/viewPageMJ4")
+    public String viewPageMJ4() {
+        return "viewPageMJ4";
+    }
 
 }

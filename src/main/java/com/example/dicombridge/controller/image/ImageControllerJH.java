@@ -466,7 +466,7 @@ public class ImageControllerJH {
         // DICOM 이미지의 URI를 모델에 추가
         model.addAttribute("dicomImageUri", dicomImageUri);
 
-        return "viewPageJong"; // JSP 페이지 이름
+        return "viewPage"; // JSP 페이지 이름
     }
 }
 
