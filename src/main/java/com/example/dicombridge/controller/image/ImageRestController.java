@@ -2,12 +2,17 @@ package com.example.dicombridge.controller.image;
 
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 @RestController
@@ -44,16 +49,53 @@ public class ImageRestController {
      ****************리스트에서 클릭시 출력되는 전체 image*****************************************
      *****************************************************************************************/
 
-    @PostMapping("/takeuidgiveseriesnum/{studyinsuid}")
-    public ResponseEntity<Map<String, String>> getSeriesNum(@PathVariable String studyinsuid, Model model) throws IOException{
+    @PostMapping("/takeuidgiveseriesnum/{seriesinsuid}")
+    public ResponseEntity<byte[]> getSeriesNum(@PathVariable String seriesinsuid, Model model) throws IOException{
         //List list = imageService.getSeriesNum(studyinsuid);
         //System.out.println(list.size());
-        Map<String, String> images = imageService.getSeriesNum(studyinsuid);
-        if(!images.isEmpty()) {
-            return new ResponseEntity<>(images, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+       File file = imageService.getSeriesNum(seriesinsuid);
+        // 파일을 byte 배열로 읽기
+        Path path = file.toPath();
+        byte[] data = Files.readAllBytes(path);
+
+        // HTTP 응답 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", seriesinsuid + ".jpg");
+
+        // 파일을 byte 배열로 응답
+        return new ResponseEntity<>(data, headers, HttpStatus.OK);
+    }
+    @PostMapping("/getFile/{studyKey}")
+    public ResponseEntity<byte[]> getFile(@PathVariable String studyKey) throws IOException {
+        // imageService.getFile 메서드로부터 파일을 읽어들임
+        File file = imageService.getFile(Integer.valueOf(studyKey));
+
+        // 파일을 byte 배열로 읽기
+        Path path = file.toPath();
+        byte[] data = Files.readAllBytes(path);
+
+        // HTTP 응답 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", studyKey + ".jpg");
+
+        // 파일을 byte 배열로 응답
+        return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
 
+    /*****************************************************************************************
+     ****************************Seriesinsuid count 조회***************************************
+     *****************************************************************************************/
+    @PostMapping("/seriesinsuidcount/{Seriesinsuid}")
+    public ResponseEntity<Integer> seriesinsuidCount(@PathVariable String seriesinsuid) throws IOException{
+        System.out.println("메서드 들어옴");
+        int count = imageService.seriesinsuidCount(seriesinsuid);
+        System.out.println(count);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        return ResponseEntity.ok().headers(headers).body(count);
+
+    }
 }
