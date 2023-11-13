@@ -145,7 +145,6 @@
         </div>
     </div>
 </div>
-<<<<<<< HEAD:src/main/webapp/WEB-INF/views/viewPageJong.jsp
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <%--<script src="https://unpkg.com/cornerstone-core@2.6.1/dist/cornerstone.js"></script>--%>
 <script type="text/javascript" src="https://unpkg.com/cornerstone-core@2.4.0/dist/cornerstone.js"></script>
@@ -156,15 +155,6 @@
 <scirpt src="https://unpkg.com/dicom-parser@1.8.21/dist/dicomParser.js"></scirpt>
 <%--<script src="https://unpkg.com/dicom-parser@1.8.21/dist/dicomParser.min.js"></script>--%>
 
-<!-- JavaScript 코드를 포함하여 DICOM 이미지를 표시합니다 -->
-<script>
-    // DICOM 이미지를 표시할 요소를 가져옵니다
-
-
-
-    // CornerstoneWADOImageLoader를 설정합니다
-    cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
-    cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
 
 <script src="https://unpkg.com/cornerstone-core"></script>
 <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
@@ -180,7 +170,6 @@
 
         // DICOM 이미지를 표시할 요소를 가져옵니다
         const element = document.getElementById('dicomImage');
->>>>>>> #02-OhJeonghoon:src/main/webapp/WEB-INF/views/viewPage.jsp
 
         // CornerstoneWADOImageLoader를 설정합니다
         cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
@@ -226,6 +215,7 @@
             });
         });
     }
+
     // 메타데이터를 업데이트하는 함수
     function updateMetadata(metadataText, element) {
         const metadataDiv = document.createElement('div');
@@ -242,7 +232,6 @@
         // 이미지 요소의 부모에 메타데이터 요소 추가
         element.parentElement.appendChild(metadataDiv);
 
-<<<<<<< HEAD:src/main/webapp/WEB-INF/views/viewPageJong.jsp
         // 각 메타데이터 항목을 출력
         console.log('Study Date:', studyDate);
         console.log('Patient Name:', patientName);
@@ -264,13 +253,7 @@
         console.log('Series Instance UID:', seriesInstanceUID);
         console.log('Study ID:', studyID);
         console.log('Series Number:', seriesNumber);
-    });
-*/
-=======
     }
-
-
->>>>>>> #02-OhJeonghoon:src/main/webapp/WEB-INF/views/viewPage.jsp
 </script>
 
 </body>

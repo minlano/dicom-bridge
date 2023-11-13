@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Title</title>
@@ -18,7 +19,11 @@
 <body>
 <div>
     <a href="#" onclick="viewDicomByStudykey(1)">Convert DCM to Images</a>
-    <a href="#" onclick="viewDicomBySeriesinsuid('1.2.392.200036.9116.4.1.6116.40033.7002')">Convert DCM to Images</a>
+    <a href="#" onclick="viewDicomBySeriesinsuidTotal(`1.2.392.200036.9116.4.1.6116.40033.7002`)">Convert DCM to Images</a>
+    <div id="print"></div>
+
+
+
 </div>
 <div id="dicomImageContainer"></div>
 </body>
