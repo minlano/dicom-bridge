@@ -17,10 +17,12 @@ public class ImageController {
     public String viewer() {
         return "viewer";
     }
+
     @GetMapping("/testMJ")
     public String testMJ() {
         return "testMJ";
     }
+
     @GetMapping("/viewPageMJ")
     public String viewPageMJ() {
         return "viewPageMJ";
@@ -30,7 +32,4 @@ public class ImageController {
     public String viewPageMJ4() {
         return "viewPageMJ4";
     }
-
-
-
 }

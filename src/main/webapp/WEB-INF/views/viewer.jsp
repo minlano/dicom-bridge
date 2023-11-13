@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -111,7 +112,46 @@
                 </li>
                 <li>
                     <img src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png" alt="Series">
-                    <div>Series</div>
+                    <div class="tooltip" onclick="showBox('Series')">Series</div>
+                    <div id="infoBox">
+                        <div id="infoContent">
+                            <ul>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                            </ul>
+                            <ul>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                            </ul>
+                            <ul>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                            </ul>
+                            <ul>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                            </ul>
+                            <ul>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                                <div><img src="/images/blank_box.png"></div>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <img src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png" alt="Layout">
@@ -119,27 +159,25 @@
                 </li>
             </ul>
         </aside>
-
         <section id="thumbnail-container" style="display: none">
             <table>
                 <thead><tr><th>썸네일</th></tr></thead>
                 <tbody></tbody>
             </table>
         </section>
-
         <section id="image-container">
-            <div class="image">
-                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지1">
-            </div>
-            <div class="image">
-                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지2">
-            </div>
-            <div class="image">
-                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지3">
-            </div>
-            <div class="image">
-                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지4">
-            </div>
+<%--            <div class="image">--%>
+<%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지1">--%>
+<%--            </div>--%>
+<%--            <div class="image">--%>
+<%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지2">--%>
+<%--            </div>--%>
+<%--            <div class="image">--%>
+<%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지3">--%>
+<%--            </div>--%>
+<%--            <div class="image">--%>
+<%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지4">--%>
+<%--            </div>--%>
         </section>
     </section>
 </div>

@@ -25,7 +25,7 @@ public class ImageRestController {
 
     private final ImageService imageService;
 
-    @PostMapping("/{studyKey}")
+    @PostMapping("/haha/{studyKey}")
     public ResponseEntity<Map<String, String>> getImagesData(@PathVariable String studyKey) throws IOException {
         Map<String, String> images = imageService.getImages(Integer.valueOf(studyKey));
         if(!images.isEmpty()) {
@@ -36,18 +36,22 @@ public class ImageRestController {
     }
 
     /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
-    @GetMapping("/{studyKey}")
-    public ResponseEntity<Map<String, String>> getImagesData2(@PathVariable String studyKey) throws IOException {
+    @PostMapping("/{studyKey}")
+    public ResponseEntity<byte[]> getImagesData2(@PathVariable String studyKey) throws IOException {
         Map<String, byte[]> dicomDatas = imageService.getImageBytes(Integer.valueOf(studyKey));
 
         // DICOM 데이터를 Base64로 인코딩
-        Map<String, String> res = new HashMap<>();
+//        Map<String, String> res = new HashMap<>();
+        byte[] byteArray = null;
         for(String dicomData : dicomDatas.keySet()) {
-            String base64Encoded = Base64.getEncoder().encodeToString(dicomDatas.get(dicomData));
-            res.put(dicomData, base64Encoded);
+//            String base64Encoded = Base64.getEncoder().encodeToString(dicomDatas.get(dicomData));
+//            res.put(dicomData, base64Encoded);
+            byteArray = dicomDatas.get(dicomData);
         }
-        return ResponseEntity.ok(res);
+        System.out.println(byteArray);
+        return ResponseEntity.ok(byteArray);
     }
+    /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
 
     @PostMapping("/getThumbnail/{studyKey}")
     public ResponseEntity<Map<String, String>> getThumbnailData(@PathVariable String studyKey, Model model) throws IOException {

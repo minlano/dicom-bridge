@@ -74,7 +74,7 @@ aside ul li {
 aside li div, nav li div {
 	display: block;
 	text-align: center;
-	margin-top: 5px;
+	margin-top: 2px;
 }
 
 aside ul li:hover {
@@ -137,7 +137,6 @@ nav li {
 	justify-content: center; /* 수평 가운데 정렬 */
 }
 
-
 nav ul li:nth-child(5),
 nav ul li:nth-child(6) {
 	display: flex;
@@ -152,7 +151,6 @@ nav ul li:nth-child(5){
 nav ul li:nth-child(1){
 	padding-top: 20px;
 }
-
 
 /* thumbnail */
 section#thumbnail-container {
@@ -191,7 +189,7 @@ section#thumbnail-container {
 	max-width: 90%; /* 이미지의 최대 너비를 부모 요소의 너비에 맞춥니다. */
 	height: auto; /* 이미지의 높이를 자동으로 조정하여 이미지 비율을 유지합니다. */
 	/*margin: 7px 10px 0px 10px;*/
-	border: 2px solid gray;
+	border: 2px solid grey;
 }
 
 
@@ -210,11 +208,37 @@ section#image-container {
 	justify-content: center;
 	align-items: center;
 	background-color: lightgray;
-	border: 2px solid gray;
+	border: 2px solid grey;
 	max-width: 100%;
 	/*max-height: calc(100% - 101px);*/
 }
 
 #image-container .image img{
 	height: 100%;
+}
+
+
+
+#infoBox {
+	display: none;
+	position: fixed;
+	width: 110px;
+	height: 130px;
+	transform: translate(0%, 0%);
+	background-color: #dddddd;
+	border: 2px solid #090900;
+	margin: 0 0 0 0;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+}
+
+#infoContent ul {
+	margin: 0 0 0 0;
+}
+
+#infoContent img {
+	display: block;
+	width: 20px;
+	height: 20px;
+	padding: 1px;
 }
