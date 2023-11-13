@@ -67,12 +67,44 @@ $(document).on("dblclick", "tr.subTr", function() {
 });
 
 
-$(document).on("click", "#Dsearch", function() {
-    var detailedSearch = $("#Detailed-search");
+// $(document).on("click", "", function() {
+//     const studyinsuid = $(this).data('studyinsuid');
+//     const studykey = $(this).data('studykey');
+//
+//     if (studyinsuid && studykey) {
+//         window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
+//     } else {
+//         alert("Data not available");
+//     }
+// });
 
-    if (detailedSearch.css('display') === 'block') {
-        detailedSearch.css('display', 'none');
+// 리포트
+$(document).on("click", "tr.subTr", function() {
+    const studykey = $(this).data('studykey');
+
+    if (studykey) {
+        // 서버에 studykey를 전송하여 reportstatus 값을 가져오는 요청
+        $.ajax({
+            url: "/getReportStatus", // 적절한 엔드포인트를 사용해야 함
+            method: "GET",
+            data: { studykey: studykey },
+            success: function(response) {
+                // 서버로부터 받은 reportstatus 값을 기반으로 <select> 요소 생성
+                const reportStatusSelect = $("<select>");
+
+                // response에는 적절한 reportstatus 값들이 들어있어야 함
+                for (const status of response) {
+                    reportStatusSelect.append(`<option value="${status}">${status}</option>`);
+                }
+
+                // 기존의 <select> 요소를 제거하고 새로 생성된 <select> 요소 추가
+                $("#reportStatusSelectContainer").empty().append(reportStatusSelect);
+            },
+            error: function() {
+                alert("Error fetching reportstatus");
+            }
+        });
     } else {
-        detailedSearch.css('display', 'block');
+        alert("Data not available");
     }
 });

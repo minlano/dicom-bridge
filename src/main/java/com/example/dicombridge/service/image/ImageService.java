@@ -1,7 +1,5 @@
 package com.example.dicombridge.service.image;
 
-import com.example.dicombridge.domain.common.ThumbnailDto;
-import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
 import com.example.dicombridge.repository.ImageRepository;
 import jcifs.Address;
@@ -116,9 +114,6 @@ public class ImageService {
     }
     public String convertDcm2Jpg(File file) {
         try {
-            // dcm metadata
-
-
             Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
             BufferedImage image = dcm2Jpg.readImageFromDicomInputStream(file);
 
@@ -134,25 +129,25 @@ public class ImageService {
         return null;
     }
 
-//    private Map<String, byte[]> fileByteRead(Map<String, Image> imageMap) throws SmbException, MalformedURLException {
-//        Map<String, byte[]> fileByteMap = new HashMap<>();
-//        for(String fname : imageMap.keySet()) {
-//            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
-//            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-//            fileByteMap.put(fname, byteArrayOutputStream.toByteArray());
-//        }
-//        return fileByteMap;
-//    }
+    private Map<String, byte[]> fileByteRead(Map<String, Image> imageMap) throws SmbException, MalformedURLException {
+        Map<String, byte[]> fileByteMap = new HashMap<>();
+        for(String fname : imageMap.keySet()) {
+            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
+            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+            fileByteMap.put(fname, byteArrayOutputStream.toByteArray());
+        }
+        return fileByteMap;
+    }
 
     /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
-//    public Map<String, byte[]> getImageBytes(int studyKey) throws SmbException, MalformedURLException {
-//        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
-//        Map<String, Image> map = images.stream().collect(Collectors.toMap(
-//                i -> i.getFname(),
-//                i -> i
-//        ));
-//        return fileByteRead(map);
-//    }
+    public Map<String, byte[]> getImageBytes(int studyKey) throws SmbException, MalformedURLException {
+        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
+        Map<String, Image> map = images.stream().collect(Collectors.toMap(
+                i -> i.getFname(),
+                i -> i
+        ));
+        return fileByteRead(map);
+    }
 
     public Map<String, String> getImages(int studyKey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
@@ -195,56 +190,10 @@ public class ImageService {
 
     }
 
+
+
     /* thumbnail */
-    private SmbFileInputStream getSmbFileInputStream2(ThumbnailDto thumbnailDto) throws MalformedURLException, SmbException {
-        SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, thumbnailDto.getPath().replace('\\', '/') + "/" + thumbnailDto.getFname()), cifsContext);
-        return new SmbFileInputStream(file);
-    }
-
-//    private Map<String, ThumbnailDto> fileRead4(Map<String, ThumbnailDto> thumbnailDtoMap) throws IOException {
-//
-//        Map<String, ThumbnailWithFileDto> newThumbnailWithFileDtoMap = new HashMap();
-//        for (String fname : thumbnailDtoMap.keySet()) {
-//            SmbFileInputStream smbFileInputStream = getSmbFileInputStream2(thumbnailDtoMap.get(fname));
-//            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-//            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
-//
-//            ThumbnailDto thumbnailDto = thumbnailDtoMap.get(fname);
-//            ThumbnailWithFileDto thumbnailWithFileDto = getThumbnailWithFileDto(thumbnailDto, tempDcmFile);
-//            newThumbnailWithFileDtoMap.put(thumbnailWithFileDto.getFname(), thumbnailWithFileDto)
-//
-//
-//            newThumbnailDtoMap.put(thumbnailDto.getFname(), thumbnailDto);
-//        }
-//        return newThumbnailDtoMap;
-//    }
-
-    private static ThumbnailWithFileDto getThumbnailWithFileDto(ThumbnailDto thumbnailDto, File tempDcmFile) {
-        ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto();
-        thumbnailWithFileDto.setImagekey(thumbnailDto.getImagekey());
-        thumbnailWithFileDto.setStudyinsuid(thumbnailDto.getStudyinsuid());
-        thumbnailWithFileDto.setSeriesinsuid(thumbnailDto.getSeriesinsuid());
-        thumbnailWithFileDto.setSopinstanceuid(thumbnailDto.getSopinstanceuid());
-        thumbnailWithFileDto.setSopclassuid(thumbnailDto.getSopclassuid());
-        thumbnailWithFileDto.setPath(thumbnailDto.getPath());
-        thumbnailWithFileDto.setFname(thumbnailDto.getFname());
-        thumbnailWithFileDto.setDelflag(thumbnailDto.getDelflag());
-        thumbnailWithFileDto.setSeriesdesc(thumbnailDto.getSeriesdesc());
-        thumbnailWithFileDto.setImage(tempDcmFile);
-        return thumbnailWithFileDto;
-    }
     public Map<String, String> getThumbnail(int studyKey) throws IOException {
-//    public Map<String, ThumbnailDto> getThumbnail(int studyKey) throws IOException {
-//        Map<String, ThumbnailDto> map = new HashMap<>();
-//        List<ThumbnailDto> images = imageRepository.findImageAndSeriesDesc(studyKey);
-//
-//        for (int i = 0; i < images.size(); i++) {
-//            ThumbnailDto thumbnailDto = images.get(i);
-//            if (thumbnailDto.getImagekey() == 1) {
-//                map.put(thumbnailDto.getFname(), thumbnailDto);
-//            }
-//        }
-//        return fileRead4(map);
         Map<String, Image> map = new HashMap<>();
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
 
@@ -254,6 +203,7 @@ public class ImageService {
                 map.put(image.getFname(), image);
             }
         }
+
         return fileRead(map);
     }
 
@@ -268,18 +218,10 @@ public class ImageService {
     }
 
     public File getFileByseriesinsuidNcount(String seriesinsuid,int order) throws IOException  {
-        int imagenum = order+1;
-        String insnum = String.valueOf(imagenum);
-
-        //List<Image> images = imageRepository.findByseriesinsuidAndImageIdImagekey(seriesinsuid, imagenum);
-        List<Image> images = imageRepository.findBySeriesinsuidAndInstancenum(seriesinsuid, insnum);
-       // Image needImages = images.get(order);
-       // Map<String, Image> map = new HashMap<>();
-       // map. put(needImages.getFname(), needImages);
-        Map<String, Image> map = images.stream().collect(Collectors.toMap(
-                i -> i.getFname(),
-                i -> i
-        ));
+        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
+        Image needImages = images.get(order);
+        Map<String, Image> map = new HashMap<>();
+        map. put(needImages.getFname(), needImages);
         return fileRead2(map);
     }
 
@@ -306,4 +248,14 @@ public class ImageService {
         }
         return tempFiles;
     }
+
+
+
+    public List<String> getReportStatusByStudyKey(int studykey) {
+        // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
+        List<Image> images = imageRepository.findByImageIdStudykey(studykey);
+        System.out.println("images : " + images);
+        return images.stream().map(Image::getReportstatus).collect(Collectors.toList());
+    }
+
 }

@@ -215,6 +215,7 @@
             });
         });
     }
+
     // 메타데이터를 업데이트하는 함수
     function updateMetadata(metadataText, element) {
         const metadataDiv = document.createElement('div');
@@ -230,7 +231,6 @@
         metadataDiv.style.visibility = 'visible';
         // 이미지 요소의 부모에 메타데이터 요소 추가
         element.parentElement.appendChild(metadataDiv);
-
 
         // 각 메타데이터 항목을 출력
         console.log('Study Date:', studyDate);
@@ -254,7 +254,6 @@
         console.log('Study ID:', studyID);
         console.log('Series Number:', seriesNumber);
     }
-
 </script>
 
 </body>

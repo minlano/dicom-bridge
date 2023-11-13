@@ -178,7 +178,9 @@
                     </div>
                     <div>
                         <div>Report Code</div>
-                        <div><select></select></div>
+                        <div id="reportStatusSelectContainer">
+                            <select></select>
+                        </div>
                     </div>
                     <div>
                         <div>예비판독의</div>

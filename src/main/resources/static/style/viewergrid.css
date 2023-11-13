@@ -140,7 +140,6 @@ nav li {
 	justify-content: center; /* 수평 가운데 정렬 */
 }
 
-
 nav ul li:nth-child(5),
 nav ul li:nth-child(6) {
 	display: flex;
@@ -155,7 +154,6 @@ nav ul li:nth-child(5){
 nav ul li:nth-child(1){
 	padding-top: 20px;
 }
-
 
 /* thumbnail */
 section#thumbnail-container {
@@ -193,8 +191,10 @@ section#thumbnail-container {
 }
 
 #thumbnail-container img {
-	/*max-width: 90%;*/
-	height: 130px;
+	max-width: 90%; /* 이미지의 최대 너비를 부모 요소의 너비에 맞춥니다. */
+	height: auto; /* 이미지의 높이를 자동으로 조정하여 이미지 비율을 유지합니다. */
+	/*margin: 7px 10px 0px 10px;*/
+	border: 2px solid grey;
 }
 
 
@@ -212,6 +212,8 @@ section#image-container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background-color: lightgray;
+	border: 2px solid grey;
 	background-color: black;
 	border: 1px solid #7D7C7C;
 	max-width: 100%;
@@ -222,8 +224,6 @@ section#image-container {
 	height: 100%;
 	width: 50%;
 }
-
-
 
 #infoBox {
 	display: none;

@@ -31,9 +31,6 @@ toolbarBtn.addEventListener("click", () => {
 
 });
 
-
-
-
 function showThumbnail(path) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/studies/getThumbnail/" + path, true);
@@ -52,27 +49,15 @@ function showThumbnail(path) {
     xhr.send();
 }
 
-// function displayImages(images) {
-//     var imagesContainer = document.getElementById("imagesContainer");
-//     imagesContainer.innerHTML = "";
-//
-//     for (var imageName in images) {
-//         if (images.hasOwnProperty(imageName)) {
-//             var base64Image = images[imageName];
-//             var img = document.createElement("img");
-//             img.src = "data:image/jpeg;base64," + base64Image;
-//             imagesContainer.appendChild(img);
-//         }
-//     }
-// }
-
-
 function displayImages(images) {
     var tbody = document.querySelector("#thumbnail-container tbody");
 
     for (var imageName in images) {
         if (images.hasOwnProperty(imageName)) {
             var base64Image = images[imageName];
+
+            // 여기서 서버로부터 가져온 이미지들을 어딘가에 저장할 필요가 있어 보임 -> 일단 local
+
             var tr = document.createElement("tr");
             var td = document.createElement("td");
             var div = document.createElement("div");
@@ -155,4 +140,4 @@ function imageLayout(X, Y) {
 const list_btn = document.getElementById("list_btn");
 document.getElementById("list_btn").addEventListener("click", function() {
     window.location.href = "/list";
-});
+})
