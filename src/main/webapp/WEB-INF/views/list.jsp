@@ -45,7 +45,7 @@
             </ul>
         </nav>
 
-        <aside id="Detailed-search">
+        <aside id="Detailed-search" style="display: none;">
             <ul>
                 <li><div id="calender"></div></li>
                 <li>
@@ -73,8 +73,8 @@
                 <a class="subtitle">검색</a>
             </div>
             <ul>
-                <li><input type="text" class="keyword" placeholder="환자 아이디">
-                    <input type="text" class="keyword" placeholder="환자 이름">
+                <li><input type="text" class="keyword" id="Pid-input" placeholder="환자 아이디">
+                    <input type="text" class="keyword" id="Pname-input" placeholder="환자 이름">
                     <select id="category" class="keyword">
                         <option value="전체">판독상태</option>
                         <option value="읽지않음">읽지않음</option>
@@ -108,7 +108,7 @@
                     <th>환자 아이디</th>
                     <th>환자 이름</th>
                     <th>검사장비</th>
-                    <th class="wide-cell">검사설명</th>
+                    <th class="study">검사설명</th>
                     <th>검사일시</th>
                     <th>판독상태</th>
                     <th>시리즈</th>

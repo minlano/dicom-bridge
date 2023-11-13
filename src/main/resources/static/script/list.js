@@ -33,7 +33,7 @@ function displayItems(response, startIndex, batchSize, totalItems) {
         studyListStr +=     "<th>" + response[i].pid + "</th>";
         studyListStr +=     "<th>" + response[i].panme + "</th>";
         studyListStr +=     "<th>" + response[i].modality + "</th>";
-        studyListStr +=     "<th class='wide-cell'>" + response[i].studydesc + "</th>";
+        studyListStr +=     "<th class='studyList'>" + response[i].studydesc + "</th>";
         studyListStr +=     "<th>" + response[i].studydate + "</th>";
         studyListStr +=     "<th>" + response[i].reportstatus + "</th>";
         studyListStr +=     "<th>" + response[i].seriescnt + "</th>";
@@ -67,13 +67,12 @@ $(document).on("dblclick", "tr.subTr", function() {
 });
 
 
-$(document).on("click", "", function() {
-    const studyinsuid = $(this).data('studyinsuid');
-    const studykey = $(this).data('studykey');
+$(document).on("click", "#Dsearch", function() {
+    var detailedSearch = $("#Detailed-search");
 
-    if (studyinsuid && studykey) {
-        window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
+    if (detailedSearch.css('display') === 'block') {
+        detailedSearch.css('display', 'none');
     } else {
-        alert("Data not available");
+        detailedSearch.css('display', 'block');
     }
 });

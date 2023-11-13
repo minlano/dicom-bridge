@@ -80,6 +80,7 @@ nav li img {
 
 nav li {
     margin-bottom: 40px;
+    cursor: pointer;
 }
 
 
@@ -134,6 +135,7 @@ aside li {
     border: none;
     text-align: center;
     background-color: #2B2B2B;
+    cursor: pointer;
 }
 
 aside li:nth-child(1) {
@@ -142,7 +144,7 @@ aside li:nth-child(1) {
 
 aside li:not(:first-child) {
     border-radius: 50%; /* 동그랗게 만들기 위해 50%로 설정합니다 */
-    background-color: #2B2B2B;
+    background-color: #393939;
     line-height: 40px;
     width : 40px;
     height: 40px;
@@ -226,7 +228,11 @@ img{
 }
 
 .wide-cell {
-    width: 550px; /* 원하는 너비로 설정 */
+    width: 550px;
+}
+
+.study, .studyList {
+    width: 550px;
 }
 
 footer {
@@ -274,9 +280,11 @@ footer {
 }
 #previousTable tr:nth-child(odd):not(:first-child) {
     background-color: #393939;
+    cursor: pointer;
 }
 #previousTable tr:nth-child(even) {
     background-color: #2F2F2F;
+    cursor: pointer;
 }
 
 .right-div {
@@ -426,6 +434,7 @@ footer {
     border-radius: 12px;
     padding-left: 10px;
     color : #9B9B9B;
+    cursor: pointer;
 }
 #search {
     background-color: #621212;
@@ -437,6 +446,7 @@ footer {
     margin-left: 15px;
     font-size: 12px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .subTr:hover {
@@ -472,4 +482,22 @@ footer {
     display: flex;
     align-items: center; /* 수직 가운데 정렬 */
     justify-content: center; /* 수평 가운데 정렬 */
+}
+
+#trTitle{
+    background-color: #393939;
+}
+
+#loadMore {
+    cursor: pointer;
+}
+
+#Pid-input, #Pname-input {
+    font: inherit;
+    letter-spacing: inherit;
+    color: currentcolor;
+    border: 0px;
+    box-sizing: content-box;
+    height: 1.4375em;
+    padding: 8.5px 14px;
 }

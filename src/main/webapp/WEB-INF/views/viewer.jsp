@@ -13,7 +13,7 @@
         <ul>
             <li><img src="/images/user.png"  alt="Adminstrato"> <div>Administrator</div></li>
             <li class="nav_li" id="thumbnail_btn" >
-                <input type="hidden" id="studyId" value="${studyId}" />
+                <input type="hidden" id="studyId" value="${studyId}"/>
                 <div class="image-container">
                     <img class="normal-image" src="/images/add-image.png"  alt="thumbnail">
                     <img class="hover-image" src="/images/add-image_click.png" alt="thumbnail">

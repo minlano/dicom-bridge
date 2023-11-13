@@ -78,6 +78,7 @@ aside ul li {
 	text-align: center;
 	margin: 5px;
 	padding: 10px;
+	cursor: pointer;
 }
 
 aside li div, nav li div {
@@ -111,6 +112,7 @@ nav li img {
 
 nav li {
 	margin-bottom: 40px;
+	cursor: pointer;
 }
 
 
