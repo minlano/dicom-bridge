@@ -1,14 +1,17 @@
 var toolbarBtn = document.getElementById("Toolbar_btn");
 const thumbnailBtn = document.getElementById("thumbnail_btn");
+
 let isThumbnailVisible = true;
 let isToolbarVisible = true;
 
+
 thumbnailBtn.addEventListener("click", () => {
     const thumbnailContainer = document.getElementById("thumbnail-container");
+    const studyKey = document.getElementById("studyId").value
 
     if (isThumbnailVisible) {
         thumbnailContainer.style.display = "block";
-        showThumbnail('17');
+        showThumbnail(studyKey);
     } else {
         thumbnailContainer.style.display = "none";
         var tbody = document.querySelector("#thumbnail-container tbody");
@@ -74,35 +77,22 @@ function displayImages(images) {
             var base64Image = images[imageName];
             var tr = document.createElement("tr");
             var td = document.createElement("td");
+            var div = document.createElement("div");
             var img = document.createElement("img");
             img.src = "data:image/jpeg;base64," + base64Image;
 
-            td.appendChild(img);
+            div.appendChild(img);
+            td.appendChild(div);
             tr.appendChild(td);
             tbody.appendChild(tr);
         }
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const list_btn = document.getElementById("list_btn");
+document.getElementById("list_btn").addEventListener("click", function() {
+        window.location.href = "/list";
+});
 
 
 
