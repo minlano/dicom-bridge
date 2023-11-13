@@ -39,6 +39,7 @@ function showThumbnail(path) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var imagesData = JSON.parse(xhr.responseText);
+                console.log(imagesData);
                 displayImages(imagesData);
             } else {
                 alert("Failed to retrieve images. Status code: " + xhr.status);
@@ -102,7 +103,6 @@ async function imageDisplay() {
             var img = document.createElement('img');
 
             div.className = `image ${i} ${j}`;
-            img.src =
         }
     }
 }

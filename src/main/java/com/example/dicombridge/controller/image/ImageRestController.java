@@ -1,5 +1,6 @@
 package com.example.dicombridge.controller.image;
 
+import com.example.dicombridge.domain.common.ThumbnailDto;
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -33,22 +34,22 @@ public class ImageRestController {
         }
     }
 
-    /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
-    @PostMapping("/{studyKey}")
-    public ResponseEntity<byte[]> getImagesData2(@PathVariable String studyKey) throws IOException {
-        Map<String, byte[]> dicomDatas = imageService.getImageBytes(Integer.valueOf(studyKey));
-
-        // DICOM 데이터를 Base64로 인코딩
-//        Map<String, String> res = new HashMap<>();
-        byte[] byteArray = null;
-        for(String dicomData : dicomDatas.keySet()) {
-//            String base64Encoded = Base64.getEncoder().encodeToString(dicomDatas.get(dicomData));
-//            res.put(dicomData, base64Encoded);
-            byteArray = dicomDatas.get(dicomData);
-        }
-        System.out.println(byteArray);
-        return ResponseEntity.ok(byteArray);
-    }
+//    /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
+//    @PostMapping("/{studyKey}")
+//    public ResponseEntity<byte[]> getImagesData2(@PathVariable String studyKey) throws IOException {
+//        Map<String, byte[]> dicomDatas = imageService.getImageBytes(Integer.valueOf(studyKey));
+//
+//        // DICOM 데이터를 Base64로 인코딩
+////        Map<String, String> res = new HashMap<>();
+//        byte[] byteArray = null;
+//        for(String dicomData : dicomDatas.keySet()) {
+////            String base64Encoded = Base64.getEncoder().encodeToString(dicomDatas.get(dicomData));
+////            res.put(dicomData, base64Encoded);
+//            byteArray = dicomDatas.get(dicomData);
+//        }
+//        System.out.println(byteArray);
+//        return ResponseEntity.ok(byteArray);
+//    }
     /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
 
     @PostMapping("/getThumbnail/{studyKey}")
@@ -62,6 +63,16 @@ public class ImageRestController {
         }
     }
 
+//    @PostMapping("/getThumbnail/{studyKey}")
+//    public ResponseEntity<Map<String, ThumbnailDto>> getThumbnailData(@PathVariable String studyKey, Model model) throws IOException {
+//        Map<String, ThumbnailDto> images = imageService.getThumbnail(Integer.valueOf(studyKey));
+//
+//        if(!images.isEmpty()) {
+//            return new ResponseEntity<>(images, HttpStatus.OK);
+//        }else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     /*****************************************************************************************
      ***************리스트에 들어가면 studyinsuid가 전부 동일, studyinsuid가 같은 파일 찾기**********
