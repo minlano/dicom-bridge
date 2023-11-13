@@ -1,8 +1,10 @@
 package com.example.dicombridge.controller.image;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -13,8 +15,10 @@ public class ImageController {
         return "test";
     }
 
-    @GetMapping("/viewer")
-    public String viewer() {
+    @GetMapping("/viewer/{studyInsUid}/{studyId}")
+    public String viewer(@PathVariable String studyInsUid, @PathVariable String studyId, Model model) {
+        model.addAttribute("studyInsUid", studyInsUid);
+        model.addAttribute("studyId", studyId);
         return "viewer";
     }
 

@@ -1,89 +1,148 @@
-*{
+* {
     margin: 0;
     padding: 0;
-    font-size: 12px;
 }
+
+body{
+    width: 100%;
+    overflow: auto;
+}
+
 h1 {
-    font-size: 40px;
+    font-size: 30pt;
     color: white;
+    font-family: 'Noto Sans KR', sans-serif;
 }
+
 .subtitle {
     font-size: 15px;
     font-weight: bold;
 }
 
 #container {
-    background-color: #393939;
-    display: grid; /*grid 형식으로*/
-    grid-template-columns: 160px calc(100% - 160px);
-    /* grid-template-rows: 60px 110px auto auto; */
-    grid-template-rows: 1fr 2fr 7fr 7fr;
+    background: #423F3E;
+    display: grid;
+    grid-template-columns: 0.5fr 9.5fr;
+    grid-template-rows: 1fr 9fr;
     grid-template-areas:
-    "header header"/*1행 header header 위에 적은것 처럼 왼쪽 header 200 오른쪽 header auto*/
-    "nav aside"/*2행 nav div*/
-    "nav section"/*3행 nav div*/
-    "nav footer";/*4행 footer footer*/
-    min-height: 100vh;
-    max-width: 100%;
-    margin: 0 auto; /* 가운데 정렬을 위한 마진 설정 */
-    padding-bottom: 25px;
-    padding-right: 25px ;
+    "header header"
+    "bar contents";
+    height: 100vh;
 }
-aside, section, footer {
-    max-width: 100%; /* 부모 요소(#container)의 크기에 맞추기 위해 100%로 설정 */
+
+#bar-container {
+    grid-area: bar;
+    display: flex;
+}
+
+#list-contents {
+    grid-area: contents;
+    margin: 0px 40px 40px 0px;
+
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 1fr 5fr 5fr;
+    grid-template-areas:
+    "aside"
+    "main"
+    "footer";
+
+    max-height: 100%;
     overflow: hidden;
 }
 
-header{
-    display: flex;
-    align-items: center;
+header {
     grid-area: header;
-
+    background-color: #423F3E;
+    align-items: center;
+    display: flex;
+    margin: 20px 40px 20px;
 }
+
 
 nav {
-    border-radius: 25px;
+    border-radius: 15px;
+    grid-area: menu;
+    background-color: #2B2B2B;
+    margin: 0px 10px 40px 40px;
+}
+
+nav li div {
+    display: block;
     text-align: center;
-    grid-area: nav;
-    background-color: #242424;
-    color : white;
-    height: 100%;
-    margin: 0px 10px 30px 40px;
+    margin-top: 5px;
 }
-nav ul {
-    list-style: none;
-    padding: 0;
+
+nav li img {
+    width: 30px;
+    height: auto;
+}
+
+nav li {
+    margin-bottom: 40px;
+}
+
+
+nav ul li:nth-child(3),
+nav ul li:nth-child(4) {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    align-items: flex-end;
+    justify-content: center;
+    margin-top: auto;
 }
 
-nav ul div li {
-    margin-top: 10px;
+nav ul li:nth-child(3){
+    padding-top: 563px;
+}
+nav ul li:nth-child(1){
+    padding-top: 20px;
 }
 
-aside ul{
+ul {
+    margin: 10px;
+    list-style: none;
+    color: white;
+    font-size: 9pt;
+}
+
+li {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#study-search ul{
     list-style:none;
     white-space: nowrap;
 }
+
+aside#Detailed-search{
+    grid-area: dsearch;
+    width: 250px;
+    background-color: #2B2B2B;
+    border-radius: 15px;
+    margin: 0px 10px 40px 0px;
+}
+
 .circle-list {
     list-style-type: none; /* 기본 목록 마커를 제거합니다 */
     padding: 0;
 }
+
 aside li {
     display: inline-block;
     margin-left: 20px;
     border: none;
     text-align: center;
-    background-color: #242424;
+    background-color: #2B2B2B;
 }
+
 aside li:nth-child(1) {
     width: 50%;
 }
+
 aside li:not(:first-child) {
     border-radius: 50%; /* 동그랗게 만들기 위해 50%로 설정합니다 */
-    background-color: #373737;
+    background-color: #2B2B2B;
     line-height: 40px;
     width : 40px;
     height: 40px;
@@ -93,41 +152,33 @@ aside li:not(:first-child) {
     font-weight: bold;
     border : none;
 }
-section {
-    display: flex;
-    flex-wrap: nowrap; /*넘치는 컨텐츠에 대해서 줄바꿈을 할 것인가 말것인가 */
-    gap: 10px;
-    grid-area: section;
-    width:100vw;
-    display:flex;
-    flex-direction: row;
-    background-color: #4F4A45;
-    flex-wrap: wrap;
-
-}
 
 
-aside {
+aside#study-search {
     grid-area: aside;
-    background-color:#242424;
+    background-color:#2B2B2B;
     color: white;
     padding: 10px;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 
 }
+
 #search-bar, #search-result{
     margin-left: 20px;
     margin-top: 5px;
 }
+
 #search-result{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 #search-result a{
     margin-right: auto; /* 왼쪽 끝에 배치 */
 }
+
 #search-result button,select {
     padding-left: 5px;
     border-radius: 15px ;
@@ -140,7 +191,7 @@ aside {
 
 article {
     width: 25vw; /*25%*/
-    background-color: #242424;
+    background-color: #2B2B2B;
     height: 20vw;
 }
 
@@ -149,15 +200,17 @@ img{
 }
 
 #mainContent {
-
-    grid-area: section; /* #mainContent를 section 그리드 영역에 배치 */
-    background-color: #242424;
+    grid-area: main; /* #mainContent를 section 그리드 영역에 배치 */
+    background-color: #2B2B2B;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     display: flex;
     justify-content: center;
-
+    overflow: auto;
+    max-height:38vh;
+    height: 500px;
 }
+
 #mainTable {
     width: 90%;
     height: 15px;
@@ -166,30 +219,33 @@ img{
     border-collapse: collapse;
     font-size: 12px;
 }
+
 #mainTable th, #mainTable td {
-    border: 2px solid #242424;
+    border: 2px solid #2B2B2B;
     padding: 8px;
 }
 
 .wide-cell {
     width: 550px; /* 원하는 너비로 설정 */
 }
+
 footer {
+    grid-area: footer;
     display: flex;
+    max-height: 35vh; /* 원하는 높이의 최대값 설정 */
 }
 
 .left-div, .right-div {
     flex: 1;
     border-radius: 15px;
-    border: 1px solid black;
     text-align: center;
-    margin-top : 20px;
+    margin-top : 10px;
     margin-right: 10px;
 }
 
 .left-div {
     padding: 15px;
-    background-color: #242424;
+    background-color: #2B2B2B;
     color: white;
     list-style: none; /* 목록의 기본 스타일(점) 제거 */
 }
@@ -210,9 +266,10 @@ footer {
     color: white;
     border-collapse: collapse;
     font-size: 12px;
+    text-align: center;
 }
 #previousTable th, #previousTable td {
-    border: 2px solid #242424; /* 테두리를 1px 굵기의 검은 선으로 설정 */
+    border: 2px solid #2B2B2B; /* 테두리를 1px 굵기의 검은 선으로 설정 */
     padding: 8px; /* 셀 안의 내용과 테두리 사이의 간격을 조절 */
 }
 #previousTable tr:nth-child(odd):not(:first-child) {
@@ -226,24 +283,22 @@ footer {
     background-color: #242424;
     display: grid; /*grid 형식으로*/
     grid-template : 1fr 6fr 7fr  / 100px auto auto ;
-    grid-gap: 10px;
     padding-top: 15px;
-    padding-right: 25px;
-    padding-bottom:15px;
     color : white;
-
     max-width: 100%;
     margin: 0 auto; /* 가운데 정렬을 위한 마진 설정 */
-    margin-top: 20px;
+    margin-top: 10px;
 }
+
 [class *= cell] {
     box-sizing: border-box;
     border: none;
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
-    background-color:  #393939;
+    background-color: #393939;
 }
+
 .right-div > div:first-child {
     grid-row-start: 1;
     grid-row-end: 2;
@@ -268,6 +323,7 @@ footer {
     background-color: #090900;
     color: white;
 }
+
 .cell-a {
     grid-row-start: 2;
     grid-row-end: 3;
@@ -276,6 +332,7 @@ footer {
     display: grid; /* 그리드 레이아웃 사용 */
     place-items: center; /* 자식 요소를 가운데 정렬 */
 }
+
 .cell-a textarea {
     width: 100%; /* 부모 요소에 맞게 너비를 설정 */
     height: 100%; /* 부모 요소에 맞게 높이를 설정 */
@@ -285,6 +342,7 @@ footer {
     background-color: #373737;
     border: none;
 }
+
 .cell-b {
     grid-row-start: 3;
     grid-row-end: 4;
@@ -293,6 +351,7 @@ footer {
     display: grid; /* 그리드 레이아웃 사용 */
     place-items: center; /* 자식 요소를 가운데 정렬 */
 }
+
 .cell-b textarea {
     width: 100%; /* 부모 요소에 맞게 너비를 설정 */
     height: 100%; /* 부모 요소에 맞게 높이를 설정 */
@@ -302,6 +361,7 @@ footer {
     background-color: #373737;
     border: none;
 }
+
 .cell-c {
     grid-row-start: 2;
     grid-row-end: 4;
@@ -311,6 +371,7 @@ footer {
     grid-template-columns: repeat(1, 1fr); /* 1열로 균등하게 분배 */
     gap: 0px; /* 열 사이의 간격을 설정 (원하는 간격으로 조절) */
 }
+
 .cell-c > div:not(:last-child) {
     display: flex;
     flex-direction: column;
@@ -349,10 +410,7 @@ footer {
     background-color: #090900;
     color: white;
 }
-nav img {
-    width: 40px; /* 원하는 너비 설정 */
-    height: auto; /* 높이를 자동으로 조정하여 가로 세로 비율 유지 */
-}
+
 
 .keyword {
     height: 30px;
@@ -386,7 +444,32 @@ nav img {
     background-color: darkolivegreen;
 }
 
-html {
-    height: 100%;
-    width: 100%;
+.image-container .hover-image {
+    display: none;
+}
+
+.image-container .normal-image {
+    display: block;
+}
+
+.nav_li:hover .hover-image {
+    display: block;
+}
+
+.nav_li:hover .normal-image {
+    display: none;
+}
+
+.image-container:hover .hover-image {
+    display: block;
+}
+
+.image-container:hover .normal-image {
+    display: none;
+}
+
+.image-container {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
 }

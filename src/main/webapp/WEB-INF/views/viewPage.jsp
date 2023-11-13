@@ -145,6 +145,7 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD:src/main/webapp/WEB-INF/views/viewPageJong.jsp
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <%--<script src="https://unpkg.com/cornerstone-core@2.6.1/dist/cornerstone.js"></script>--%>
 <script type="text/javascript" src="https://unpkg.com/cornerstone-core@2.4.0/dist/cornerstone.js"></script>
@@ -155,6 +156,108 @@
 <scirpt src="https://unpkg.com/dicom-parser@1.8.21/dist/dicomParser.js"></scirpt>
 <%--<script src="https://unpkg.com/dicom-parser@1.8.21/dist/dicomParser.min.js"></script>--%>
 
+<!-- JavaScript 코드를 포함하여 DICOM 이미지를 표시합니다 -->
+<script>
+    // DICOM 이미지를 표시할 요소를 가져옵니다
+    $(document).ready(function() {
+        $.ajax({
+            url: "/studies/1",
+            type: "GET",
+            success: function(response) {
+                let b2a = new binary2Array(response);
+
+                cornerstoneTools.external.cornerstone = cornerstone;
+                b2a.el.style.width = '2000px';
+                b2a.el.style.height = '2000px';
+                cornerstone.enable(b2a.el);
+                cornerstone.displayImage(b2a.el, b2a.image);
+            },
+            error: function() {
+                alert("Error Occurred!");
+            }
+        });
+
+        class binary2Array {
+            constructor(response) {
+                // let img = new Image;
+                this.el = document.getElementById('dicomImage');
+
+                let val;
+                for(let key in response) {
+                    val = response[key];
+                }
+
+                var decodedBiData = atob(val);
+                var uint8Array = new Uint8Array(decodedBiData.length);
+                for (var i = 0; i < decodedBiData.length; i++) {
+                    uint8Array[i] = decodedBiData.charCodeAt(i);
+                }
+
+                /**********************************************************************/
+                // Canvas 엘리먼트 생성
+                let canvas = document.createElement('canvas');
+                canvas.width = 500;
+                canvas.height = 500;
+                let test = document.getElementById("imageTest");
+                test.appendChild(canvas);
+
+                // Canvas의 2D 컨텍스트 가져오기
+                let ctx = canvas.getContext('2d');
+
+                // ImageData 생성
+                let imageData = ctx.createImageData(2108, 2560);
+
+                // ImageData에 픽셀 데이터 설정
+                for (let i = 0; i < uint8Array.length; i++) {
+                    imageData.data[i] = uint8Array[i];
+                }
+
+                // Canvas에 ImageData를 그리기
+                ctx.putImageData(imageData, 0, 0);
+                /**********************************************************************/
+
+
+                // var bit8Array = new Uint8Array(binaryData.buffer);
+                const options = { TransferSyntaxUID: '1.2.840.10008.1.2.4.70' };
+                var dicomDataSet = dicomParser.parseDicom(uint8Array, options);
+                var studyInstanceUid = dicomDataSet.string('x0020000d');
+                var rows = dicomDataSet.uint16('x00280010');
+                var cols = dicomDataSet.uint16('x00280011');
+                // var windowCenter = dicomDataSet.floatString('x00281050');
+                // var windowWidth = dicomDataSet.floatString('x00281051');
+                // var minPixelValue = dicomDataSet.uint16('x00280106');
+                // var maxPixelValue = dicomDataSet.uint16('x00280107');
+                var pixelDataElement = dicomDataSet.elements.x7fe00010;
+                var pixelArray = new Uint16Array(dicomDataSet.byteArray.buffer, pixelDataElement.dataOffset, pixelDataElement.length / 2);
+
+                function getPixelData() {
+                    return uint8Array;
+                }
+                /***********************************************************/
+                this.image = {
+                    imageId: studyInstanceUid,
+                    windowCenter: 30,
+                    windowWidth: 30,
+                    minPixelValue: 0,
+                    maxPixelValue: 255,
+                    slope: 1.0,
+                    intercept: 0,
+                    render: cornerstone.renderGrayscaleImage,
+                    getPixelData: getPixelData,
+                    rows: rows,
+                    columns: cols,
+                    height: rows,
+                    width: cols,
+                    color: false,
+                    sizeInBytes: cols * rows,
+                    columnPixelSpacing: 0.264583333333334, // 1 pixel to mm
+                    rowPixelSpacing: 0.264583333333334
+                    // columnPixelSpacing: 1.0, // 1 pixel to mm
+                    // rowPixelSpacing: 1.0
+                };
+            };
+        }
+    });
 
 <script src="https://unpkg.com/cornerstone-core"></script>
 <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
@@ -215,7 +318,6 @@
             });
         });
     }
-
     // 메타데이터를 업데이트하는 함수
     function updateMetadata(metadataText, element) {
         const metadataDiv = document.createElement('div');
@@ -231,6 +333,7 @@
         metadataDiv.style.visibility = 'visible';
         // 이미지 요소의 부모에 메타데이터 요소 추가
         element.parentElement.appendChild(metadataDiv);
+
 
         // 각 메타데이터 항목을 출력
         console.log('Study Date:', studyDate);
@@ -254,6 +357,7 @@
         console.log('Study ID:', studyID);
         console.log('Series Number:', seriesNumber);
     }
+
 </script>
 
 </body>
