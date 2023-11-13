@@ -218,10 +218,18 @@ public class ImageService {
     }
 
     public File getFileByseriesinsuidNcount(String seriesinsuid,int order) throws IOException  {
-        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
-        Image needImages = images.get(order);
-        Map<String, Image> map = new HashMap<>();
-        map. put(needImages.getFname(), needImages);
+        int imagenum = order+1;
+        String insnum = String.valueOf(imagenum);
+
+        //List<Image> images = imageRepository.findByseriesinsuidAndImageIdImagekey(seriesinsuid, imagenum);
+        List<Image> images = imageRepository.findBySeriesinsuidAndInstancenum(seriesinsuid, insnum);
+       // Image needImages = images.get(order);
+       // Map<String, Image> map = new HashMap<>();
+       // map. put(needImages.getFname(), needImages);
+        Map<String, Image> map = images.stream().collect(Collectors.toMap(
+                i -> i.getFname(),
+                i -> i
+        ));
         return fileRead2(map);
     }
 

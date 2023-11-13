@@ -19,7 +19,7 @@
 <body>
 <div>
     <a href="#" onclick="viewDicomByStudykey(1)">Convert DCM to Images</a>
-    <a href="#" onclick="viewDicomBySeriesinsuidTotal(`1.2.392.200036.9116.4.1.6116.40033.7002`)">Convert DCM to Images</a>
+    <a href="#" onclick="viewDicomBySeriesinsuidnthrow()">Convert DCM to Images</a>
     <div id="print"></div>
 
 

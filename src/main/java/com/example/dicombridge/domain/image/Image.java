@@ -23,4 +23,6 @@ public class Image {
     private String path;
     private String fname;
     private Integer delflag;
+
+    private String instancenum;
 }

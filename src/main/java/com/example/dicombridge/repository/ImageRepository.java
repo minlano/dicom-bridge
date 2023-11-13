@@ -9,6 +9,8 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image, ImageId> {
     List<Image> findByImageIdStudykey(int studykey);
     List<Image> findByseriesinsuid(String seriesinsuid);//studyinsuid로 imagetab 조회
+    //List<Image> findByseriesinsuidAndImageIdImagekey(String seriesinsuid, int imagenum);
+    List<Image> findBySeriesinsuidAndInstancenum(String seriesinsuid, String insnum);
 
     int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
 
