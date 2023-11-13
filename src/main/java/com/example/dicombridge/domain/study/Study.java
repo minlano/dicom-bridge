@@ -61,6 +61,7 @@ public class Study {
     private Integer verifyflag;
 
     public Study(StudyRequestDto studytabRequestDto) {
+        this.studykey = studytabRequestDto.getStudykey();
         this.studyinsuid = studytabRequestDto.getStudyinsuid();
         this.studydate = studytabRequestDto.getStudydate();
         this.accessnum = studytabRequestDto.getAccessnum();

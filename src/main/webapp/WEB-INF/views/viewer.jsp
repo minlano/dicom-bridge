@@ -9,12 +9,12 @@
 <div id="viewer">
     <header>
         <h1>DicomBridge</h1>
-<%--        <img src="/images/DicomBridgeLogo.png"  alt="DicomBridge">--%>
     </header>
     <nav>
         <ul>
-            <li><img src="/images/user.png"  alt="Adminstrato"> <div>Adminstrato</div></li>
-            <li class="nav_li" id="thumbnail_btn">
+            <li><img src="/images/user.png"  alt="Adminstrato"> <div>Administrator</div></li>
+            <li class="nav_li" id="thumbnail_btn" >
+                <input type="hidden" id="studyId" value="${studyId}"/>
                 <div class="image-container">
                     <img class="normal-image" src="/images/add-image.png"  alt="thumbnail">
                     <img class="hover-image" src="/images/add-image_click.png" alt="thumbnail">
@@ -54,7 +54,7 @@
 
         <aside id="toolbar">
             <ul>
-                <li>
+                <li id="list_btn">
                     <img src="/images/worklist.0c26b996e226a3db09e77ef62d440241.png" alt="List">
                     <div>List</div>
                 </li>
@@ -161,7 +161,7 @@
         </aside>
         <section id="thumbnail-container" style="display: none">
             <table>
-                <thead><tr><th>썸네일</th></tr></thead>
+                <thead><tr><th>thumbnail</th></tr></thead>
                 <tbody></tbody>
             </table>
         </section>

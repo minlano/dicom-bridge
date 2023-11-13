@@ -5,10 +5,11 @@ let isToolbarVisible = true;
 
 thumbnailBtn.addEventListener("click", () => {
     const thumbnailContainer = document.getElementById("thumbnail-container");
+    const studyKey = document.getElementById("studyId").value
 
     if (isThumbnailVisible) {
         thumbnailContainer.style.display = "block";
-        showThumbnail('17');
+        showThumbnail(studyKey);
     } else {
         thumbnailContainer.style.display = "none";
         var tbody = document.querySelector("#thumbnail-container tbody");
@@ -30,6 +31,9 @@ toolbarBtn.addEventListener("click", () => {
 
 });
 
+
+
+
 function showThumbnail(path) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/studies/getThumbnail/" + path, true);
@@ -39,7 +43,6 @@ function showThumbnail(path) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var imagesData = JSON.parse(xhr.responseText);
-                console.log(imagesData);
                 displayImages(imagesData);
             } else {
                 alert("Failed to retrieve images. Status code: " + xhr.status);
@@ -49,21 +52,35 @@ function showThumbnail(path) {
     xhr.send();
 }
 
+// function displayImages(images) {
+//     var imagesContainer = document.getElementById("imagesContainer");
+//     imagesContainer.innerHTML = "";
+//
+//     for (var imageName in images) {
+//         if (images.hasOwnProperty(imageName)) {
+//             var base64Image = images[imageName];
+//             var img = document.createElement("img");
+//             img.src = "data:image/jpeg;base64," + base64Image;
+//             imagesContainer.appendChild(img);
+//         }
+//     }
+// }
+
+
 function displayImages(images) {
     var tbody = document.querySelector("#thumbnail-container tbody");
 
     for (var imageName in images) {
         if (images.hasOwnProperty(imageName)) {
             var base64Image = images[imageName];
-
-            // 여기서 서버로부터 가져온 이미지들을 어딘가에 저장할 필요가 있어 보임 -> 일단 local
-
             var tr = document.createElement("tr");
             var td = document.createElement("td");
+            var div = document.createElement("div");
             var img = document.createElement("img");
             img.src = "data:image/jpeg;base64," + base64Image;
 
-            td.appendChild(img);
+            div.appendChild(img);
+            td.appendChild(div);
             tr.appendChild(td);
             tbody.appendChild(tr);
         }
@@ -134,3 +151,8 @@ function imageLayout(X, Y) {
     }
     return { row: row, col: col };
 }
+
+const list_btn = document.getElementById("list_btn");
+document.getElementById("list_btn").addEventListener("click", function() {
+    window.location.href = "/list";
+});
