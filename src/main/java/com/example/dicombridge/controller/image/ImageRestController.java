@@ -2,6 +2,7 @@ package com.example.dicombridge.controller.image;
 
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -173,5 +174,10 @@ public class ImageRestController {
         // 파일을 byte 배열로 응답
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
+
+
+
+
 
 }

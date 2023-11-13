@@ -14,6 +14,7 @@ import jcifs.smb.SmbFileInputStream;
 
 import org.dcm4che3.io.DicomInputStream;
 import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -247,6 +248,15 @@ public class ImageService {
             tempFiles.add(tempDcmFile);
         }
         return tempFiles;
+    }
+
+
+
+    public List<String> getReportStatusByStudyKey(int studykey) {
+        // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
+        List<Image> images = imageRepository.findByImageIdStudykey(studykey);
+        System.out.println("images : " + images);
+        return images.stream().map(Image::getReportstatus).collect(Collectors.toList());
     }
 
 }

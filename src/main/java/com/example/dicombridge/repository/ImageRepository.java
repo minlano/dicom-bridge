@@ -12,4 +12,6 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
 
     int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
 
+
+
 }
