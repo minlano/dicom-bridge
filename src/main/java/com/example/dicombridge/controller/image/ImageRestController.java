@@ -14,9 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/studies")
@@ -83,6 +81,42 @@ public class ImageRestController {
         // 파일을 byte 배열로 응답
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+    @PostMapping("/takeuidgiveseriesnum2/{seriesinsuid}")
+    public ResponseEntity<List<byte[]>> getSeriesNum2(@PathVariable String seriesinsuid, Model model) throws IOException{
+        List<File> files = imageService.getSeriesNum2(seriesinsuid);
+
+        List<byte[]> byteArrayList = new ArrayList<>();
+
+        for (File file : files) {
+            // 각 파일을 byte 배열로 변환합니다.
+            Path path = file.toPath();
+            byte[] data = Files.readAllBytes(path);
+
+            // byte 배열을 리스트에 추가합니다.
+            byteArrayList.add(data);
+        }
+
+//        for (File file : files) {
+//            Path path = file.toPath();
+//            byte[] data = Files.readAllBytes(path);
+//            baos.write(data);
+//        }
+//        System.out.println(baos.toByteArray().toString());
+        System.out.println("진입 후 진행중..");
+        // HTTP 응답 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        //headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentType(MediaType.APPLICATION_JSON);  // JSON으로 응답합니다.
+        headers.setContentDispositionFormData("attachment", seriesinsuid + ".jpg");
+
+        // 파일을 byte 배열로 응답
+        return new ResponseEntity<>(byteArrayList, headers, HttpStatus.OK);
+    }
+
+
+    /*****************************************************************************************
+     ************************************StudyKey로 조회***************************************
+     *****************************************************************************************/
     @PostMapping("/getFile/{studyKey}")
     public ResponseEntity<byte[]> getFile(@PathVariable String studyKey) throws IOException {
         // imageService.getFile 메서드로부터 파일을 읽어들임
@@ -92,6 +126,7 @@ public class ImageRestController {
         Path path = file.toPath();
         byte[] data = Files.readAllBytes(path);
 
+        System.out.println(data);
         // HTTP 응답 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -104,15 +139,35 @@ public class ImageRestController {
     /*****************************************************************************************
      ****************************Seriesinsuid count 조회***************************************
      *****************************************************************************************/
-    @PostMapping("/seriesinsuidcount/{Seriesinsuid}")
+    @PostMapping("/seriesinsuidcount/{seriesinsuid}")
     public ResponseEntity<Integer> seriesinsuidCount(@PathVariable String seriesinsuid) throws IOException{
-        System.out.println("메서드 들어옴");
         int count = imageService.seriesinsuidCount(seriesinsuid);
-        System.out.println(count);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         return ResponseEntity.ok().headers(headers).body(count);
-
     }
+
+    /*****************************************************************************************
+     ****************************Seriesinsuid count 별 이미지***********************************
+     *****************************************************************************************/
+    @PostMapping("/takeserIesunsuidIndex/{seriesinsuid}/{order}")
+    public ResponseEntity<byte[]> takeserIesunsuidIndex(
+            @PathVariable String seriesinsuid,@PathVariable int order) throws IOException {
+        File file = imageService.getFileByseriesinsuidNcount(seriesinsuid,order);
+
+        // 파일을 byte 배열로 읽기
+        Path path = file.toPath();
+        byte[] data = Files.readAllBytes(path);
+
+       // System.out.println(data);
+        // HTTP 응답 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", seriesinsuid + ".jpg");
+
+        // 파일을 byte 배열로 응답
+        return new ResponseEntity<>(data, headers, HttpStatus.OK);
+    }
+
 }

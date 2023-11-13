@@ -259,11 +259,7 @@
         }
     });
 
-/*
-    // CornerstoneWADOImageLoader를 설정합니다
-    cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
-    cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
-=======
+
 <script src="https://unpkg.com/cornerstone-core"></script>
 <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
 <script src="https://unpkg.com/dicom-parser@1.8.0/dist/dicomParser.js"></script>
@@ -278,7 +274,7 @@
 
         // DICOM 이미지를 표시할 요소를 가져옵니다
         const element = document.getElementById('dicomImage');
->>>>>>> #02-OhJeonghoon:src/main/webapp/WEB-INF/views/viewPage.jsp
+
 
         // CornerstoneWADOImageLoader를 설정합니다
         cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
@@ -340,7 +336,7 @@
         // 이미지 요소의 부모에 메타데이터 요소 추가
         element.parentElement.appendChild(metadataDiv);
 
-<<<<<<< HEAD:src/main/webapp/WEB-INF/views/viewPageJong.jsp
+
         // 각 메타데이터 항목을 출력
         console.log('Study Date:', studyDate);
         console.log('Patient Name:', patientName);
@@ -362,13 +358,11 @@
         console.log('Series Instance UID:', seriesInstanceUID);
         console.log('Study ID:', studyID);
         console.log('Series Number:', seriesNumber);
-    });
-*/
-=======
     }
 
 
->>>>>>> #02-OhJeonghoon:src/main/webapp/WEB-INF/views/viewPage.jsp
+
+
 </script>
 
 </body>

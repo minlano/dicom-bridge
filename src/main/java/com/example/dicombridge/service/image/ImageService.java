@@ -170,6 +170,19 @@ public class ImageService {
         return fileRead2(map);
     }
 
+    public List<File> getSeriesNum2(String seriesinsuid) throws IOException  {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            map.put(image.getFname(), image);
+        }
+
+
+        return fileRead3(map);
+    }
+
     public int seriesinsuidCount(String seriesinsuid) {
 
         return imageRepository.countByseriesinsuid(seriesinsuid);
@@ -196,11 +209,19 @@ public class ImageService {
 
     public File getFile(int studykey) throws IOException  {
         List<Image> images = imageRepository.findByImageIdStudykey(studykey);
-
+        System.out.println("요청이미지"+images);
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
                 i -> i.getFname(),
                 i -> i
         ));
+        return fileRead2(map);
+    }
+
+    public File getFileByseriesinsuidNcount(String seriesinsuid,int order) throws IOException  {
+        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
+        Image needImages = images.get(order);
+        Map<String, Image> map = new HashMap<>();
+        map. put(needImages.getFname(), needImages);
         return fileRead2(map);
     }
 
@@ -213,6 +234,19 @@ public class ImageService {
             return tempDcmFile;
         }
         return null;
+    }
+
+    private List<File> fileRead3(Map<String, Image> imageMap) throws IOException {
+        List<File> tempFiles = new ArrayList<>();
+
+        for (String fname : imageMap.keySet()) {
+            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
+            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
+
+            tempFiles.add(tempDcmFile);
+        }
+        return tempFiles;
     }
 
 }

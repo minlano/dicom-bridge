@@ -25,7 +25,10 @@ public class ImageController {
     public String viewPageMJ() {
         return "viewPageMJ";
     }
-
+    @GetMapping("/viewPageMJ3")
+    public String viewPageMJ3() {
+        return "viewPageMJ3";
+    }
     @GetMapping("/viewPageMJ4")
     public String viewPageMJ4() {
         return "viewPageMJ4";
