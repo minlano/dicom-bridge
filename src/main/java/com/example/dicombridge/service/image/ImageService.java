@@ -284,13 +284,6 @@ public class ImageService {
         return imageRepository.findMaxStudyKeyByStudyKey(studyinsuid);
     }
 
-    public List<String> getReportStatusByStudyKey(int studykey) {
-        // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
-        List<Image> images = imageRepository.findByImageIdStudykey(studykey);
-        //System.out.println("images : " + images);
-        return images.stream().map(Image::getReportstatus).collect(Collectors.toList());
-    }
-
     //Seriesinsuid 조회
     public List<Image> getSeriesInsUid(String studyinsuid, int seriesCount) {
         List<Image> allImages = new ArrayList<>();
