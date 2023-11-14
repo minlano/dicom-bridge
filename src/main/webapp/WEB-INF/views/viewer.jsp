@@ -185,4 +185,11 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/script/viewer.js"></script>
+<script>document.addEventListener("DOMContentLoaded", function() {
+    // 페이지가 로딩되면 실행될 코드
+
+    // countBySeriesinsuid 함수 호출
+    countBySeriesinsuid();
+});
+</script>
 </html>

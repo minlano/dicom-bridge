@@ -123,6 +123,8 @@ async function viewDicomBySeriesinsuidnthrow() {
     }
 
 }
+
+
 ////////////////////////////////////////////////////////
 async function handleScroll(event) {
     // 스크롤 최대값 설정
@@ -205,3 +207,24 @@ async function getSeriesTab() { //아직 안씀(seriesTab)
         console.error(error);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

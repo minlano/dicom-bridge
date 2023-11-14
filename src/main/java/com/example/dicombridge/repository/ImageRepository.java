@@ -29,5 +29,10 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
     //List<Image> findByseriesinsuidAndImageIdImagekey(String seriesinsuid, int imagenum);
     List<Image> findBySeriesinsuidAndInstancenum(String seriesinsuid, String insnum);
 
+    @Query("SELECT MAX(i.imageId.serieskey) FROM Image i WHERE i.studyinsuid = :studyinsuid")
+    Integer findMaxStudyKeyByStudyKey(@Param("studyinsuid") String studyinsuid); // serieskey의 최댓값을 구하지만 1부터 숫자가 늘어나기에 count와 같다.
+
+    List<Image> findByImageIdSerieskeyAndImageIdImagekeyAndStudyinsuid(int serieskey,int imagekey, String studyinsuid);
+
     int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
 }
