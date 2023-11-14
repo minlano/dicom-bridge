@@ -1,6 +1,7 @@
 package com.example.dicombridge.controller.image;
 
 import com.example.dicombridge.domain.common.ThumbnailDto;
+import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,20 +54,9 @@ public class ImageRestController {
 //    }
     /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
 
-    @PostMapping("/getThumbnail/{studyKey}")
-    public ResponseEntity<Map<String, String>> getThumbnailData(@PathVariable String studyKey, Model model) throws IOException {
-        Map<String, String> images = imageService.getThumbnail(Integer.valueOf(studyKey));
-
-        if(!images.isEmpty()) {
-            return new ResponseEntity<>(images, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
 //    @PostMapping("/getThumbnail/{studyKey}")
-//    public ResponseEntity<Map<String, ThumbnailDto>> getThumbnailData(@PathVariable String studyKey, Model model) throws IOException {
-//        Map<String, ThumbnailDto> images = imageService.getThumbnail(Integer.valueOf(studyKey));
+//    public ResponseEntity<Map<String, String>> getThumbnailData(@PathVariable String studyKey, Model model) throws IOException {
+//        Map<String, String> images = imageService.getThumbnail(Integer.valueOf(studyKey));
 //
 //        if(!images.isEmpty()) {
 //            return new ResponseEntity<>(images, HttpStatus.OK);
@@ -74,6 +64,17 @@ public class ImageRestController {
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //        }
 //    }
+
+    @PostMapping("/getThumbnail/{studyKey}")
+    public ResponseEntity<Map<String, ThumbnailWithFileDto>> getThumbnailData(@PathVariable String studyKey) throws IOException {
+        Map<String, ThumbnailWithFileDto> images = imageService.getThumbnail(Integer.valueOf(studyKey));
+
+        if(!images.isEmpty()) {
+            return new ResponseEntity<>(images, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     /*****************************************************************************************
      ***************리스트에 들어가면 studyinsuid가 전부 동일, studyinsuid가 같은 파일 찾기**********

@@ -11,6 +11,7 @@ import java.io.File;
 @AllArgsConstructor
 public class ThumbnailDto {
     private Integer imagekey;
+    private Integer serieskey;
     private String studyinsuid;
     private String seriesinsuid;
     private String sopinstanceuid;

@@ -190,13 +190,28 @@ section#thumbnail-container {
 	border: 1px solid #7D7C7C;
 }
 
+/*#thumbnail-container tbody div:not(.thumbnail-desc) {*/
+/*	background-color: black;*/
+/*	margin : 4px;*/
+/*	border: 1px solid #7D7C7C;*/
+/*}*/
+
 #thumbnail-container img {
 	max-width: 90%; /* 이미지의 최대 너비를 부모 요소의 너비에 맞춥니다. */
 	height: auto; /* 이미지의 높이를 자동으로 조정하여 이미지 비율을 유지합니다. */
 	/*margin: 7px 10px 0px 10px;*/
-	border: 2px solid grey;
+	/*border: 2px solid grey;*/
 }
 
+.thumbnail-desc {
+	max-width: 90%;
+	margin: 0px;
+	padding: 0px;
+	position: absolute;
+	z-index: 9999;
+	color: white;
+	background-color: rgba(0, 0, 0, 0);
+}
 
 section#image-container {
 	background-color: #2B2B2B;

@@ -1,5 +1,7 @@
 package com.example.dicombridge.service.image;
 
+import com.example.dicombridge.domain.common.ThumbnailDto;
+import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
 import com.example.dicombridge.repository.ImageRepository;
 import jcifs.Address;
@@ -77,7 +79,6 @@ public class ImageService {
         }
         return fileMap;
     }
-
 
     private SmbFileInputStream getSmbFileInputStream(Image image) throws MalformedURLException, SmbException {
         SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, image.getPath().replace('\\', '/') + "/" + image.getFname()), cifsContext);
@@ -160,6 +161,10 @@ public class ImageService {
     /*****************************************************************************************
      ***************studyinsuid를 이용하여 image 조회 및 map에 정보를 담고 fileRead(map)**********
      *****************************************************************************************/
+    public List<String> getSeriesByStudy(String studyInsUid) {
+        return imageRepository.findDistinctSeriesinsuidByStudyinsuid(studyInsUid);
+    }
+
     public File getSeriesNum(String seriesinsuid) throws IOException  {
         List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
 
@@ -190,21 +195,40 @@ public class ImageService {
 
     }
 
-
-
     /* thumbnail */
-    public Map<String, String> getThumbnail(int studyKey) throws IOException {
-        Map<String, Image> map = new HashMap<>();
-        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
+    private SmbFileInputStream getSmbFileInputStream(ThumbnailDto thumbnailDto) throws MalformedURLException, SmbException {
+        SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, thumbnailDto.getPath().replace('\\', '/') + "/" + thumbnailDto.getFname()), cifsContext);
+        return new SmbFileInputStream(file);
+    }
+
+    private Map<String, ThumbnailWithFileDto> fileRead4(Map<String, ThumbnailDto> thumbnailDtoMap) throws IOException {
+        Map<String, ThumbnailWithFileDto> thumbnailWithFileDtoMap = new HashMap<>();
+        for (String fname : thumbnailDtoMap.keySet()) {
+            ThumbnailDto thumbnailDto = thumbnailDtoMap.get(fname);
+
+            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(thumbnailDto);
+            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
+            String dcmByte = convertDcm2Jpg(tempDcmFile);
+
+            ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto(thumbnailDto);
+            thumbnailWithFileDto.setImage(dcmByte);
+            thumbnailWithFileDtoMap.put(fname, thumbnailWithFileDto);
+        }
+        return thumbnailWithFileDtoMap;
+    }
+
+    public Map<String, ThumbnailWithFileDto> getThumbnail(int studyKey) throws IOException {
+        Map<String, ThumbnailDto> map = new HashMap<>();
+        List<ThumbnailDto> images = imageRepository.findImageAndSeriesDesc(studyKey);
 
         for (int i = 0; i < images.size(); i++) {
-            Image image = images.get(i);
-            if (image.getImageId().getImagekey() == 1) {
-                map.put(image.getFname(), image);
+            ThumbnailDto imageInfo = images.get(i);
+            if (imageInfo.getImagekey() == 1) {
+                map.put(imageInfo.getFname(), imageInfo);
             }
         }
-
-        return fileRead(map);
+        return fileRead4(map);
     }
 
     public File getFile(int studykey) throws IOException  {
@@ -254,7 +278,6 @@ public class ImageService {
     public List<String> getReportStatusByStudyKey(int studykey) {
         // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
         List<Image> images = imageRepository.findByImageIdStudykey(studykey);
-        System.out.println("images : " + images);
         return images.stream().map(Image::getReportstatus).collect(Collectors.toList());
     }
 

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/style/viewergrid.css">
 </head>
 <body>
+<div id="studyInsUid" style="display: none;">${studyInsUid}</div>
 <div id="viewer">
     <header>
         <h1>DicomBridge</h1>
@@ -182,5 +183,6 @@
     </section>
 </div>
 </body>
-<script src="/script/viewer.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/script/viewer.js"></script>
 </html>
