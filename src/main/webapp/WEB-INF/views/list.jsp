@@ -10,6 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="/style/listgrid.css">
     <title>Dicom-bridge</title>
 </head>
@@ -170,7 +171,9 @@
             <div class="right-div">
                 <div class="subtitleAndButton"><a class="subtitle">Report</a> <button class="checkButton">판독 지우기</button></div>
                 <div class="cell-a"><textarea placeholder="코멘트" readonly></textarea></div>
-                <div class="cell-b"><textarea placeholder="[Finding]\n\n[Conclusion]\n\n[Recommend] 나중에 줄바꿈 기능 추가" readonly></textarea></div>
+                <div class="cell-b">
+                    <textarea name="interpretation" id="interpretation"></textarea>
+                </div>
                 <div class="cell-c">
                     <div>
                         <div>판독 매크로</div>
@@ -184,11 +187,11 @@
                     </div>
                     <div>
                         <div>예비판독의</div>
-                        <div><input type="text"></div>
+                        <div><input type="text" id="text5"></div>
                     </div>
                     <div>
                         <div>판독의1</div>
-                        <div><input type="text"></div>
+                        <div><input type="text" id="text3">></div>
                     </div>
                     <div>
                         <div>판독의2</div>

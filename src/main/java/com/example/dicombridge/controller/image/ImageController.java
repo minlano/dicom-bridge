@@ -46,16 +46,7 @@ public class ImageController {
         return "viewPageMJ4";
     }
 
-    @Autowired
-    private ImageService imageService;
-    @GetMapping("/getReportStatus")
-    public ResponseEntity<List<String>> getReportStatus(@RequestParam int studykey) {
-        // 실제 로직 구현
-        System.out.println("studykey :" + studykey);
-        List<String> reportStatusList = imageService.getReportStatusByStudyKey(studykey);
-        System.out.println("reportStatusList:" + reportStatusList);
-        return new ResponseEntity<>(reportStatusList, HttpStatus.OK);
-    }
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.dicombridge.service.image;
 
 import com.example.dicombridge.domain.image.Image;
+import com.example.dicombridge.domain.study.Study;
 import com.example.dicombridge.repository.ImageRepository;
 import jcifs.Address;
 import jcifs.CIFSContext;
@@ -251,11 +252,6 @@ public class ImageService {
 
 
 
-    public List<String> getReportStatusByStudyKey(int studykey) {
-        // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
-        List<Image> images = imageRepository.findByImageIdStudykey(studykey);
-        System.out.println("images : " + images);
-        return images.stream().map(Image::getReportstatus).collect(Collectors.toList());
-    }
+
 
 }

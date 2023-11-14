@@ -22,4 +22,9 @@ public class StudyService {
                         .map(StudyResponseDto::new)
                         .collect(Collectors.toList());
     }
+    public List<Integer> getReportStatusByStudyKey(int studykey) {
+        // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
+        List<Study> studies = studyRepository.findByStudykey(studykey);
+        return studies.stream().map(Study::getReportstatus).collect(Collectors.toList());
+    }
 }

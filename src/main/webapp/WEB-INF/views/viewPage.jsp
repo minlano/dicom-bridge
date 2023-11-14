@@ -80,8 +80,8 @@
         /* 넓게 설정 */
         flex: 1;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        /*justify-content: center;*/
+        /*align-items: center;*/
     }
 
     .contents img {
@@ -168,14 +168,14 @@
     // DICOM 이미지와 메타데이터를 로드하고 업데이트하는 함수
     function loadDICOMImageAndUpdateMetadata() {
 
-        // DICOM 이미지를 표시할 요소를 가져옵니다
+        // DICOM 이미지를 표시할 요소
         const element = document.getElementById('dicomImage');
 
-        // CornerstoneWADOImageLoader를 설정합니다
+        // CornerstoneWADOImageLoader를 설정
         cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
         cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
 
-        // DICOM 이미지의 URI를 JSP 모델에서 가져옵니다
+        // DICOM 이미지의 URI를 JSP 모델에서 가져옴
         const dicomImageUri = "${dicomImageUri}"; // JSP 모델에서 DICOM 이미지 URI 가져오기
         console.log("dicomImageUri:"+dicomImageUri);
         element.style.width = '100%'; // 원하는 너비 설정
@@ -185,34 +185,23 @@
         cornerstone.loadImage(dicomImageUri).then(image => {
             cornerstone.displayImage(element, image);
 
+        const arrayBuffer = image.data.byteArray.buffer;
+        const byteArray = new Uint8Array(arrayBuffer);
+        const dataSet = dicomParser.parseDicom(byteArray);
 
-            const element = document.getElementById('dicomImage');
-            element.style.width = '100%';
-            element.style.height = '500px';
+        // DICOM 태그에 대한 메타데이터 변수 할당
+        const studyDate = dataSet.string('x00080020'); // Study Date
+        const patientName = dataSet.string('x00100010'); // Patient Name
+        const patientID = dataSet.string('x00100020'); // Patient ID
 
-            cornerstone.enable(element);
-            cornerstone.loadImage(dicomImageUri).then(image => {
-                cornerstone.displayImage(element, image);
-            // DICOM 이미지 메타데이터를 추출
-            const arrayBuffer = image.data.byteArray.buffer;
-            const byteArray = new Uint8Array(arrayBuffer);
-            const dataSet = dicomParser.parseDicom(byteArray);
+        // 메타데이터 값을 업데이트
+        const metadataText = 'Study Date: ' + studyDate + ', Patient Name: ' + patientName + ', Patient ID: ' + patientID;
+        updateMetadata(metadataText, element);
 
-            // DICOM 태그에 대한 메타데이터 변수 할당
-            const studyDate = dataSet.string('x00080020'); // Study Date
-            const patientName = dataSet.string('x00100010'); // Patient Name
-            const patientID = dataSet.string('x00100020'); // Patient ID
-
-            // 메타데이터 값을 업데이트
-            const metadataText = 'Study Date: ' + studyDate + ', Patient Name: ' + patientName + ', Patient ID: ' + patientID;
-            updateMetadata(metadataText, element);
-
-            // 각 메타데이터 항목을 출력
-            console.log('Study Date:', studyDate);
-            console.log('Patient Name:', patientName);
-            console.log('Patient ID:', patientID);
-
-            });
+        // 각 메타데이터 항목을 출력
+        console.log('Study Date:', studyDate);
+        console.log('Patient Name:', patientName);
+        console.log('Patient ID:', patientID);
         });
     }
 
@@ -232,27 +221,7 @@
         // 이미지 요소의 부모에 메타데이터 요소 추가
         element.parentElement.appendChild(metadataDiv);
 
-        // 각 메타데이터 항목을 출력
-        console.log('Study Date:', studyDate);
-        console.log('Patient Name:', patientName);
-        console.log('Patient ID:', patientID);
-        console.log('Patient Birth Date:', patientBirthDate);
-        console.log('Patient Sex:', patientSex);
-        console.log('Other Patient IDs:', otherPatientIDs);
-        console.log('Patient Age:', patientAge);
-        console.log('Patient Comments:', patientComments);
-        console.log('Body Part Examined:', bodyPartExamined);
-        console.log('KVP:', kvp);
-        console.log('Exposure Time:', exposureTime);
-        console.log('X-Ray Tube Current:', xRayTubeCurrent);
-        console.log('Exposure:', exposure);
-        console.log('Radiation Setting:', radiationSetting);
-        console.log('Imager Pixel Spacing:', imagerPixelSpacing);
-        console.log('View Position:', viewPosition);
-        console.log('Study Instance UID:', studyInstanceUID);
-        console.log('Series Instance UID:', seriesInstanceUID);
-        console.log('Study ID:', studyID);
-        console.log('Series Number:', seriesNumber);
+
     }
 </script>
 
