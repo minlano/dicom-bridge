@@ -54,17 +54,53 @@ function displayItems(response, startIndex, batchSize, totalItems) {
     }
 }
 
+/****************************************
+ ********************값넘기는거 확인********
+ ****************************************/
+// $(document).on("dblclick", "tr.subTr", function() {
+//         const studyinsuid = $(this).data('studyinsuid');
+//         const studykey = $(this).data('studykey');
+//
+//         if (studyinsuid && studykey) {
+//             window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
+//         } else {
+//             alert("Data not available");
+//         }
+// });
 
 $(document).on("dblclick", "tr.subTr", function() {
-        const studyinsuid = $(this).data('studyinsuid');
-        const studykey = $(this).data('studykey');
+    const studyinsuid = $(this).data('studyinsuid');
+    const studykey = $(this).data('studykey');
 
-        if (studyinsuid && studykey) {
-            window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
-        } else {
-            alert("Data not available");
-        }
+    if (studyinsuid && studykey) {
+        $.ajax({
+            type: "POST",
+            url: "/studies/seriescount/" + studyinsuid,
+            success: function(data) {
+                var seriesCount = data; // 시리즈 갯수.
+                //페이지 이동 후
+                //var seriesCount = localStorage.getItem("seriesCount"); 로 사용
+
+                // LocalStorage에 데이터 저장
+                localStorage.setItem("seriesCount", seriesCount);
+                localStorage.setItem("studyinsuid", studyinsuid);
+
+                // 성공적으로 요청을 받아온 후에 페이지 리디렉션을 수행
+                window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
+            },
+            error: function(xhr, status, error) {
+                alert("실패 사유: " + xhr.status);
+            }
+        });
+    } else {
+        alert("Data not available");
+    }
 });
+/****************************************
+********************값넘기는거 확인********
+ ****************************************/
+
+
 
 
 // $(document).on("click", "", function() {

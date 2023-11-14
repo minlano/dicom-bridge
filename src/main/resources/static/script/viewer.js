@@ -2,6 +2,12 @@ var toolbarBtn = document.getElementById("Toolbar_btn");
 const thumbnailBtn = document.getElementById("thumbnail_btn");
 let isThumbnailVisible = true;
 let isToolbarVisible = true;
+// 현재 페이지의 URL을 가져옴
+var currentUrl = window.location.href;
+// seriesCount
+var seriesCount = localStorage.getItem("seriesCount");
+var studyinsuid = localStorage.getItem("studyinsuid");
+// DOMContentLoaded 이벤트가 발생하면 실행되는 함수
 
 thumbnailBtn.addEventListener("click", () => {
     const thumbnailContainer = document.getElementById("thumbnail-container");
@@ -114,7 +120,7 @@ var infoContent =  document.getElementById('infoContent');
 function imageLayout(X, Y) {
     var boxImg = infoContent.querySelectorAll('ul div img');
     boxImg.forEach(function(img) {
-        img.src = 'images/blank_box.png';
+        img.src = '/images/blank_box.png';
     });
 
     var boxSize = 22;
@@ -131,7 +137,7 @@ function imageLayout(X, Y) {
         for(var j = 0; j < row; j++) {
             divRow = ulRow.querySelectorAll('div')[j];
             var targetImg = divRow.querySelector('img');
-            targetImg.src = 'images/filled_box.png';
+            targetImg.src = '/images/filled_box.png';
         }
     }
     return { row: row, col: col };
@@ -141,3 +147,46 @@ const list_btn = document.getElementById("list_btn");
 document.getElementById("list_btn").addEventListener("click", function() {
     window.location.href = "/list";
 })
+
+/*************************************************
+ *********************URL에서 파라미터 값 추출
+ *************************************************/
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+/*************************************************
+ *********************Seriesinsuid 조회
+ *************************************************/
+
+async function countBySeriesinsuid() {
+    const axiosInstance = axios.create({
+        baseURL: "http://localhost:8080" // 서버의 URL
+    });
+
+    try {
+        let response = await axiosInstance.post("/studies/getseriesinsuid/" + studyinsuid+"/" + seriesCount, {
+            seriesCount: seriesCount
+        });
+
+        if (response.status === 200) {
+            //값 받아오기
+            const seriesinsuidValues = response.data; //배열로 담아있음.
+            //리스트에서 가져온var seriesCount = localStorage.getItem("seriesCount");
+            //의 갯수만큼 있음.
+            console.log("seriesinsuid 종류별 값들:", seriesinsuidValues);
+            console.log("seriesinsuid 종류 갯수:", seriesinsuidValues.length);
+        }
+    } catch (error) {
+        console.error(error);
+        // 서버 응답 데이터 로깅 추가
+        console.error('Server response data:', error.response.data);
+    }
+}
+

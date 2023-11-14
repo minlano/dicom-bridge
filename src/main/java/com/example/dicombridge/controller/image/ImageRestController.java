@@ -1,6 +1,8 @@
 package com.example.dicombridge.controller.image;
 
 import com.example.dicombridge.domain.common.ThumbnailDto;
+import com.example.dicombridge.domain.image.Image;
+import com.example.dicombridge.repository.ImageRepository;
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/studies")
 @RequiredArgsConstructor
 public class ImageRestController {
+
 
     private final ImageService imageService;
 
@@ -142,7 +146,7 @@ public class ImageRestController {
         Path path = file.toPath();
         byte[] data = Files.readAllBytes(path);
 
-        System.out.println(data);
+//        System.out.println(data);
         // HTTP 응답 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -185,10 +189,30 @@ public class ImageRestController {
         // 파일을 byte 배열로 응답
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+    /*****************************************************************************************
+     ***********************************Series의 갯수******************************************
+     *****************************************************************************************/
+    @PostMapping("/seriescount/{studyinsuid}")
+    public int seriesCount(@PathVariable("studyinsuid") String studyinsuid){
 
+        return imageService.findMaxStudyKeyByStudyKey(studyinsuid);
+    }
 
+    /*****************************************************************************************
+     **********************************Seriesinsuid 조회***************************************
+     *****************************************************************************************/
+    @PostMapping("/getseriesinsuid/{studyinsuid}/{seriesCount}")
+   // public ResponseEntity<String> getseriesinsuid(@PathVariable int seriesCount) throws IOException {
+    public List<String> getSeriesInsUid(@PathVariable String studyinsuid, @PathVariable int seriesCount) throws IOException {
 
+        List<Image> images =imageService.getSeriesInsUid(studyinsuid,seriesCount);
 
+        List<String> seriesinsuidValues = images.stream()
+                .map(Image::getSeriesinsuid)
+                .collect(Collectors.toList());
+
+        return seriesinsuidValues;
+    }
 
 
 }

@@ -60,15 +60,14 @@ public class ImageService {
             this.cifsContext = new BaseContext(configuration).withCredentials(auth);
             Address address = cifsContext.getNameServiceClient().getByName(HOST);
             cifsContext.getTransportPool().logon(cifsContext, address);
-        }
-        catch (UnknownHostException | CIFSException e) {
+        } catch (UnknownHostException | CIFSException e) {
             throw new RuntimeException(e);
         }
     }
 
     private Map<String, String> fileRead(Map<String, Image> imageMap) throws IOException {
         Map<String, String> fileMap = new HashMap<>();
-        for(String fname : imageMap.keySet()) {
+        for (String fname : imageMap.keySet()) {
             SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
             ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
             File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
@@ -86,7 +85,7 @@ public class ImageService {
 
     private ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
         ByteArrayOutputStream byteArrayOutputStream;
-        byte[] buffer = new byte[1024*12];
+        byte[] buffer = new byte[1024 * 12];
         try {
             byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -107,11 +106,12 @@ public class ImageService {
         //스토리지에서 cifs로 읽어들인 dicomFile의 temp(로컬에는 저장안되고 메모리에 저장됨)
         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
             fos.write(fileBytes);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e);
         }
         return tempFile;
     }
+
     public String convertDcm2Jpg(File file) {
         try {
             Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
@@ -131,7 +131,7 @@ public class ImageService {
 
     private Map<String, byte[]> fileByteRead(Map<String, Image> imageMap) throws SmbException, MalformedURLException {
         Map<String, byte[]> fileByteMap = new HashMap<>();
-        for(String fname : imageMap.keySet()) {
+        for (String fname : imageMap.keySet()) {
             SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
             ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
             fileByteMap.put(fname, byteArrayOutputStream.toByteArray());
@@ -139,7 +139,9 @@ public class ImageService {
         return fileByteMap;
     }
 
-    /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
+    /**
+     * DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드
+     **/
     public Map<String, byte[]> getImageBytes(int studyKey) throws SmbException, MalformedURLException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
@@ -152,15 +154,16 @@ public class ImageService {
     public Map<String, String> getImages(int studyKey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
-                                                            i -> i.getFname(),
-                                                            i -> i
-                                                        ));
+                i -> i.getFname(),
+                i -> i
+        ));
         return fileRead(map);
     }
+
     /*****************************************************************************************
      ***************studyinsuid를 이용하여 image 조회 및 map에 정보를 담고 fileRead(map)**********
      *****************************************************************************************/
-    public File getSeriesNum(String seriesinsuid) throws IOException  {
+    public File getSeriesNum(String seriesinsuid) throws IOException {
         List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
 
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
@@ -170,7 +173,7 @@ public class ImageService {
         return fileRead2(map);
     }
 
-    public List<File> getSeriesNum2(String seriesinsuid) throws IOException  {
+    public List<File> getSeriesNum2(String seriesinsuid) throws IOException {
         Map<String, Image> map = new HashMap<>();
         List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
 
@@ -191,7 +194,6 @@ public class ImageService {
     }
 
 
-
     /* thumbnail */
     public Map<String, String> getThumbnail(int studyKey) throws IOException {
         Map<String, Image> map = new HashMap<>();
@@ -207,9 +209,9 @@ public class ImageService {
         return fileRead(map);
     }
 
-    public File getFile(int studykey) throws IOException  {
+    public File getFile(int studykey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studykey);
-        System.out.println("요청이미지"+images);
+        System.out.println("요청이미지" + images);
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
                 i -> i.getFname(),
                 i -> i
@@ -218,16 +220,24 @@ public class ImageService {
     }
 
     public File getFileByseriesinsuidNcount(String seriesinsuid,int order) throws IOException  {
-        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
-        Image needImages = images.get(order);
-        Map<String, Image> map = new HashMap<>();
-        map. put(needImages.getFname(), needImages);
+        int imagenum = order+1;
+        String insnum = String.valueOf(imagenum);
+
+        //List<Image> images = imageRepository.findByseriesinsuidAndImageIdImagekey(seriesinsuid, imagenum);
+        List<Image> images = imageRepository.findBySeriesinsuidAndInstancenum(seriesinsuid, insnum);
+        // Image needImages = images.get(order);
+        // Map<String, Image> map = new HashMap<>();
+        // map. put(needImages.getFname(), needImages);
+        Map<String, Image> map = images.stream().collect(Collectors.toMap(
+                i -> i.getFname(),
+                i -> i
+        ));
         return fileRead2(map);
     }
 
     private File fileRead2(Map<String, Image> imageMap) throws IOException {
         Map<String, String> fileMap = new HashMap<>();
-        for(String fname : imageMap.keySet()) {
+        for (String fname : imageMap.keySet()) {
             SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
             ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
             File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
@@ -249,13 +259,29 @@ public class ImageService {
         return tempFiles;
     }
 
-
+    public int findMaxStudyKeyByStudyKey(String studyinsuid) {
+        return imageRepository.findMaxStudyKeyByStudyKey(studyinsuid);
+    }
 
     public List<String> getReportStatusByStudyKey(int studykey) {
         // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
         List<Image> images = imageRepository.findByImageIdStudykey(studykey);
-        System.out.println("images : " + images);
+        //System.out.println("images : " + images);
         return images.stream().map(Image::getReportstatus).collect(Collectors.toList());
+    }
+
+    //Seriesinsuid 조회
+    public List<Image> getSeriesInsUid(String studyinsuid, int seriesCount) {
+        List<Image> allImages = new ArrayList<>();
+        int imagekey = 1;
+        for(int i=1; i<seriesCount+1; i++){
+            int serieskey = i;
+            List<Image> images = imageRepository.findByImageIdSerieskeyAndImageIdImagekeyAndStudyinsuid(serieskey, imagekey, studyinsuid);
+
+            allImages.addAll(images);
+        }
+
+        return allImages;
     }
 
 }

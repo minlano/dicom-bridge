@@ -1,52 +1,59 @@
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Title</title>
-    <script src="https://unpkg.com/cornerstone-core"></script>
-    <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/script/dicomParser.js"></script>
-    <script src="/script/mjtest.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .box {
+            width: 500px;
+            height: 500px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            border: 1px solid black; /* .box에 테두리 추가 */
+        }
 
+        .unvisible {
+            display: none;
+            border: 1px solid black; /* border 추가 */
+        }
+
+        .visible {
+            display: block;
+            border: 2px solid red; /* visible 클래스가 적용된 div에는 크게 표시되도록 스타일 추가 */
+            box-sizing: border-box; /* border를 포함한 크기로 지정 */
+            width: 100%; /* 부모 .box의 크기에 맞게 width 100%로 설정 */
+            height: 100%; /* 부모 .box의 크기에 맞게 height 100%로 설정 */
+        }
+    </style>
 </head>
 <body>
-<div id="targetDivId"></div>
-<div>
-    <a href="#" onclick="viewDicomByStudykey(2)">Convert DCM to Images</a>
 
-    <div class="col-md-6">
-        <span>Transfer Syntax: </span><span id="transferSyntax"></span><br>
-        <span>SOP Class: </span><span id="sopClass"></span><br>
-        <span>Samples Per Pixel: </span><span id="samplesPerPixel"></span><br>
-        <span>Photometric Interpretation: </span><span id="photometricInterpretation"></span><br>
-        <span>Number Of Frames: </span><span id="numberOfFrames"></span><br>
-        <span>Planar Configuration: </span><span id="planarConfiguration"></span><br>
-        <span>Rows: </span><span id="rows"></span><br>
-        <span>Columns: </span><span id="columns"></span><br>
-        <span>Pixel Spacing: </span><span id="pixelSpacing"></span><br>
-        <span>Bits Allocated: </span><span id="bitsAllocated"></span><br>
-        <span>Bits Stored: </span><span id="bitsStored"></span><br>
-        <span>High Bit: </span><span id="highBit"></span><br>
-        <span>Pixel Representation: </span><span id="pixelRepresentation"></span><br>
-        <span>WindowCenter: </span><span id="windowCenter"></span><br>
-        <span>WindowWidth: </span><span id="windowWidth"></span><br>
-        <span>RescaleIntercept: </span><span id="rescaleIntercept"></span><br>
-        <span>RescaleSlope: </span><span id="rescaleSlope"></span><br>
-        <span>Basic Offset Table Entries: </span><span id="basicOffsetTable"></span><br>
-        <span>Fragments: </span><span id="fragments"></span><br>
-        <span>Min Stored Pixel Value: </span><span id="minStoredPixelValue"></span><br>
-        <span>Max Stored Pixel Value: </span><span id="maxStoredPixelValue"></span><br>
-        <span>Total Time: </span><span id="totalTime"></span><br>
-        <span>Load Time: </span><span id="loadTime"></span><br>
-        <span>Decode Time: </span><span id="decodeTime"></span><br>
-
-    </div>
-
+<div class="box">
+    <div class="unvisible"></div>
+    <div class="unvisible"></div>
+    <div class="unvisible"></div>
+    <div class="unvisible"></div>
 </div>
-<div id="dicomImageContainer"></div>
+
+<button value="1x1" onclick="showDivs(1)">1x1</button>
+<button value="2x2" onclick="showDivs(2)">2x2</button>
+
+<script>
+    function showDivs(num) {
+        var divs = document.querySelectorAll('.box .unvisible');
+
+        // 모든 div를 초기화
+        divs.forEach(function(div) {
+            div.classList.remove('visible');
+        });
+
+        // 선택한 개수만큼 div를 보이도록 설정
+        for (var i = 0; i < num; i++) {
+            divs[i].classList.add('visible');
+        }
+    }
+</script>
 
 </body>
-
-
 </html>

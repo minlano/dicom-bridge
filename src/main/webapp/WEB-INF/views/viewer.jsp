@@ -4,6 +4,7 @@
 <head>
     <title>DicomBridge</title>
     <link rel="stylesheet" href="/style/viewergrid.css">
+
 </head>
 <body>
 <div id="viewer">
@@ -182,5 +183,13 @@
     </section>
 </div>
 </body>
-<script src="/script/viewer.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/script/viewer.js"></script>
+<script>document.addEventListener("DOMContentLoaded", function() {
+    // 페이지가 로딩되면 실행될 코드
+
+    // countBySeriesinsuid 함수 호출
+    countBySeriesinsuid();
+});
+</script>
 </html>
