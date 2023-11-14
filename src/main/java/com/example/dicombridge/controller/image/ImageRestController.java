@@ -66,7 +66,6 @@ public class ImageRestController {
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //        }
 //    }
-
     @PostMapping("/getThumbnail/{studyKey}")
     public ResponseEntity<Map<String, ThumbnailWithFileDto>> getThumbnailData(@PathVariable String studyKey) throws IOException {
         Map<String, ThumbnailWithFileDto> images = imageService.getThumbnail(Integer.valueOf(studyKey));
@@ -211,6 +210,4 @@ public class ImageRestController {
 
         return seriesinsuidValues;
     }
-
-
 }

@@ -48,7 +48,7 @@ function showThumbnail(path) {
                 var imagesData = JSON.parse(xhr.responseText);
                 displayImages(imagesData);
             } else {
-                alert("Failed to retrieve images. Status code: " + xhr.status);
+                alert("Failed - Status code: " + xhr.status);
             }
         }
     };

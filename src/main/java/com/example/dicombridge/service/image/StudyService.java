@@ -27,4 +27,12 @@ public class StudyService {
         List<Study> studies = studyRepository.findByStudykey(studykey);
         return studies.stream().map(Study::getReportstatus).collect(Collectors.toList());
     }
+
+    public List<StudyResponseDto> getSearch() {
+        List<Study> studyList = studyRepository.findAll();
+        return studyList.stream()
+                .map(StudyResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
 }

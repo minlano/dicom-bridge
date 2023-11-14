@@ -171,6 +171,10 @@ aside#study-search {
     margin-top: 5px;
 }
 
+#search-result {
+    margin-right: 70px;
+}
+
 #search-result{
     display: flex;
     justify-content: space-between;
@@ -178,7 +182,7 @@ aside#study-search {
 }
 
 #search-result a{
-    margin-right: auto; /* 왼쪽 끝에 배치 */
+    margin-right: 5px;
 }
 
 #search-result button,select {
@@ -201,16 +205,32 @@ img{
     width: 100%;
 }
 
+/*#mainContent {*/
+/*    grid-area: main; !* #mainContent를 section 그리드 영역에 배치 *!*/
+/*    background-color: #2B2B2B;*/
+/*    border-bottom-left-radius: 10px;*/
+/*    border-bottom-right-radius: 10px;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    overflow: auto;*/
+/*    max-height:38vh;*/
+/*    height: 500px;*/
+/*}*/
+
 #mainContent {
-    grid-area: main; /* #mainContent를 section 그리드 영역에 배치 */
+    grid-area: main;
     background-color: #2B2B2B;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    display: flex;
-    justify-content: center;
+    display: block;
+    overflow: visible;
+    max-height: unset;
+    height: auto;
     overflow: auto;
-    max-height:38vh;
-    height: 500px;
+}
+
+#mainContent::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 OS에서 스크롤바 디자인 안보이게 하기 */
 }
 
 #mainTable {
@@ -220,6 +240,7 @@ img{
     color: white;
     border-collapse: collapse;
     font-size: 12px;
+    margin: 0 auto;/**/
 }
 
 #mainTable th, #mainTable td {
@@ -238,7 +259,7 @@ img{
 footer {
     grid-area: footer;
     display: flex;
-    max-height: 35vh; /* 원하는 높이의 최대값 설정 */
+    max-height: 37vh; /* 원하는 높이의 최대값 설정 */
 }
 
 .left-div, .right-div {
@@ -263,8 +284,18 @@ footer {
     padding: 0;
     display: flex; /* 가로 정렬을 위해 flexbox 레이아웃 사용 */
     flex-direction: row; /* 가로로 정렬 */
-    justify-content: space-around;
+    justify-content: flex-start;
 }
+
+.pid-div{
+    margin: 0px 50px;
+}
+
+.table-div {
+    display: flex;
+    justify-content: center;
+}
+
 #previousTable {
     width: 90%;
     height: 15px;
@@ -278,7 +309,12 @@ footer {
     border: 2px solid #2B2B2B; /* 테두리를 1px 굵기의 검은 선으로 설정 */
     padding: 8px; /* 셀 안의 내용과 테두리 사이의 간격을 조절 */
 }
-#previousTable tr:nth-child(odd):not(:first-child) {
+
+#previousTable tr th {
+    background-color: #090909;
+}
+
+#previousTable tr:nth-child(odd) {
     background-color: #393939;
     cursor: pointer;
 }
@@ -321,8 +357,13 @@ footer {
     align-items: center;
 }
 .subtitleAndButton a{
+    margin-right: 3px;
+}
+
+#studyCount {
     margin-right: auto; /* 왼쪽 끝에 배치 */
 }
+
 .subtitleAndButton button {
     padding-left: 5px;
     border-radius: 15px ;
@@ -500,4 +541,20 @@ footer {
     box-sizing: content-box;
     height: 1.4375em;
     padding: 8.5px 14px;
+}
+
+.buttonContainer {
+    text-align: center; /* 버튼을 수평 중앙에 정렬 */
+    margin-top: 10px; /* 버튼과 테이블 사이 간격 조절 */
+}
+
+#loadMore{
+    width: 100px;
+    background-color: #090900;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 7px;
+    cursor: pointer;
+    font-size: 12px;
 }

@@ -161,10 +161,12 @@
             </ul>
         </aside>
         <section id="thumbnail-container" style="display: none">
-            <table>
-                <thead><tr><th>thumbnail</th></tr></thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>thumbnail</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </section>
         <section id="image-container">
 <%--            <div class="image">--%>
