@@ -142,7 +142,7 @@ public class ImageRestController {
         Path path = file.toPath();
         byte[] data = Files.readAllBytes(path);
 
-        System.out.println(data);
+        //System.out.println(data);
         // HTTP 응답 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);

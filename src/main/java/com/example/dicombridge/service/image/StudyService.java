@@ -22,4 +22,12 @@ public class StudyService {
                         .map(StudyResponseDto::new)
                         .collect(Collectors.toList());
     }
+
+    public List<StudyResponseDto> getSearch() {
+        List<Study> studyList = studyRepository.findAll();
+        return studyList.stream()
+                .map(StudyResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
 }

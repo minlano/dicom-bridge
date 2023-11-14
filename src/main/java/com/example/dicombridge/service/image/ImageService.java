@@ -112,6 +112,7 @@ public class ImageService {
         }
         return tempFile;
     }
+
     public String convertDcm2Jpg(File file) {
         try {
             Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
@@ -197,8 +198,9 @@ public class ImageService {
         Map<String, Image> map = new HashMap<>();
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
 
-        for (int i = 0; i < images.size(); i++) {
+        for(int i = 0; i < images.size(); i++) {
             Image image = images.get(i);
+
             if (image.getImageId().getImagekey() == 1) {
                 map.put(image.getFname(), image);
             }
@@ -254,7 +256,7 @@ public class ImageService {
     public List<String> getReportStatusByStudyKey(int studykey) {
         // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
         List<Image> images = imageRepository.findByImageIdStudykey(studykey);
-        System.out.println("images : " + images);
+        //System.out.println("images : " + images);
         return images.stream().map(Image::getReportstatus).collect(Collectors.toList());
     }
 
