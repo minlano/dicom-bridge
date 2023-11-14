@@ -25,9 +25,9 @@ public class Image {
     private Integer delflag;
 
     private String instancenum;
-    private String reportstatus;
 
     public Image(String seriesinsuid) {
         this.seriesinsuid = seriesinsuid;
     }
+
 }

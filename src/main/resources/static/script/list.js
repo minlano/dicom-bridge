@@ -79,32 +79,86 @@ $(document).on("dblclick", "tr.subTr", function() {
 // });
 
 // 리포트
-$(document).on("click", "tr.subTr", function() {
-    const studykey = $(this).data('studykey');
+$(document).ready(function() {
+    // reportstatus에 따라 입력될 값을 설정하는 함수
+    function setReportInput(reportstatus) {
+        const adminInput = "administrator";
+        const empty = "";
+        console.log("reportstatus:" + reportstatus);
 
-    if (studykey) {
-        // 서버에 studykey를 전송하여 reportstatus 값을 가져오는 요청
-        $.ajax({
-            url: "/getReportStatus", // 적절한 엔드포인트를 사용해야 함
-            method: "GET",
-            data: { studykey: studykey },
-            success: function(response) {
-                // 서버로부터 받은 reportstatus 값을 기반으로 <select> 요소 생성
-                const reportStatusSelect = $("<select>");
+        // 먼저 text3, text5, text6 값 비워주기
+        $("#text3, #text5, #text6").val(empty);
 
-                // response에는 적절한 reportstatus 값들이 들어있어야 함
-                for (const status of response) {
-                    reportStatusSelect.append(`<option value="${status}">${status}</option>`);
-                }
-
-                // 기존의 <select> 요소를 제거하고 새로 생성된 <select> 요소 추가
-                $("#reportStatusSelectContainer").empty().append(reportStatusSelect);
-            },
-            error: function() {
-                alert("Error fetching reportstatus");
-            }
-        });
-    } else {
-        alert("Data not available");
+        if (reportstatus === 3) {
+            console.log("3번");
+            $("#text3").val(adminInput);
+        } else if (reportstatus === 5) {
+            console.log("5번");
+            $("#text5").val(adminInput);
+        } else if (reportstatus === 6) {
+            $("#text6").val(empty);
+        }
     }
+
+    // 클릭 이벤트에 reportstatus를 받아와서 처리하는 코드
+    $(document).on("click", "tr.subTr", function() {
+        const studykey = $(this).data('studykey');
+
+        if (studykey) {
+            // 서버에 studykey를 전송하여 reportstatus 값을 가져오는 요청
+            $.ajax({
+                url: "/getReportStatus",
+                method: "GET",
+                data: { studykey: studykey },
+                success: function(response) {
+                    // 서버로부터 받은 reportstatus 값을 기반으로 <select> 요소 생성
+                    const reportStatusSelect = $("<select>");
+
+                    // response에는 적절한 reportstatus 값들이 들어있어야 함
+                    for (const status of response) {
+                        reportStatusSelect.append(`<option value="${status}">${status}</option>`);
+                    }
+
+                    // 기존의 <select> 요소를 제거하고 새로 생성된 <select> 요소 추가
+                    $("#reportStatusSelectContainer").empty().append(reportStatusSelect);
+
+                    // reportstatus에 따라 입력될 값을 설정
+                    const selectedStatus = reportStatusSelect.val();
+                    console.log("selectedStatus:" +selectedStatus);
+                    setReportInput(parseInt(selectedStatus));
+
+                    // 서버에 getInterpretation 요청을 보내고 결과를 받아 처리
+                    $.ajax({
+                        url: "/getInterpretation",
+                        method: "GET",
+                        data: { studykey: studykey },
+                        success: function(interpretationResponse) {
+                            // interpretationResponse가 배열이라면 첫 번째 요소를 선택
+                            const interpretationValue = interpretationResponse.length > 0 ? interpretationResponse[0] : '';
+
+                            // <textarea> 요소에 값을 설정
+                            $("#interpretation").val(interpretationValue);
+                        },
+                        error: function() {
+                            alert("Error fetching interpretation");
+                        }
+                    });
+                },
+                error: function() {
+                    alert("Error fetching reportstatus");
+                }
+            });
+        } else {
+            alert("Data not available");
+        }
+    });
+
+    // reportstatus 값이 변경될 때 호출되는 이벤트 처리
+    $(document).on("change", "#reportStatusSelectContainer select", function() {
+        const selectedStatus = $(this).val();
+        console.log("selectedStatus: " + selectedStatus);
+
+        // 기존 input 요소의 값을 변경
+        setReportInput(parseInt(selectedStatus));
+    });
 });
