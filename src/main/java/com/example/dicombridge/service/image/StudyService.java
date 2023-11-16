@@ -28,8 +28,10 @@ public class StudyService {
         return studies.stream().map(Study::getReportstatus).collect(Collectors.toList());
     }
 
-    public List<StudyResponseDto> getSearch() {
-        List<Study> studyList = studyRepository.findAll();
+    public List<StudyResponseDto> getSearch(String pid, String pname, Integer reportstatus) {
+
+        List<Study> studyList = studyRepository.findByPidAndPnameAndReportstatus(pid, pname, reportstatus);
+
         return studyList.stream()
                 .map(StudyResponseDto::new)
                 .collect(Collectors.toList());

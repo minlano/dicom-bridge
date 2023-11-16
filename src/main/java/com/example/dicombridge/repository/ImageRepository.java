@@ -23,7 +23,7 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
                     "FROM Image image " +
                     "LEFT OUTER JOIN Series series ON image.imageId.studykey = series.seriesId.studykey " +
                     "WHERE image.imageId.studykey = :studykey")
-    List<ThumbnailDto> findImageAndSeriesDesc(int studykey);
+    List<ThumbnailDto> findImageAndSeriesDesc(@Param("studykey") int studykey);
 
     List<Image> findByseriesinsuid(String seriesinsuid);//studyinsuid로 imagetab 조회
     //List<Image> findByseriesinsuidAndImageIdImagekey(String seriesinsuid, int imagenum);
