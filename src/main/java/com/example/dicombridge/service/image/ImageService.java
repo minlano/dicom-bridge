@@ -19,7 +19,11 @@ import jcifs.smb.SmbFileInputStream;
 import org.dcm4che3.io.DicomInputStream;
 import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 
 import javax.annotation.PostConstruct;
@@ -227,10 +231,12 @@ public class ImageService {
     }
 
     public File getFileByseriesinsuidNcount(String seriesinsuid,int order) throws IOException  {
-        int imagenum = order+1;
-        String insnum = String.valueOf(imagenum);
-
-        List<Image> images = imageRepository.findBySeriesinsuidAndInstancenum(seriesinsuid, insnum);
+        int imagenum = order;
+        //String insnum = String.valueOf(imagenum);
+        Pageable pageable = PageRequest.of(imagenum-1,1); // n은 가져올 행 번호
+        //int로 전달할 수 있지만하면 모든 결과를 메모리에 로드하므로 결과 집합이 큰 경우 성능 이슈가 발생할 수 있다.
+        // 결과 집합이 크다면 Pageable을 사용하여 페이징 처리하는 것이 좋다
+        List<Image> images = imageRepository.findNthImageBySeriesinsuid(seriesinsuid, pageable);
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
                 i -> i.getFname(),
                 i -> i

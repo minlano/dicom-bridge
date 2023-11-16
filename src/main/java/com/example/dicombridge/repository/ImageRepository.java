@@ -6,6 +6,7 @@ import com.example.dicombridge.domain.image.ImageId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -30,6 +31,8 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
     List<Image> findByseriesinsuid(String seriesinsuid);//studyinsuid로 imagetab 조회
     //List<Image> findByseriesinsuidAndImageIdImagekey(String seriesinsuid, int imagenum);
     List<Image> findBySeriesinsuidAndInstancenum(String seriesinsuid, String insnum);
+    @Query("SELECT i FROM Image i WHERE i.seriesinsuid = :seriesinsuid ORDER BY i.instancenum ASC")
+    List<Image> findNthImageBySeriesinsuid(@Param("seriesinsuid") String seriesinsuid, Pageable pageable);
 
     @Query("SELECT MAX(i.imageId.serieskey) FROM Image i WHERE i.studyinsuid = :studyinsuid")
     Integer findMaxStudyKeyByStudyKey(@Param("studyinsuid") String studyinsuid); // serieskey의 최댓값을 구하지만 1부터 숫자가 늘어나기에 count와 같다.
