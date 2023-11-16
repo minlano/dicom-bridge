@@ -12,18 +12,20 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image, ImageId> {
     List<Image> findByImageIdStudykey(int studykey);
 
+    List<Image> findByStudyinsuid(String studyInsUid);
+
     @Query("SELECT DISTINCT i.seriesinsuid " +
            "FROM Image i " +
            "WHERE i.studyinsuid = :studyInsUid")
     List<String> findDistinctSeriesinsuidByStudyinsuid(@Param("studyInsUid") String studyInsUid);
 
     @Query(
-            value = "SELECT " +
-                    "new com.example.dicombridge.domain.common.ThumbnailDto(image.imageId.imagekey, image.imageId.serieskey, image.studyinsuid, image.seriesinsuid, image.sopinstanceuid, image.sopclassuid, image.path, image.fname, image.delflag, series.seriesdesc) " +
-                    "FROM Image image " +
-                    "LEFT OUTER JOIN Series series ON image.imageId.studykey = series.seriesId.studykey " +
-                    "WHERE image.imageId.studykey = :studykey")
-    List<ThumbnailDto> findImageAndSeriesDesc(int studykey);
+            value = "SELECT new com.example.dicombridge.domain.common.ThumbnailDto(image.imageId.imagekey, image.imageId.serieskey, image.studyinsuid, image.seriesinsuid, image.sopinstanceuid, image.sopclassuid, image.path, image.fname, image.delflag, series.seriesdesc) " +
+                    "FROM Image image, Series series " +
+                    "WHERE image.seriesinsuid = series.seriesinsuid " +
+                    "  AND image.imageId.studykey = :studykey " +
+                    "  AND series.seriesId.studykey = :studykey")
+    List<ThumbnailDto> findImageAndSeriesDesc(@Param("studykey") int studykey);
 
     List<Image> findByseriesinsuid(String seriesinsuid);//studyinsuid로 imagetab 조회
     //List<Image> findByseriesinsuidAndImageIdImagekey(String seriesinsuid, int imagenum);

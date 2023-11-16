@@ -14,5 +14,6 @@ import javax.persistence.Table;
 public class Series {
     @EmbeddedId
     private SeriesId seriesId;
+    private String seriesinsuid;
     private String seriesdesc;
 }

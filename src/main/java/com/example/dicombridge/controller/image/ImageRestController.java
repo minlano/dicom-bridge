@@ -29,52 +29,28 @@ public class ImageRestController {
 
     private final ImageService imageService;
 
-    @PostMapping("/haha/{studyKey}")
-    public ResponseEntity<Map<String, String>> getImagesData(@PathVariable String studyKey) throws IOException {
-        Map<String, String> images = imageService.getImages(Integer.valueOf(studyKey));
-        if(!images.isEmpty()) {
-            return new ResponseEntity<>(images, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-//    /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
-//    @PostMapping("/{studyKey}")
-//    public ResponseEntity<byte[]> getImagesData2(@PathVariable String studyKey) throws IOException {
-//        Map<String, byte[]> dicomDatas = imageService.getImageBytes(Integer.valueOf(studyKey));
-//
-//        // DICOM 데이터를 Base64로 인코딩
-////        Map<String, String> res = new HashMap<>();
-//        byte[] byteArray = null;
-//        for(String dicomData : dicomDatas.keySet()) {
-////            String base64Encoded = Base64.getEncoder().encodeToString(dicomDatas.get(dicomData));
-////            res.put(dicomData, base64Encoded);
-//            byteArray = dicomDatas.get(dicomData);
-//        }
-//        System.out.println(byteArray);
-//        return ResponseEntity.ok(byteArray);
-//    }
-    /**  DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드 **/
-//    @PostMapping("/getThumbnail/{studyKey}")
-//    public ResponseEntity<Map<String, ThumbnailDto>> getThumbnailData(@PathVariable String studyKey, Model model) throws IOException {
-//        Map<String, ThumbnailDto> images = imageService.getThumbnail(Integer.valueOf(studyKey));
-//
-//        if(!images.isEmpty()) {
-//            return new ResponseEntity<>(images, HttpStatus.OK);
-//        }else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    /** ThumbNale **/
     @PostMapping("/getThumbnail/{studyKey}")
     public ResponseEntity<Map<String, ThumbnailWithFileDto>> getThumbnailData(@PathVariable String studyKey) throws IOException {
         Map<String, ThumbnailWithFileDto> images = imageService.getThumbnail(Integer.valueOf(studyKey));
 
-        if(!images.isEmpty()) {
+        if (!images.isEmpty()) {
             return new ResponseEntity<>(images, HttpStatus.OK);
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/getseriesInsUidAndCount/{studyinsuid}/{seriesCount}")
+    public List<String> getseriesInsUidAndCount(@PathVariable String studyinsuid, @PathVariable int seriesCount) throws IOException {
+
+        List<Image> images = imageService.getSeriesInsUidAndCount(studyinsuid,seriesCount);
+
+        List<String> seriesinsuidValues = images.stream()
+                .map(Image::getSeriesinsuid)
+                .collect(Collectors.toList());
+
+        return seriesinsuidValues;
     }
 
     /*****************************************************************************************

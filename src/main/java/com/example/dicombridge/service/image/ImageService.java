@@ -5,6 +5,7 @@ import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
 import com.example.dicombridge.domain.study.Study;
 import com.example.dicombridge.repository.ImageRepository;
+import com.example.dicombridge.service.fileRead.FileRead;
 import jcifs.Address;
 import jcifs.CIFSContext;
 import jcifs.CIFSException;
@@ -27,8 +28,12 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class ImageService {
@@ -80,14 +85,15 @@ public class ImageService {
         return fileMap;
     }
 
-    private SmbFileInputStream getSmbFileInputStream(Image image) throws MalformedURLException, SmbException {
+    public SmbFileInputStream getSmbFileInputStream(Image image) throws MalformedURLException, SmbException {
         SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, image.getPath().replace('\\', '/') + "/" + image.getFname()), cifsContext);
         return new SmbFileInputStream(file);
     }
 
-    private ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
+    public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
+//        long startTime = System.currentTimeMillis();
         ByteArrayOutputStream byteArrayOutputStream;
-        byte[] buffer = new byte[1024 * 12];
+        byte[] buffer = new byte[1024 * 1024 * 1024];
         try {
             byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -100,10 +106,12 @@ public class ImageService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+//        long endTime = System.currentTimeMillis();
+//        System.out.println("convert2ByteArrayOutputStream 각 시간 :  " + (endTime - startTime));
         return byteArrayOutputStream;
     }
 
-    private File convert2DcmFile(byte[] fileBytes) throws IOException {
+    public File convert2DcmFile(byte[] fileBytes) throws IOException {
         File tempFile = File.createTempFile("tempfile", ".dcm");
         //스토리지에서 cifs로 읽어들인 dicomFile의 temp(로컬에는 저장안되고 메모리에 저장됨)
         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
@@ -131,28 +139,6 @@ public class ImageService {
         return null;
     }
 
-    private Map<String, byte[]> fileByteRead(Map<String, Image> imageMap) throws SmbException, MalformedURLException {
-        Map<String, byte[]> fileByteMap = new HashMap<>();
-        for (String fname : imageMap.keySet()) {
-            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
-            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-            fileByteMap.put(fname, byteArrayOutputStream.toByteArray());
-        }
-        return fileByteMap;
-    }
-
-    /**
-     * DicomParser 이용하기 위해 byte로 일단 보내기 위한 메서드
-     **/
-    public Map<String, byte[]> getImageBytes(int studyKey) throws SmbException, MalformedURLException {
-        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
-        Map<String, Image> map = images.stream().collect(Collectors.toMap(
-                i -> i.getFname(),
-                i -> i
-        ));
-        return fileByteRead(map);
-    }
-
     public Map<String, String> getImages(int studyKey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
@@ -165,10 +151,6 @@ public class ImageService {
     /*****************************************************************************************
      ***************studyinsuid를 이용하여 image 조회 및 map에 정보를 담고 fileRead(map)**********
      *****************************************************************************************/
-    public List<String> getSeriesByStudy(String studyInsUid) {
-        return imageRepository.findDistinctSeriesinsuidByStudyinsuid(studyInsUid);
-    }
-
     public File getSeriesNum(String seriesinsuid) throws IOException {
         List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
 
