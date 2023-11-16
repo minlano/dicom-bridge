@@ -7,7 +7,25 @@ var currentUrl = window.location.href;
 // seriesCount
 var seriesCount = localStorage.getItem("seriesCount");
 var studyinsuid = localStorage.getItem("studyinsuid");
-// DOMContentLoaded 이벤트가 발생하면 실행되는 함수
+
+// 스크롤 최대값 설정
+let order = 1;
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    // 페이지가 로딩되면 실행될 코드
+    // 마우스 스크롤 이벤트 나중에 호버+@하면서 추가할 것
+   // document.body.addEventListener("wheel", handleScroll);
+    // countBySeriesinsuid 함수 호출
+
+    rowCol.col = 2; rowCol.row = 2;
+    var imageContainer = document.getElementById('image-container');
+    imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+    imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+    imageDisplay()
+});
+
 
 thumbnailBtn.addEventListener("click", () => {
     const thumbnailContainer = document.getElementById("thumbnail-container");
@@ -132,15 +150,43 @@ infoBox.addEventListener(('click'), function(e) {
     imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
 })
 
+// async function imageDisplay() {
+//     for(var i = 0; i<rowCol.row; i++) {
+//         for (var j = 0; j < rowCol.col; j++) {
+//             var div = document.createElement('div');
+//             var img = document.createElement('img');
+//
+//             div.className = `image ${i} ${j}`;
+//             div.appendChild(img);
+//             return div;
+//         }
+//     }
+// }
 async function imageDisplay() {
+    var imageContainer = document.getElementById('image-container');
+    var index = 0;
     for(var i = 0; i<rowCol.row; i++) {
         for (var j = 0; j < rowCol.col; j++) {
             var div = document.createElement('div');
-            var img = document.createElement('img');
+           // var img = document.createElement('img');
 
             div.className = `image ${i} ${j}`;
-            div.appendChild(img);
-            return div;
+            var id = `image_${i}_${j}`;
+            div.id = id;
+            div.setAttribute('data-div-id', id); // data-div-id 속성에 id 값을 저장
+            document.body.appendChild(div);
+            imageContainer.appendChild(div);
+            //div.appendChild(img);
+            // 문자열을 정수로 변환
+            var numericI = parseInt(i, 10);
+            var numericJ = parseInt(j, 10);
+
+            if(seriesCount>index){
+
+                viewDicomBySeriesinsuidnthrow(id, index);
+            }
+            index ++;
+            //return div;
         }
     }
 }
@@ -168,7 +214,7 @@ async function getDicomMetadata(studyInsUid) { //다이콤 메타 데이터 양�
     // return dataSet;
 
     const API = axios.create({
-        baseURL: 'http://localhost:8081',
+        baseURL: 'http://localhost:8080',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -243,7 +289,7 @@ function getParameterByName(name, url) {
  *********************Seriesinsuid 조회
  *************************************************/
 
-async function countBySeriesinsuid() {
+async function findBySeriesinsuid() {
     const axiosInstance = axios.create({
         baseURL: "http://localhost:8080" // 서버의 URL
     });
@@ -258,8 +304,9 @@ async function countBySeriesinsuid() {
             const seriesinsuidValues = response.data; //배열로 담아있음.
             //리스트에서 가져온var seriesCount = localStorage.getItem("seriesCount");
             //의 갯수만큼 있음.
-            console.log("seriesinsuid 종류별 값들:", seriesinsuidValues);
-            console.log("seriesinsuid 종류 갯수:", seriesinsuidValues.length);
+            //console.log("seriesinsuid 종류별 값들:", seriesinsuidValues);
+            //console.log("seriesinsuid 종류 갯수:", seriesinsuidValues.length);
+            return seriesinsuidValues;
         }
     } catch (error) {
         console.error(error);
@@ -268,3 +315,104 @@ async function countBySeriesinsuid() {
     }
 }
 
+/*************************************************
+ *********************seriesinsuid의 특정행 조회
+ *************************************************/
+async function viewDicomBySeriesinsuidnthrow(id, index) {
+    cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
+    cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
+    const seriesinsuid = await findBySeriesinsuid();
+    let tempseriesinsuid = seriesinsuid[index];
+    console.log(tempseriesinsuid);
+    try {
+        let response = await axios.post("/studies/takeserIesunsuidIndex/"+tempseriesinsuid+"/"+order, {
+            order: order
+        }, {
+            responseType: 'arraybuffer'
+        });
+        if (response.status === 200) {
+            let arrayBuffer = response.data;
+            //const dataSet = await getDicomMetadata(arrayBuffer);
+
+            const divId = id;
+            displayDicomImagenthrow(arrayBuffer, divId);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
+function displayDicomImagenthrow(arrayBuffer, divId) { //dicom 이미지 출력
+
+    const imageId = `dicomweb:${URL.createObjectURL(new Blob([arrayBuffer], { type: 'application/dicom' }))}`;
+    const existingDiv = document.getElementById(divId);
+
+    if(existingDiv){
+        existingDiv.innerHTML = ''; // div 내용을 비워줍니다.
+        cornerstone.enable(existingDiv);
+        cornerstone.loadImage(imageId).then(image => {
+            cornerstone.displayImage(existingDiv, image);
+        });
+    } else {
+        console.error(`Div with ID '${divId}' not found.`);
+    }
+
+
+}
+
+/*************************************************
+ *********************Seriesinsuid 총 갯수 조회
+ *************************************************/
+async function countBySeriesinsuid(seriesinsuid) {
+
+
+    const axiosInstance = axios.create({
+        baseURL: "http://localhost:8080" // 서버의 URL
+    });
+
+    try {
+        let response = await axiosInstance.post("/studies/seriesinsuidcount/" + seriesinsuid, {
+            seriesinsuid: seriesinsuid
+        });
+
+        if (response.status === 200) {
+            let count = response.data;
+            console.log(count);
+            return count;
+        }
+    } catch (error) {
+        console.error(error);
+        // 서버 응답 데이터 로깅 추가
+        console.error('Server response data:', error.response.data);
+    }
+}
+
+////////////////////////////////////////////////////////
+async function handleScroll(event) {
+
+    let maxOrder = await countBySeriesinsuid(seriesinsuid[1])
+
+    console.log(order+"/"+maxOrder);
+
+    if (event.deltaY > 0) {
+        // 스크롤을 아래로 내리면 count를 감소시킴
+        if (order > 0) {
+            order--;
+        } else {
+            // order이 0보다 작아지면 maxOrder로 설정
+            order = maxOrder - 1;
+        }
+    } else {
+        // 스크롤을 위로 올리면 count를 증가시킴
+        if (order < maxOrder-1) {
+            order++;
+        } else {
+            // order이 maxOrder보다 크면 0으로 설정
+            order = 0;
+        }
+    }
+
+    // 변경된 count에 맞게 이미지 표시
+    viewDicomBySeriesinsuidnthrow(seriesinsuid[0]);
+}
