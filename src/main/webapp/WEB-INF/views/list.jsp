@@ -80,11 +80,11 @@
                 <li><input type="text" class="keyword" id="Pid-input" placeholder="환자 아이디">
                     <input type="text" class="keyword" id="Pname-input" placeholder="환자 이름">
                     <select id="category" class="keyword">
-                        <option value="전체">판독상태</option>
-                        <option value="읽지않음">읽지않음</option>
-                        <option value="열람중">열람중</option>
-                        <option value="예비판독">예비판독</option>
-                        <option value="판독">판독</option>
+                        <option value="">판독상태</option>
+                        <option value="3">읽지않음</option>
+                        <option value="4">열람중</option>
+                        <option value="5">예비판독</option>
+                        <option value="6">판독</option>
                     </select>
                     <button id="search">검색</button>
                 </li>
@@ -101,20 +101,24 @@
             </div>
         </aside>
         <section id="mainContent">
-            <table id="mainTable">
-                <tr id="trTitle">
-                    <th>번호</th>
-                    <th>환자 아이디</th>
-                    <th>환자 이름</th>
-                    <th>검사장비</th>
-                    <th class="study">검사설명</th>
-                    <th>검사일시</th>
-                    <th>판독상태</th>
-                    <th>시리즈</th>
-                    <th>이미지</th>
-                    <th>Verify</th>
-                </tr>
-            </table>
+            <div class="table-container">
+                <table id="mainTable">
+                    <thead id="header-container">
+                        <tr id="trTitle">
+                            <th>번호</th>
+                            <th>환자 아이디</th>
+                            <th>환자 이름</th>
+                            <th>검사장비</th>
+                            <th class="study">검사설명</th>
+                            <th>검사일시</th>
+                            <th>판독상태</th>
+                            <th>시리즈</th>
+                            <th>이미지</th>
+                            <th>Verify</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </section>
         <footer>
             <div class="left-div">

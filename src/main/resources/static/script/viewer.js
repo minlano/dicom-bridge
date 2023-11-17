@@ -52,32 +52,64 @@ function showThumbnail(path) {
     xhr.send();
 }
 
+// function displayImages(images) {
+//     var tbody = document.querySelector("#thumbnail-container tbody");
+//
+//     for (var imageName in images) {
+//         if (images.hasOwnProperty(imageName)) {
+//             var base64Image = images[imageName].image;
+//             var seriesKey = images[imageName].serieskey;
+//             var seriesDesc = images[imageName].seriesdesc;
+//
+//             // 여기서 서버로부터 가져온 이미지들을 어딘가에 저장할 필요가 있어 보임 -> 일단 localStorage 시도(아직시작안함)
+//             var tr = document.createElement("tr");
+//             var td = document.createElement("td");
+//             var divImg = document.createElement("div");
+//             var img = document.createElement("img");
+//             var divDesc = document.createElement("div");
+//
+//             divDesc.className = "thumbnail-desc";
+//             divDesc.innerHTML = `Series Number : ${seriesKey}<br> &nbsp&nbsp&nbsp Series Desc : ${seriesDesc}`;
+//             img.src = "data:image/jpeg;base64," + base64Image;
+//
+//             divImg.appendChild(img);
+//             td.appendChild(divDesc);
+//             td.appendChild(divImg);
+//             tr.appendChild(td);
+//             tbody.appendChild(tr);
+//         }
+//     }
+// }
+
 function displayImages(images) {
     var tbody = document.querySelector("#thumbnail-container tbody");
 
-    for (var imageName in images) {
-        if (images.hasOwnProperty(imageName)) {
-            var base64Image = images[imageName].image;
-            var seriesKey = images[imageName].serieskey;
-            var seriesDesc = images[imageName].seriesdesc;
+    // 이미지 배열을 serieskey에 대해 오름차순으로 정렬
+    var sortedImages = Object.values(images).sort(function (a, b) {
+        return a.serieskey - b.serieskey;
+    });
 
-            // 여기서 서버로부터 가져온 이미지들을 어딘가에 저장할 필요가 있어 보임 -> 일단 localStorage 시도(아직시작안함)
-            var tr = document.createElement("tr");
-            var td = document.createElement("td");
-            var divImg = document.createElement("div");
-            var img = document.createElement("img");
-            var divDesc = document.createElement("div");
+    for (var i = 0; i < sortedImages.length; i++) {
+        var base64Image = sortedImages[i].image;
+        var seriesKey = sortedImages[i].serieskey;
+        var seriesDesc = sortedImages[i].seriesdesc;
 
-            divDesc.className = "thumbnail-desc";
-            divDesc.innerHTML = `Series Number : ${seriesKey}<br> &nbsp&nbsp&nbsp Series Desc : ${seriesDesc}`;
-            img.src = "data:image/jpeg;base64," + base64Image;
+        // 이미지 표시 로직은 이전과 동일
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        var divImg = document.createElement("div");
+        var img = document.createElement("img");
+        var divDesc = document.createElement("div");
 
-            divImg.appendChild(img);
-            td.appendChild(divDesc);
-            td.appendChild(divImg);
-            tr.appendChild(td);
-            tbody.appendChild(tr);
-        }
+        divDesc.className = "thumbnail-desc";
+        divDesc.innerHTML = `Series Number : ${seriesKey}<br> &nbsp&nbsp&nbsp Series Desc : ${seriesDesc}`;
+        img.src = "data:image/jpeg;base64," + base64Image;
+
+        divImg.appendChild(img);
+        td.appendChild(divDesc);
+        td.appendChild(divImg);
+        tr.appendChild(td);
+        tbody.appendChild(tr);
     }
 }
 

@@ -244,8 +244,25 @@ img{
 }
 
 #mainTable th, #mainTable td {
+    text-align: center;
     border: 2px solid #2B2B2B;
     padding: 8px;
+}
+
+#mainTable th {
+    height: 35px;
+    background-color: #393939;
+}
+
+#header-container {
+    position: sticky;
+    top: 0;
+    background-color: #393939;
+    z-index: 2;
+}
+
+#mainTable td{
+    z-index: 1;
 }
 
 .wide-cell {
@@ -526,7 +543,7 @@ footer {
 }
 
 #trTitle{
-    background-color: #393939;
+    background-color: #373737;
 }
 
 #loadMore {

@@ -24,10 +24,13 @@ public class StudyRestController {
     public List<StudyResponseDto> searchList(
             @RequestParam(name = "pid", required = false) String pid,
             @RequestParam(name = "pname", required = false) String pname,
-            @RequestParam(name = "reportstatus", required = false) String reportstatus
+            @RequestParam(name = "reportstatus", required = false) Integer reportstatus
     ){
 
-        return studyService.getSearch();
+        if(pid != null || pname != null || reportstatus != null){
+            return studyService.getSearch(pid, pname, reportstatus);
+        }
+        return studyService.getStudies();
     }
 
 }

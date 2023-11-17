@@ -2,37 +2,72 @@ let startIndex = 0;
 const batchSize = 10;
 let totalItems = 0;
 
-$("#search").click(function() {
-    $('#mainTable tr:gt(0)').remove(); // 첫번쨰 tr 제외하고 삭제
+$(document).on("click", "#search", function () {
+    $('#mainTable tr:gt(0)').remove(); // 첫번째 tr 제외하고 삭제
     $('#previousTable tr:gt(0)').remove();
     startIndex = 0; // 검색 버튼 클릭 시 startIndex 초기화
-    fetchItems(startIndex, batchSize);
+    previousItems();
+
+    const pid = $('#Pid-input').val();
+    const pname = $('#Pname-input').val();
+    const reportstatus = $('#category').val();
+
+    fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize);
+
 });
 
-$(document).on("click", "#loadMore", function() {
-    startIndex += batchSize; // 다음 페이지의 시작 인덱스로 업데이트
-    fetchItems(startIndex, batchSize);
-});
 
-function fetchItems(startIndex, batchSize) {
+function fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize) {
     $.ajax({
-        url: "/study-list",
-        data: { startIndex: startIndex, batchSize: batchSize },
+        url: "/search-list",
+        method: "GET",
+        data: { pid: pid, pname: pname, reportstatus: reportstatus, startIndex: startIndex, batchSize: batchSize },
         success: function(response) {
-            totalItems = response.length; // 전체 수
+            totalItems = response.length; // 전체 아이템 수
             $('#studyCount').text(totalItems);
             displayItems(response, startIndex, batchSize, totalItems);
-            previous(response);
         },
         error: function() {
-            alert("Error Occur!");
+            alert("Error fetching reportstatus");
         }
     });
 }
 
+function search(startIndex,batchSize) {
+    var pid = $('#Pid-input').val();
+    var pname = $('#Pname-input').val();
+    var reportstatus = $('#category').val();
+
+    fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize);
+}
+
+$(document).on("click", "#loadMore", function() {
+    startIndex += batchSize; // 다음 페이지의 시작 인덱스로 업데이트
+    search(startIndex,batchSize);
+});
+
+
+
 function displayItems(response, startIndex, batchSize, totalItems) {
     let studyListStr = "";
     for (let i = startIndex; i < startIndex + batchSize && i < response.length; i++) {
+        let reportStatusText = "";
+        switch (response[i].reportstatus) {
+            case 3:
+                reportStatusText = "읽지 않음";
+                break;
+            case 4:
+                reportStatusText = "열람 중";
+                break;
+            case 5:
+                reportStatusText = "예비판독";
+                break;
+            case 6:
+                reportStatusText = "판독";
+                break;
+            default:
+                reportStatusText = "알 수 없음";
+        }
         studyListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}'>`;
         studyListStr +=     "<td>" + (i+1) + "</td>";
         studyListStr +=     "<td class='pid'>" + response[i].pid + "</td>";
@@ -40,7 +75,7 @@ function displayItems(response, startIndex, batchSize, totalItems) {
         studyListStr +=     "<td>" + response[i].modality + "</td>";
         studyListStr +=     "<td class='studyList'>" + response[i].studydesc + "</td>";
         studyListStr +=     "<td>" + response[i].studydate + "</td>";
-        studyListStr +=     "<td>" + response[i].reportstatus + "</td>";
+        studyListStr +=     "<td>" + reportStatusText + "</td>";
         studyListStr +=     "<td>" + response[i].seriescnt + "</td>";
         studyListStr +=     "<td>" + response[i].imagecnt + "</td>";
         studyListStr +=     "<td>" + response[i].verifyflag + "</td>";
@@ -50,8 +85,9 @@ function displayItems(response, startIndex, batchSize, totalItems) {
     const table = document.getElementById("mainTable");
     table.insertAdjacentHTML('beforeend', studyListStr);
 
-    if (startIndex + batchSize >= totalItems) {
+    if (startIndex + batchSize >= totalItems)  {
         $("#loadMore").remove();
+
     } else if ($("#loadMore").length === 0) {
         const loadMoreBtn = "<button id='loadMore'>더보기</button>";
         const buttonContainer = $("<div class='buttonContainer'></div>"); // 테이블 아래 중앙에 버튼을 추가하기 위한 div 요소 생성
@@ -60,19 +96,6 @@ function displayItems(response, startIndex, batchSize, totalItems) {
     }
 }
 
-/****************************************
- ********************값넘기는거 확인********
- ****************************************/
-// $(document).on("dblclick", "tr.subTr", function() {
-//         const studyinsuid = $(this).data('studyinsuid');
-//         const studykey = $(this).data('studykey');
-//
-//         if (studyinsuid && studykey) {
-//             window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
-//         } else {
-//             alert("Data not available");
-//         }
-// });
 
 $(document).on("dblclick", "tr.subTr", function() {
     const studyinsuid = $(this).data('studyinsuid');
@@ -102,23 +125,7 @@ $(document).on("dblclick", "tr.subTr", function() {
         alert("Data not available");
     }
 });
-/****************************************
-********************값넘기는거 확인********
- ****************************************/
 
-
-
-
-// $(document).on("click", "", function() {
-//     const studyinsuid = $(this).data('studyinsuid');
-//     const studykey = $(this).data('studykey');
-//
-//     if (studyinsuid && studykey) {
-//         window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
-//     } else {
-//         alert("Data not available");
-//     }
-// });
 
 // 리포트
 $(document).ready(function() {
@@ -206,19 +213,21 @@ $(document).ready(function() {
 });
 
 
-//세부검색
-$(document).on("click", "#Dsearch", function() {
-    var detailedSearch = $("#Detailed-search");
 
-    if (detailedSearch.css('display') === 'block') {
-        detailedSearch.css('display', 'none');
-    } else {
-        detailedSearch.css('display', 'block');
-    }
-});
+/* 이전검색 */
+function previousItems() {
+    $.ajax({
+        url: "/study-list",
+        success: function(response) {
+            previous(response);
+        },
+        error: function() {
+            alert("Error Occur!");
+        }
+    });
+}
 
-
-//click - Previous 동일한 환자 정보 불러오기
+//Previous 동일한 환자 정보 불러오기
 function previous(response) {
     $(document).on("click", "#mainTable .subTr", function () {
         $('#previousTable tr:gt(0)').remove();
@@ -250,42 +259,13 @@ function previous(response) {
 }
 
 
-/* 검색 */
-// $(document).on("click", "#search", function () {
-//     var pid = $('#Pid-input').val();
-//     var pname = $('#Pname-input').val();
-//     var reportstatus = $('#category').val(); // 수정된 부분
-//
-//     if (pid !== "" || pname !== "" || reportstatus !== ""){
-//         $.ajax({
-//             url: "/search-list", // 적절한 엔드포인트를 사용해야 함
-//             method: "GET",
-//             data: { pid: pid, pname: pname, reportstatus: reportstatus }, // pname 추가
-//             success: function(response) {
-//                 totalItems = response.length; // 전체 아이템 수
-//                 $('#studyCount').text(totalItems);
-//                 displayItems(response, startIndex, batchSize, totalItems);
-//             },
-//             error: function() {
-//                 alert("Error fetching reportstatus");
-//             }
-//         });
-//     }
-//
-// });
+//세부검색
+$(document).on("click", "#Dsearch", function() {
+    var detailedSearch = $("#Detailed-search");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if (detailedSearch.css('display') === 'block') {
+        detailedSearch.css('display', 'none');
+    } else {
+        detailedSearch.css('display', 'block');
+    }
+});
