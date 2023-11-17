@@ -275,9 +275,11 @@ public class ImageService {
         int imagekey = 1;
         for(int i=1; i<seriesCount+1; i++){
             int serieskey = i;
+//            System.out.printf("serieskey --> %d     imagekey --> %d     studyinsuid --> %s \n", serieskey, imagekey, studyinsuid);
             List<Image> images = imageRepository.findByImageIdSerieskeyAndImageIdImagekeyAndStudyinsuid(serieskey, imagekey, studyinsuid);
             allImages.addAll(images);
         }
+        System.out.println(allImages.size());
 
         return allImages;
     }

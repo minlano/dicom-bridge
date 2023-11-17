@@ -4,7 +4,7 @@ const axiosInstance = axios.create({
 
 // seriesCount
 var seriesCount = localStorage.getItem("seriesCount");
-var studyinsuid = localStorage.getItem("studyinsuid");
+var studyInsUid = localStorage.getItem("studyinsuid");
 
 // 스크롤 최대값 설정
 let order = 1;
@@ -37,8 +37,8 @@ function imageLayout(X, Y) {
     var X_GAP = 3; var Y_GAP = 3;
     var row; var col;
     for(var i= 0; i < 5; i++) {
-        if((boxSize * i) + X_GAP < X) { row = i + 1; }
-        if((boxSize * i) + Y_GAP < Y) { col = i + 1; }
+        if((boxSize * i) + X_GAP < X) row = i + 1;
+        if((boxSize * i) + Y_GAP < Y) col = i + 1;
     }
 
     var ulRow; var divRow;
@@ -46,8 +46,7 @@ function imageLayout(X, Y) {
         ulRow = infoContent.querySelectorAll('ul')[i];
         for(var j = 0; j < col; j++) {
             divRow = ulRow.querySelectorAll('div')[j];
-            var targetImg = divRow.querySelector('img');
-            targetImg.src = '/images/filled_box.png';
+            divRow.querySelector('img').src = '/images/filled_box.png';
         }
     }
     rowCol.col = col; rowCol.row = row;
@@ -64,17 +63,10 @@ infoBox.addEventListener(('click'), function(e) {
 })
 
 
-
-
 /**
  * SeriesImageLoad
  */
 document.addEventListener("DOMContentLoaded", function() {
-    // 페이지가 로딩되면 실행될 코드
-    // 마우스 스크롤 이벤트 나중에 호버+@하면서 추가할 것
-    // document.body.addEventListener("wheel", handleScroll);
-    // countBySeriesinsuid 함수 호출
-
     imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
     imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
     imageDisplay();
@@ -105,10 +97,9 @@ async function imageDisplay() {
     }
 
     var index = 0;
-    for(var i = 0; i<rowCol.row; i++) {
-        for (var j = 0; j < rowCol.col; j++) {
+    for(var i=0; i<rowCol.row; i++) {
+        for (var j=0; j<rowCol.col; j++) {
             var div = document.createElement('div');
-            // var img = document.createElement('img');
 
             div.className = `image ${i} ${j}`;
             // div.addEventListener('wheel', handleScroll);
@@ -116,7 +107,7 @@ async function imageDisplay() {
             div.id = id;
             div.setAttribute('data-div-id', id); // data-div-id 속성에 id 값을 저장
             imageContainer.appendChild(div);
-            if(seriesCount>index){
+            if(index < seriesCount){
                 viewDicomBySeriesinsuidnthrow(id, index);
             }
             index ++;
@@ -129,7 +120,6 @@ async function viewDicomBySeriesinsuidnthrow(id, index) {
     cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
     const seriesinsuid = await findBySeriesinsuid();
     let tempseriesinsuid = seriesinsuid[index];
-    console.log(tempseriesinsuid);
     try {
         let response = await axios.post("/studies/takeserIesunsuidIndex/" + tempseriesinsuid + "/" + order, {
             order: order
@@ -147,7 +137,7 @@ async function viewDicomBySeriesinsuidnthrow(id, index) {
 
 async function findBySeriesinsuid() {
     try {
-        let response = await axiosInstance.post("/studies/getseriesinsuid/" + studyinsuid + "/" + seriesCount, {
+        let response = await axiosInstance.post("/studies/getseriesinsuid/" + studyInsUid + "/" + seriesCount, {
             seriesCount: seriesCount
         });
         if (response.status === 200) {
@@ -205,8 +195,8 @@ async function countBySeriesinsuid() {
     });
 
     try {
-        var seriesCount = countSeriesBySeriesInsUid(studyinsuid)
-        let response = await axiosInstance.post("/studies/getseriesInsUidAndCount/" + studyinsuid + "/" +  + "/" + seriesCount, {
+        var seriesCount = countSeriesBySeriesInsUid(studyInsUid)
+        let response = await axiosInstance.post("/studies/getseriesInsUidAndCount/" + studyInsUid + "/" +  + "/" + seriesCount, {
             seriesCount: seriesCount
         });
 
