@@ -105,6 +105,7 @@
                 <table id="mainTable">
                     <thead id="header-container">
                         <tr id="trTitle">
+                            <th><input type="checkbox" id="masterCheckbox"></th>
                             <th>번호</th>
                             <th>환자 아이디</th>
                             <th>환자 이름</th>
