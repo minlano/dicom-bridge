@@ -46,8 +46,6 @@ $(document).on("click", "#loadMore", function() {
     search(startIndex,batchSize);
 });
 
-
-
 function displayItems(response, startIndex, batchSize, totalItems) {
     let studyListStr = "";
     for (let i = startIndex; i < startIndex + batchSize && i < response.length; i++) {
@@ -69,6 +67,7 @@ function displayItems(response, startIndex, batchSize, totalItems) {
                 reportStatusText = "알 수 없음";
         }
         studyListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}'>`;
+        studyListStr +=     "<td><input type='checkbox' class='rowCheckbox'></td>";
         studyListStr +=     "<td>" + (i+1) + "</td>";
         studyListStr +=     "<td class='pid'>" + response[i].pid + "</td>";
         studyListStr +=     "<td class='pname'>" + response[i].pname + "</td>";
@@ -268,4 +267,24 @@ $(document).on("click", "#Dsearch", function() {
     } else {
         detailedSearch.css('display', 'block');
     }
+});
+$(document).ready(function() {
+    // 마스터 체크박스 클릭 시 모든 체크박스 상태 변경
+    $("#masterCheckbox").click(function(){
+        $(".rowCheckbox").prop('checked', $(this).prop('checked'));
+    });
+
+    // 맨 위에 있는 체크박스 클릭 시 모든 체크박스 상태 변경
+    $(document).on("click", "#masterCheckbox", function() {
+        $(".rowCheckbox").prop('checked', $(this).prop('checked'));
+    });
+
+    // 검색 결과 리스트의 체크박스가 하나라도 선택되어 있으면 맨 위의 체크박스도 선택 상태로 변경
+    $(document).on("click", ".rowCheckbox", function() {
+        if ($(".rowCheckbox:checked").length > 0) {
+            $("#masterCheckbox").prop('checked', true);
+        } else {
+            $("#masterCheckbox").prop('checked', false);
+        }
+    });
 });
