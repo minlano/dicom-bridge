@@ -95,9 +95,8 @@ public class ImageService {
     }
 
     public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
-//        long startTime = System.currentTimeMillis();
         ByteArrayOutputStream byteArrayOutputStream;
-        byte[] buffer = new byte[1024 * 1024 * 1024];
+        byte[] buffer = new byte[1024 * 1024];
         try {
             byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -110,8 +109,6 @@ public class ImageService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-//        long endTime = System.currentTimeMillis();
-//        System.out.println("convert2ByteArrayOutputStream 각 시간 :  " + (endTime - startTime));
         return byteArrayOutputStream;
     }
 
@@ -279,7 +276,6 @@ public class ImageService {
         for(int i=1; i<seriesCount+1; i++){
             int serieskey = i;
             List<Image> images = imageRepository.findByImageIdSerieskeyAndImageIdImagekeyAndStudyinsuid(serieskey, imagekey, studyinsuid);
-
             allImages.addAll(images);
         }
 

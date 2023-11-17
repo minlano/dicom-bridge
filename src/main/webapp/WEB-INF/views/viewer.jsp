@@ -190,4 +190,5 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="/script/dicomParser.js"></script>
 <script src="/script/viewer.js"></script>
+<script src="/script/seriesImageLoad.js"></script>
 </html>

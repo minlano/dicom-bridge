@@ -16,9 +16,9 @@ public class SeriesRestController {
 
     private final ImageService imageService;
 
-    @GetMapping("/{studyInsUid}")
-    public ResponseEntity<List<String>> getSeriesData(@PathVariable String studyInsUid) {
-        List<String> series = imageService.getSeriesByStudy(studyInsUid);
-        return new ResponseEntity<>(series, HttpStatus.OK);
-    }
+//    @GetMapping("/{studyInsUid}")
+//    public ResponseEntity<List<String>> getSeriesData(@PathVariable String studyInsUid) {
+//        List<String> series = imageService.getSeriesByStudy(studyInsUid);
+//        return new ResponseEntity<>(series, HttpStatus.OK);
+//    }
 }

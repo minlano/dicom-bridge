@@ -41,18 +41,6 @@ public class ImageRestController {
         }
     }
 
-//    @PostMapping("/getseriesInsUidAndCount/{studyinsuid}/{seriesCount}")
-//    public List<String> getseriesInsUidAndCount(@PathVariable String studyinsuid, @PathVariable int seriesCount) throws IOException {
-//
-//        List<Image> images = imageService.getSeriesInsUidAndCount(studyinsuid,seriesCount);
-//
-//        List<String> seriesinsuidValues = images.stream()
-//                .map(Image::getSeriesinsuid)
-//                .collect(Collectors.toList());
-//
-//        return seriesinsuidValues;
-//    }
-
     /*****************************************************************************************
      ***************리스트에 들어가면 studyinsuid가 전부 동일, studyinsuid가 같은 파일 찾기**********
      ****************리스트에서 클릭시 출력되는 전체 image*****************************************
@@ -175,10 +163,9 @@ public class ImageRestController {
      **********************************Seriesinsuid 조회***************************************
      *****************************************************************************************/
     @PostMapping("/getseriesinsuid/{studyinsuid}/{seriesCount}")
-   // public ResponseEntity<String> getseriesinsuid(@PathVariable int seriesCount) throws IOException {
     public List<String> getSeriesInsUid(@PathVariable String studyinsuid, @PathVariable int seriesCount) throws IOException {
 
-        List<Image> images =imageService.getSeriesInsUid(studyinsuid,seriesCount);
+        List<Image> images = imageService.getSeriesInsUid(studyinsuid,seriesCount);
 
         List<String> seriesinsuidValues = images.stream()
                 .map(Image::getSeriesinsuid)
