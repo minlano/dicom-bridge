@@ -19,7 +19,7 @@ public class ReportContentsService {
 
         // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportcontents 값을 가져옴
         List<ReportContents> reportContents = reportContentsRepository.findReportContentsByReportContentsIdStudykey(studykey);
-        System.out.println("reportContents : " + reportContents);
+
         return reportContents.stream().map(ReportContents::getInterpretation).collect(Collectors.toList());
     }
 }

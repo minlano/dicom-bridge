@@ -280,3 +280,196 @@ section#image-container {
 #thumbnail-container .table-wrapper::-webkit-scrollbar {
 	display: none; /* 크롬, 사파리, 오페라, 엣지 OS에서 스크롤바 디자인 안보이게 하기 */
 }
+
+/* 모달 스타일 */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.4);
+	padding-top: 60px;
+}
+
+.modal-content {
+	background-color: #242424;
+	margin: 5% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+	height: 60%;
+	border-radius: 20px;
+}
+
+.close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+.right-div {
+	background-color: #242424;
+	display: grid; /*grid 형식으로*/
+	grid-template : 1fr 6fr 7fr  / 100px auto auto ;
+	padding-top: 15px;
+	color : white;
+	max-width: 100%;
+	max-height: 100%;
+	margin: 0 auto; /* 가운데 정렬을 위한 마진 설정 */
+	/*margin-top: 10px;*/
+}
+
+[class *= cell] {
+	box-sizing: border-box;
+	border: none;
+	border-radius: 10px;
+	padding: 10px;
+	margin: 10px;
+	background-color: #393939;
+}
+
+.right-div > div:first-child {
+	grid-row-start: 1;
+	grid-row-end: 2;
+	grid-column-start: 1;
+	grid-column-end: 4;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.subtitleAndButton {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+}
+.subtitleAndButton a{
+	margin-right: 3px;
+}
+
+#studyCount {
+	margin-right: auto; /* 왼쪽 끝에 배치 */
+}
+
+.subtitleAndButton button {
+	padding-left: 5px;
+	border-radius: 15px ;
+	height: 30px;
+	width: 12.5%;
+	background-color: #090900;
+	color: white;
+	margin-left: auto;
+}
+
+.cell-a {
+	grid-row-start: 2;
+	grid-row-end: 3;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	display: grid; /* 그리드 레이아웃 사용 */
+	place-items: center; /* 자식 요소를 가운데 정렬 */
+}
+
+.cell-a textarea {
+	width: 100%; /* 부모 요소에 맞게 너비를 설정 */
+	height: 100%; /* 부모 요소에 맞게 높이를 설정 */
+	box-sizing: border-box; /* 내부 여백과 테두리를 포함한 전체 크기를 유지 */
+	resize: none; /* 사용자가 크기를 조절할 수 없도록 설정 */
+	white-space: pre-line;
+	background-color: #373737;
+	border: none;
+}
+
+.cell-b {
+	grid-row-start: 3;
+	grid-row-end: 4;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	display: grid; /* 그리드 레이아웃 사용 */
+	place-items: center; /* 자식 요소를 가운데 정렬 */
+}
+
+.cell-b textarea {
+	width: 100%; /* 부모 요소에 맞게 너비를 설정 */
+	height: 100%; /* 부모 요소에 맞게 높이를 설정 */
+	box-sizing: border-box; /* 내부 여백과 테두리를 포함한 전체 크기를 유지 */
+	resize: none; /* 사용자가 크기를 조절할 수 없도록 설정 */
+	white-space: pre-line;
+	background-color: #373737;
+	border: none;
+}
+
+.cell-c {
+	grid-row-start: 2;
+	grid-row-end: 4;
+	grid-column-start: 3;
+	grid-column-end: 4;
+	display: grid;
+	grid-template-columns: repeat(1, 1fr); /* 1열로 균등하게 분배 */
+	gap: 0px; /* 열 사이의 간격을 설정 (원하는 간격으로 조절) */
+}
+
+.cell-c > div:not(:last-child) {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: left;
+}
+.cell-c div div {
+	padding : 2px;
+	margin-top: 2px;
+}
+.cell-c div div select{
+	width : 80%;
+	height : 100%;
+	margin-left: 15px;
+	background-color: #090900;
+	color: white;
+	border-radius: 10px;
+}
+.cell-c div div input{
+	width : 80%;
+	margin-left: 15px;
+	background-color: #090900;
+	color: white;
+	border-radius: 10px;
+}
+.cell-c div:nth-child(6) {
+	text-align: right;
+	margin-right: 15px;
+	padding-left: 5px;
+}
+.cell-c div:nth-child(6) button {
+	padding-left: 5px;
+	border-radius: 15px ;
+	height: 30px;
+	width: 25%;
+	background-color: #090900;
+	color: white;
+}
+.horizontalStudy {
+	display: flex; /* Flexbox 사용 */
+	flex-direction: row; /* 수평으로 배열 */
+	justify-content: space-between; /* 각 요소 사이의 여백을 최대화하여 수평 정렬 */
+	margin-bottom: 10px; /* 각 horizontalStudy 요소 사이의 간격 조절 */
+}
+.horizontalStudy span {
+	display: block; /* 각 span을 새로운 줄에 표시합니다. */
+}
+
+/* studytime의 스타일을 변경 */
+.horizontalStudy .studytime {
+	font-weight: bold; /* 형광펜처럼 강조합니다. */
+	color: blue; /* 색상을 변경합니다. */
+}

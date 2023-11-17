@@ -23,11 +23,18 @@ public class StudyService {
                         .collect(Collectors.toList());
     }
     public List<Integer> getReportStatusByStudyKey(int studykey) {
-        // 이미지 레포지토리를 이용하여 studykey에 해당하는 reportstatus 값을 가져옴
+
         List<Study> studies = studyRepository.findByStudykey(studykey);
         return studies.stream().map(Study::getReportstatus).collect(Collectors.toList());
     }
-
+    public List<StudyResponseDto> getStudiesByStudyKey(int studykey) {
+        // studykey에 해당하는 studies를 가져오는 로직 추가
+        List<Study> studyList = studyRepository.findByStudykey(studykey);
+        System.out.println("studyList : "+studyList);
+        return studyList.stream()
+                .map(StudyResponseDto::new)
+                .collect(Collectors.toList());
+    }
     public List<StudyResponseDto> getSearch() {
         List<Study> studyList = studyRepository.findAll();
         return studyList.stream()

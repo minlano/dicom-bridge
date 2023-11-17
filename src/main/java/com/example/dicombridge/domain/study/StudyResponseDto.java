@@ -17,7 +17,8 @@ public class StudyResponseDto {
     private Integer seriescnt;
     private Integer imagecnt;
     private Integer verifyflag;
-
+    private String pbirthdatetime;
+    private String studytime;
     public StudyResponseDto(Study study) {
         this.studykey = study.getStudykey();
         this.studyinsuid = study.getStudyinsuid();
@@ -30,5 +31,8 @@ public class StudyResponseDto {
         this.seriescnt = study.getSeriescnt();
         this.imagecnt = study.getImagecnt();
         this.verifyflag = study.getVerifyflag();
+        this.pbirthdatetime = study.getPbirthdatetime();
+        this.studytime = study.getStudytime();
     }
+
 }
