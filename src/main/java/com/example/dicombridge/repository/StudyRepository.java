@@ -12,7 +12,6 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
 
     List<Study> findByStudykey(int studykey);
 
-
     @Query("SELECT s FROM Study s " +
             "WHERE (:pid IS NULL OR s.pid LIKE %:pid%) " +
             "AND (:pname IS NULL OR s.pname LIKE %:pname%) " +

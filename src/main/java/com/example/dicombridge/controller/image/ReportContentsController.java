@@ -22,7 +22,7 @@ public class ReportContentsController {
         // 실제 로직 구현
 
         List<String> interpretationlist = reportContentsService.getInterpretationByStudyKey(studykey);
-        System.out.println("interpretationlist :" + interpretationlist);
+
         return new ResponseEntity<>(interpretationlist, HttpStatus.OK);
     }
 }

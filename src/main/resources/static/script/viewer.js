@@ -52,35 +52,6 @@ function showThumbnail(path) {
     xhr.send();
 }
 
-// function displayImages(images) {
-//     var tbody = document.querySelector("#thumbnail-container tbody");
-//
-//     for (var imageName in images) {
-//         if (images.hasOwnProperty(imageName)) {
-//             var base64Image = images[imageName].image;
-//             var seriesKey = images[imageName].serieskey;
-//             var seriesDesc = images[imageName].seriesdesc;
-//
-//             // 여기서 서버로부터 가져온 이미지들을 어딘가에 저장할 필요가 있어 보임 -> 일단 localStorage 시도(아직시작안함)
-//             var tr = document.createElement("tr");
-//             var td = document.createElement("td");
-//             var divImg = document.createElement("div");
-//             var img = document.createElement("img");
-//             var divDesc = document.createElement("div");
-//
-//             divDesc.className = "thumbnail-desc";
-//             divDesc.innerHTML = `Series Number : ${seriesKey}<br> &nbsp&nbsp&nbsp Series Desc : ${seriesDesc}`;
-//             img.src = "data:image/jpeg;base64," + base64Image;
-//
-//             divImg.appendChild(img);
-//             td.appendChild(divDesc);
-//             td.appendChild(divImg);
-//             tr.appendChild(td);
-//             tbody.appendChild(tr);
-//         }
-//     }
-// }
-
 function displayImages(images) {
     var tbody = document.querySelector("#thumbnail-container tbody");
 

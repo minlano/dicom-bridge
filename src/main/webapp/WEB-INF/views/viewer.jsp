@@ -30,7 +30,7 @@
                 <div>Toolbar</div>
             </li>
             <li class="nav_li" id="Report_btn">
-                <div class="image-container">
+                <div class="Report_btn">
                     <img class="normal-image" src="/images/report.png"  alt="Report">
                     <img class="hover-image" src="/images/report_click.png"  alt="Report">
                 </div>
@@ -52,6 +52,56 @@
     </nav>
 
     <section id="viewer-contents">
+
+        <!-- Report Modal -->
+        <div id="reportModal" class="modal" onclick="closeModal()">
+            <div class="modal-content" onclick="event.stopPropagation();">
+                <!-- 모달 내용 -->
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="right-div">
+                    <div id="studyContainer">
+                        <c:forEach var="study" items="${studies}">
+                            <div class="horizontalStudy">
+
+                            </div>
+                        </c:forEach>
+                    </div>
+                    <div class="cell-a"><textarea placeholder="코멘트" readonly></textarea></div>
+                    <div class="cell-b">
+                        <textarea name="interpretation" id="interpretation"></textarea>
+                    </div>
+                    <div class="cell-c">
+                        <div>
+                            <div>판독 매크로</div>
+                            <div><select></select></div>
+                        </div>
+                        <div>
+                            <div>Report Code</div>
+                            <div id="reportStatusSelectContainer">
+                                <select></select>
+                            </div>
+                        </div>
+                        <div>
+                            <div>예비판독의</div>
+                            <div><input type="text" id="text5"></div>
+                        </div>
+                        <div>
+                            <div>판독의1</div>
+                            <div><input type="text" id="text3">></div>
+                        </div>
+                        <div>
+                            <div>판독의2</div>
+                            <div><input type="text"></div>
+                        </div>
+                        <div>
+                            <button class="checkButton">판독</button>
+                            <button class="checkButton">예비판독</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         <aside id="toolbar">
             <ul>
@@ -185,6 +235,7 @@
     </section>
 </div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://unpkg.com/cornerstone-core"></script>
 <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
