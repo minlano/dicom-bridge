@@ -242,4 +242,5 @@
 <script src="/script/dicomParser.js"></script>
 <script src="/script/viewer.js"></script>
 <script src="/script/seriesImageLoad.js"></script>
+<script src="/script/report.js"></script>
 </html>
