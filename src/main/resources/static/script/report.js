@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Report_btn 클릭 시 모달 열기
-    document.getElementById("Report_btn").addEventListener("click", function() {
+    var ReportBtn = document.getElementById("Report_btn")
+    ReportBtn.addEventListener("click", function() {
         openModal();
     });
 });

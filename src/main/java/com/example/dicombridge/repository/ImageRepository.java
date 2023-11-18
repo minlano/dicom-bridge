@@ -29,15 +29,21 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
     List<ThumbnailDto> findImageAndSeriesDesc(@Param("studykey") int studykey);
 
     List<Image> findByseriesinsuid(String seriesinsuid);//studyinsuid로 imagetab 조회
+
     //List<Image> findByseriesinsuidAndImageIdImagekey(String seriesinsuid, int imagenum);
+
     List<Image> findBySeriesinsuidAndInstancenum(String seriesinsuid, String insnum);
-    @Query("SELECT i FROM Image i WHERE i.seriesinsuid = :seriesinsuid ORDER BY i.instancenum ASC")
+
+    @Query("SELECT i " +
+           "FROM Image i " +
+           "WHERE i.seriesinsuid = :seriesinsuid " +
+           "ORDER BY to_number(i.instancenum) ASC")
     List<Image> findNthImageBySeriesinsuid(@Param("seriesinsuid") String seriesinsuid, Pageable pageable);
 
     @Query("SELECT MAX(i.imageId.serieskey) FROM Image i WHERE i.studyinsuid = :studyinsuid")
     Integer findMaxStudyKeyByStudyKey(@Param("studyinsuid") String studyinsuid); // serieskey의 최댓값을 구하지만 1부터 숫자가 늘어나기에 count와 같다.
 
-    List<Image> findByImageIdSerieskeyAndImageIdImagekeyAndStudyinsuid(int serieskey,int imagekey, String studyinsuid);
+    List<Image> findDistinctByStudyinsuid(String studyInsUid);
 
     int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
 }

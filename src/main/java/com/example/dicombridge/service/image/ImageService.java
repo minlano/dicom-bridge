@@ -3,7 +3,6 @@ package com.example.dicombridge.service.image;
 import com.example.dicombridge.domain.common.ThumbnailDto;
 import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
-import com.example.dicombridge.domain.study.Study;
 import com.example.dicombridge.repository.ImageRepository;
 import com.example.dicombridge.service.fileRead.FileRead;
 import jcifs.Address;
@@ -16,12 +15,11 @@ import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
 
-import org.dcm4che3.io.DicomInputStream;
+import lombok.NoArgsConstructor;
 import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
@@ -32,12 +30,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @Service
 public class ImageService {
@@ -176,10 +170,7 @@ public class ImageService {
     }
 
     public int seriesinsuidCount(String seriesinsuid) {
-
         return imageRepository.countByseriesinsuid(seriesinsuid);
-
-
     }
 
     /* thumbnail */
@@ -227,18 +218,13 @@ public class ImageService {
         return fileRead2(map);
     }
 
-    public File getFileByseriesinsuidNcount(String seriesinsuid,int order) throws IOException  {
-        int imagenum = order;
-        //String insnum = String.valueOf(imagenum);
-        Pageable pageable = PageRequest.of(imagenum-1,1); // n은 가져올 행 번호
-        //int로 전달할 수 있지만하면 모든 결과를 메모리에 로드하므로 결과 집합이 큰 경우 성능 이슈가 발생할 수 있다.
+    public File getFileByseriesinsuidNcount(String seriesinsuid, int order) throws IOException  {
+        Pageable pageable = PageRequest.of(order-1,1);
+        // int로 전달할 수 있지만 하면 모든 결과를 메모리에 로드하므로 결과 집합이 큰 경우 성능 이슈가 발생할 수 있다.
         // 결과 집합이 크다면 Pageable을 사용하여 페이징 처리하는 것이 좋다
         List<Image> images = imageRepository.findNthImageBySeriesinsuid(seriesinsuid, pageable);
-        Map<String, Image> map = images.stream().collect(Collectors.toMap(
-                i -> i.getFname(),
-                i -> i
-        ));
-        return fileRead2(map);
+        FileRead<Image> fileRead = new FileRead(this);
+        return fileRead.getFile(images);
     }
 
     private File fileRead2(Map<String, Image> imageMap) throws IOException {
@@ -269,18 +255,7 @@ public class ImageService {
         return imageRepository.findMaxStudyKeyByStudyKey(studyinsuid);
     }
 
-    //Seriesinsuid 조회
-    public List<Image> getSeriesInsUid(String studyinsuid, int seriesCount) {
-        List<Image> allImages = new ArrayList<>();
-        int imagekey = 1;
-        for(int i=1; i<seriesCount+1; i++){
-            int serieskey = i;
-//            System.out.printf("serieskey --> %d     imagekey --> %d     studyinsuid --> %s \n", serieskey, imagekey, studyinsuid);
-            List<Image> images = imageRepository.findByImageIdSerieskeyAndImageIdImagekeyAndStudyinsuid(serieskey, imagekey, studyinsuid);
-            allImages.addAll(images);
-        }
-        System.out.println(allImages.size());
-
-        return allImages;
+    public List<Image> getSeriesInsUid(String studyInsUid) {
+        return imageRepository.findDistinctByStudyinsuid(studyInsUid);
     }
 }

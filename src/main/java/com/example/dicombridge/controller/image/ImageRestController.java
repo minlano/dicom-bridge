@@ -120,9 +120,9 @@ public class ImageRestController {
     /*****************************************************************************************
      ****************************Seriesinsuid count 조회***************************************
      *****************************************************************************************/
-    @PostMapping("/seriesinsuidcount/{seriesinsuid}")
-    public ResponseEntity<Integer> seriesinsuidCount(@PathVariable String seriesinsuid) throws IOException{
-        int count = imageService.seriesinsuidCount(seriesinsuid);
+    @GetMapping("/getSeriesInsUidCount/{seriesInsUid}")
+    public ResponseEntity<Integer> seriesinsuidCount(@PathVariable String seriesInsUid) throws IOException{
+        int count = imageService.seriesinsuidCount(seriesInsUid);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -132,22 +132,17 @@ public class ImageRestController {
     /*****************************************************************************************
      ****************************Seriesinsuid count 별 이미지***********************************
      *****************************************************************************************/
-    @PostMapping("/takeserIesunsuidIndex/{seriesinsuid}/{order}")
-    public ResponseEntity<byte[]> takeserIesunsuidIndex(
-            @PathVariable String seriesinsuid,@PathVariable int order) throws IOException {
-        File file = imageService.getFileByseriesinsuidNcount(seriesinsuid,order);
+    @GetMapping("/getSeriesInsUidIndex/{seriesInsUid}/{order}")
+    public ResponseEntity<byte[]> getSeriesInsUidIndex(@PathVariable String seriesInsUid,
+                                                       @PathVariable int order) throws IOException {
+        File file = imageService.getFileByseriesinsuidNcount(seriesInsUid, order);
 
-        // 파일을 byte 배열로 읽기
-        Path path = file.toPath();
-        byte[] data = Files.readAllBytes(path);
+        byte[] data = Files.readAllBytes(file.toPath());
 
-       // System.out.println(data);
-        // HTTP 응답 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", seriesinsuid + ".jpg");
+        headers.setContentDispositionFormData("attachment", seriesInsUid + ".jpg");
 
-        // 파일을 byte 배열로 응답
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
     /*****************************************************************************************
@@ -162,15 +157,11 @@ public class ImageRestController {
     /*****************************************************************************************
      **********************************Seriesinsuid 조회***************************************
      *****************************************************************************************/
-    @PostMapping("/getseriesinsuid/{studyinsuid}/{seriesCount}")
-    public List<String> getSeriesInsUid(@PathVariable String studyinsuid, @PathVariable int seriesCount) throws IOException {
-
-        List<Image> images = imageService.getSeriesInsUid(studyinsuid,seriesCount);
-
-        List<String> seriesinsuidValues = images.stream()
+    @GetMapping("/getSeriesInsUids/{studyInsUid}")
+    public List<String> getSeriesInsUids(@PathVariable String studyInsUid) {
+        List<Image> images = imageService.getSeriesInsUid(studyInsUid);
+        return images.stream()
                 .map(Image::getSeriesinsuid)
                 .collect(Collectors.toList());
-
-        return seriesinsuidValues;
     }
 }

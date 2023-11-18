@@ -2,26 +2,23 @@ package com.example.dicombridge.service.fileRead;
 
 import com.example.dicombridge.domain.image.Image;
 import com.example.dicombridge.service.image.ImageService;
-import jcifs.smb.SmbException;
 import jcifs.smb.SmbFileInputStream;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.Table;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public class FileRead<T> {
     Map<String, byte[]> baosMap = new HashMap<>();
     Map<String, T> returnMap = new HashMap<>();
 
-    private ImageService imageService;
-
-    public FileRead(ImageService imageService) {
-        this.imageService = imageService;
-    }
+    private final ImageService imageService;
 
     /* 이거 성공하면 imageSerivce의 convert2ByteArrayOutputStream() 지워야 함 */
     public byte[] convert2ByteArrayOutputStream2(SmbFileInputStream smbFileInputStream) {
@@ -65,5 +62,12 @@ public class FileRead<T> {
             returnMap.put(fname, (T)dcmByte);
         }
         return returnMap;
+    }
+
+    public File getFile(List<Image> image) throws IOException {
+        SmbFileInputStream smbFileInputStream = imageService.getSmbFileInputStream(image.get(0));
+        ByteArrayOutputStream byteArrayOutputStream = imageService.convert2ByteArrayOutputStream(smbFileInputStream);
+        File tempDcmFile = imageService.convert2DcmFile(byteArrayOutputStream.toByteArray());
+        return tempDcmFile;
     }
 }
