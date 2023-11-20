@@ -3,7 +3,9 @@ package com.example.dicombridge.service.image;
 import com.example.dicombridge.domain.common.ThumbnailDto;
 import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
+import com.example.dicombridge.domain.series.Series;
 import com.example.dicombridge.repository.ImageRepository;
+import com.example.dicombridge.repository.SeriesRepository;
 import com.example.dicombridge.service.fileRead.FileRead;
 import jcifs.Address;
 import jcifs.CIFSContext;
@@ -253,9 +255,5 @@ public class ImageService {
 
     public int findMaxStudyKeyByStudyKey(String studyinsuid) {
         return imageRepository.findMaxStudyKeyByStudyKey(studyinsuid);
-    }
-
-    public List<Image> getSeriesInsUid(String studyInsUid) {
-        return imageRepository.findDistinctByStudyinsuid(studyInsUid);
     }
 }

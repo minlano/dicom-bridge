@@ -10,4 +10,5 @@ import java.io.Serializable;
 public class SeriesId implements Serializable {
     private Integer studykey;
     private Integer serieskey;
+    private String seriesinsuid;
 }

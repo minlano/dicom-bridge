@@ -23,7 +23,7 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
     @Query(
             value = "SELECT new com.example.dicombridge.domain.common.ThumbnailDto(image.imageId.imagekey, image.imageId.serieskey, image.studyinsuid, image.seriesinsuid, image.sopinstanceuid, image.sopclassuid, image.path, image.fname, image.delflag, series.seriesdesc) " +
                     "FROM Image image, Series series " +
-                    "WHERE image.seriesinsuid = series.seriesinsuid " +
+                    "WHERE image.seriesinsuid = series.seriesId.seriesinsuid " +
                     "  AND image.imageId.studykey = :studykey " +
                     "  AND series.seriesId.studykey = :studykey")
     List<ThumbnailDto> findImageAndSeriesDesc(@Param("studykey") int studykey);
@@ -42,8 +42,6 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
 
     @Query("SELECT MAX(i.imageId.serieskey) FROM Image i WHERE i.studyinsuid = :studyinsuid")
     Integer findMaxStudyKeyByStudyKey(@Param("studyinsuid") String studyinsuid); // serieskey의 최댓값을 구하지만 1부터 숫자가 늘어나기에 count와 같다.
-
-    List<Image> findDistinctByStudyinsuid(String studyInsUid);
 
     int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
 }

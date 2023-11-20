@@ -1,9 +1,7 @@
 package com.example.dicombridge.controller.image;
 
-import com.example.dicombridge.domain.common.ThumbnailDto;
 import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
-import com.example.dicombridge.repository.ImageRepository;
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,16 +150,5 @@ public class ImageRestController {
     public int seriesCount(@PathVariable("studyinsuid") String studyinsuid){
 
         return imageService.findMaxStudyKeyByStudyKey(studyinsuid);
-    }
-
-    /*****************************************************************************************
-     **********************************Seriesinsuid 조회***************************************
-     *****************************************************************************************/
-    @GetMapping("/getSeriesInsUids/{studyInsUid}")
-    public List<String> getSeriesInsUids(@PathVariable String studyInsUid) {
-        List<Image> images = imageService.getSeriesInsUid(studyInsUid);
-        return images.stream()
-                .map(Image::getSeriesinsuid)
-                .collect(Collectors.toList());
     }
 }

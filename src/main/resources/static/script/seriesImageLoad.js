@@ -98,7 +98,7 @@ async function imageDisplay() {
 
 async function findBySeriesInsUid() {
     try {
-        let response = await axiosInstance.get("/studies/getSeriesInsUids/" + studyInsUid);
+        let response = await axiosInstance.get("/series/getSeriesInsUids/" + studyInsUid);
         if (response.status === 200) {
             return response.data; // 배열로 담아있음.
         }
@@ -111,25 +111,62 @@ async function viewDicomBySeriesInsUid(id, seriesInsUid, order) {
     try {
         let response = await axiosInstance.get("/studies/getSeriesInsUidIndex/" + seriesInsUid + "/" + order, { responseType: 'arraybuffer' });
         if (response.status === 200)
-            displayDicomImage(response.data, id);
+            displayDicomImage(response.data, id, seriesInsUid, order);
     } catch (error) {
         console.error(error);
     }
 }
 
-function displayDicomImage(arrayBuffer, divId) { //dicom 이미지 출력
+function displayDicomImage(arrayBuffer, divId, seriesInsUid, order) { //dicom 이미지 출력
     const imageId = `dicomweb:${URL.createObjectURL(new Blob([arrayBuffer], { type: 'application/dicom' }))}`;
     const existingDiv = document.getElementById(divId);
+    // existingDiv.className = seriesInsUid;
+    existingDiv.style.position = 'relative';
+
+    // 이미 cornerstone이 활성화되었는지 확인
+    if (!existingDiv.hasAttribute('data-cornerstone-enabled')) {
+        cornerstone.enable(existingDiv);
+        existingDiv.setAttribute('data-cornerstone-enabled', 'true');
+    }
 
     if(existingDiv){
-        cornerstone.enable(existingDiv);
-        cornerstone.loadImage(imageId).then(image => {
-            cornerstone.displayImage(existingDiv, image);
-            // 메타데이터 뽑아서 이미지에 올려야 함
+        // cornerstone.enable(existingDiv);
+        cornerstone.loadImage(imageId).then(async image => {
+            await cornerstone.displayImage(existingDiv, image);
+
+            const byteArray = new Uint8Array(arrayBuffer);
+            const dataSet = dicomParser.parseDicom(byteArray);
+            const studyDate = dataSet.string('x00080020');
+            const patientName = dataSet.string('x00100010');
+            const patientID = dataSet.string('x00100020');
+            const metadataText = 'Study Date: ' + studyDate + ', Patient Name: ' + patientName + ', Patient ID: ' + patientID;
+            await updateMetadata(metadataText, existingDiv, seriesInsUid, order);
         });
     } else {
         console.error(`Div with ID '${divId}' not found.`);
     }
+}
+
+// 메타데이터를 업데이트하는 함수
+function updateMetadata(metadataText, existingDiv, seriesInsUid, order) {
+    let prevMetadataDiv = document.getElementById(`${seriesInsUid}`);
+    if(prevMetadataDiv)
+        prevMetadataDiv.remove();
+
+    let metadataDiv = document.createElement('div');
+    metadataDiv.id = `${seriesInsUid}`;
+
+    metadataDiv.style.position = 'absolute';
+    metadataDiv.style.top = '0px';
+    metadataDiv.style.left = '0px';
+    metadataDiv.style.backgroundColor = 'black';
+    metadataDiv.style.color = 'white';
+    metadataDiv.style.padding = '5px';
+    metadataDiv.textContent = metadataText;
+    metadataDiv.style.zIndex = '1000'; // 다른 엘리먼트 위에 표시되도록 함
+    // metadataDiv.style.display = 'block';
+    metadataDiv.style.visibility = 'visible';
+    existingDiv.appendChild(metadataDiv);
 }
 
 function createWheelHandler(id, seriesInsUid) {
