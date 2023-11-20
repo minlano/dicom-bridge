@@ -44,4 +44,6 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
     Integer findMaxStudyKeyByStudyKey(@Param("studyinsuid") String studyinsuid); // serieskey의 최댓값을 구하지만 1부터 숫자가 늘어나기에 count와 같다.
 
     int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
+
+
 }
