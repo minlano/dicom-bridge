@@ -3,6 +3,7 @@ plugins {
     id 'war'
     id 'org.springframework.boot' version '2.7.17'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'com.palantir.docker-compose' version '0.33.0'
 }
 
 group = 'com.example'
@@ -57,9 +58,26 @@ dependencies {
 
     /* commons-io */
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+    /* redis */
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
+war {
+    enabled = true
+    duplicatesStrategy = 'exclude'
+}
+
+bootWar {
+    duplicatesStrategy = 'exclude'
+}
+
+dockerCompose {
+    dockerComposeFile 'docker-compose.yml'
+}
