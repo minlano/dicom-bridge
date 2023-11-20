@@ -3,6 +3,7 @@ const batchSize = 10;
 let totalItems = 0;
 
 $(document).on("click", "#search", function () {
+
     $('#mainTable tr:gt(0)').remove(); // 첫번째 tr 제외하고 삭제
     $('#previousTable tr:gt(0)').remove();
     startIndex = 0; // 검색 버튼 클릭 시 startIndex 초기화
@@ -14,6 +15,25 @@ $(document).on("click", "#search", function () {
 
     fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize);
 
+});
+
+// 엔터 키인 경우
+$(document).on("keypress", function (event) {
+    if (event.which === 13 || event.keyCode === 13) {
+        // 여기에 엔터 키를 처리하는 코드 추가
+
+        // 기존 코드
+        $('#mainTable tr:gt(0)').remove(); // 첫번째 tr 제외하고 삭제
+        $('#previousTable tr:gt(0)').remove();
+        startIndex = 0; // 검색 버튼 클릭 시 startIndex 초기화
+        previousItems();
+
+        const pid = $('#Pid-input').val();
+        const pname = $('#Pname-input').val();
+        const reportstatus = $('#category').val();
+
+        fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize);
+    }
 });
 
 
