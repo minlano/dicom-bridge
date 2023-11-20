@@ -288,3 +288,47 @@ $(document).ready(function() {
         }
     });
 });
+// 이미지 다운로드 버튼 클릭 시 이벤트 처리
+$(".download-btn").click(function() {
+    // 체크된 체크박스들의 studykey를 추출
+    const selectedStudyKeys = [];
+    $(".rowCheckbox:checked").each(function() {
+        const studyKey = $(this).closest('tr').data('studykey');
+        if (studyKey) {
+            selectedStudyKeys.push(studyKey);
+        }
+    });
+
+    if (selectedStudyKeys.length > 0) {
+        // 서버에 이미지 다운로드 요청
+        downloadImages(selectedStudyKeys);
+    } else {
+        alert("선택된 이미지가 없습니다.");
+    }
+});
+
+// 서버에 이미지 다운로드 요청을 보내는 함수
+function downloadImages(selectedStudyKeys) {
+    // 각 studyKey에 대해 다운로드 요청을 보냄
+    selectedStudyKeys.forEach(function(studyKey) {
+        const downloadUrl = `/studies/download/${studyKey}`;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", downloadUrl, true);
+        xhr.responseType = "arraybuffer";
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const blob = new Blob([xhr.response], { type: "application/octet-stream" });
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `${studyKey}.dcm`;
+                link.click();
+            } else {
+                alert(`StudyKey ${studyKey} 이미지 다운로드에 실패했습니다.`);
+            }
+        };
+
+        xhr.send();
+    });
+}

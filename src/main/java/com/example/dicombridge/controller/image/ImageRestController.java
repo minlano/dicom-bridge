@@ -173,4 +173,32 @@ public class ImageRestController {
 
         return seriesinsuidValues;
     }
+
+
+    @PostMapping("/download/{studyKey}")
+    public ResponseEntity<byte[]> downloadImages(@PathVariable int studyKey) throws IOException {
+        System.out.println("studyKey : "+studyKey);
+
+        // 여러 파일을 하나의 byte 배열로 합치기
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        List<File> fileList = imageService.getFiles(studyKey);
+        for (File file : fileList) {
+            Path path = file.toPath();
+            byte[] data = Files.readAllBytes(path);
+            System.out.println("data:"+data);
+            baos.writeBytes(data);
+        }
+        // 합쳐진 byte 배열
+        byte[] mergedData = baos.toByteArray();
+        System.out.println("mergedData:" + mergedData);
+        // HTTP 응답 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setContentDispositionFormData("attachment", studyKey + ".dcm");
+
+        // 파일을 byte 배열로 응답
+        return new ResponseEntity<>(mergedData, headers, HttpStatus.OK);
+    }
+
 }

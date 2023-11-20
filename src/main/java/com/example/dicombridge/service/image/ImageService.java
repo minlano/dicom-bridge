@@ -175,6 +175,8 @@ public class ImageService {
         return fileRead3(map);
     }
 
+
+
     public int seriesinsuidCount(String seriesinsuid) {
 
         return imageRepository.countByseriesinsuid(seriesinsuid);
@@ -227,6 +229,14 @@ public class ImageService {
         return fileRead2(map);
     }
 
+    public List<File> getFiles(int studyKey) throws IOException {
+        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
+        Map<String, Image> map = images.stream().collect(Collectors.toMap(
+                i -> i.getFname(),
+                i -> i
+        ));
+        return fileReadForDownload(map);
+    }
     public File getFileByseriesinsuidNcount(String seriesinsuid,int order) throws IOException  {
         int imagenum = order;
         //String insnum = String.valueOf(imagenum);
@@ -240,6 +250,8 @@ public class ImageService {
         ));
         return fileRead2(map);
     }
+
+
 
     private File fileRead2(Map<String, Image> imageMap) throws IOException {
         Map<String, String> fileMap = new HashMap<>();
@@ -265,6 +277,16 @@ public class ImageService {
         return tempFiles;
     }
 
+    private List<File> fileReadForDownload(Map<String, Image> imageMap) throws IOException {
+        List<File> tempFiles = new ArrayList<>();
+        for (String fname : imageMap.keySet()) {
+            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
+            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
+            tempFiles.add(tempDcmFile);
+        }
+        return tempFiles;
+    }
     public int findMaxStudyKeyByStudyKey(String studyinsuid) {
         return imageRepository.findMaxStudyKeyByStudyKey(studyinsuid);
     }
@@ -283,4 +305,7 @@ public class ImageService {
 
         return allImages;
     }
+
+
+
 }

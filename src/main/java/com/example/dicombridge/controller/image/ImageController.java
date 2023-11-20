@@ -1,20 +1,30 @@
 package com.example.dicombridge.controller.image;
 
 import com.example.dicombridge.service.image.ImageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class ImageController {
+
+    private final ImageService imageService;
+
+    public ImageController(ImageService imageService) {
+        this.imageService = imageService;
+    }
 
     @GetMapping("/test")
     public String getTestPage() {
@@ -45,4 +55,8 @@ public class ImageController {
     public String viewPageMJ4() {
         return "viewPageMJ4";
     }
+
+
+
+
 }

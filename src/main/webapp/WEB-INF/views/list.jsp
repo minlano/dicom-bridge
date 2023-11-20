@@ -102,6 +102,7 @@
         </aside>
         <section id="mainContent">
             <div class="table-container">
+                <input type="hidden" id="selectedImageIds" name="selectedImageIds" />
                 <table id="mainTable">
                     <thead id="header-container">
                         <tr id="trTitle">

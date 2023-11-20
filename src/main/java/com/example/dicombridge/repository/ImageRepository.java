@@ -40,4 +40,6 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
     List<Image> findByImageIdSerieskeyAndImageIdImagekeyAndStudyinsuid(int serieskey,int imagekey, String studyinsuid);
 
     int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
+
+
 }

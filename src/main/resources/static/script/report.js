@@ -116,7 +116,7 @@ $(document).ready(function() {
                 <div class="subtitleAndButton">
                     <button class="deleteButton">판독 지우기</button>
                 </div>
-        `;
+            `;
 
             // 생성한 HTML을 해당 부분에 추가
             $("#studyContainer").append(studyInfoHtml);
