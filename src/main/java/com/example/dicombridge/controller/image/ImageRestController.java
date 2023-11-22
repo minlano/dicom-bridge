@@ -48,7 +48,7 @@ public class ImageRestController {
     public ResponseEntity<byte[]> getSeriesNum(@PathVariable String seriesinsuid, Model model) throws IOException{
         //List list = imageService.getSeriesNum(studyinsuid);
         //System.out.println(list.size());
-       File file = imageService.getSeriesNum(seriesinsuid);
+        File file = imageService.getSeriesNum(seriesinsuid);
         // 파일을 byte 배열로 읽기
         Path path = file.toPath();
         byte[] data = Files.readAllBytes(path);
@@ -61,6 +61,7 @@ public class ImageRestController {
         // 파일을 byte 배열로 응답
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
     @PostMapping("/takeuidgiveseriesnum2/{seriesinsuid}")
     public ResponseEntity<List<byte[]>> getSeriesNum2(@PathVariable String seriesinsuid, Model model) throws IOException{
         List<File> files = imageService.getSeriesNum2(seriesinsuid);
@@ -143,6 +144,7 @@ public class ImageRestController {
 
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
     /*****************************************************************************************
      ***********************************Series의 갯수******************************************
      *****************************************************************************************/
@@ -152,28 +154,38 @@ public class ImageRestController {
         return imageService.findMaxStudyKeyByStudyKey(studyinsuid);
     }
 
+//    @PostMapping("/download/{studyKey}")
+//    public ResponseEntity<byte[]> downloadImages(@PathVariable int studyKey) {
+//        try {
+//            List<ByteArrayOutputStream> imageStreams = imageService.getFiles(studyKey);
+//            byte[] zipFileData = imageService.createZipFile(imageStreams, studyKey);
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//            headers.setContentDispositionFormData("attachment", studyKey + ".zip");
+//
+//            return new ResponseEntity<>(zipFileData, headers, HttpStatus.OK);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
     @PostMapping("/download/{studyKey}")
-    public ResponseEntity<byte[]> downloadImages(@PathVariable int studyKey) throws IOException {
-        System.out.println("studyKey : "+studyKey);
+    public ResponseEntity<byte[]> downloadImages(@PathVariable int studyKey) {
+        try {
+            List<ByteArrayOutputStream> imageStreams = imageService.getFiles(studyKey);
+            byte[] zipFileData = imageService.createZipFile(imageStreams, studyKey);
 
-        // 여러 파일을 하나의 byte 배열로 합치기
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", studyKey + ".zip");
 
-        List<File> fileList = imageService.getFiles(studyKey);
-        for (File file : fileList) {
-            Path path = file.toPath();
-            byte[] data = Files.readAllBytes(path);
-            System.out.println("data:"+data);
-            baos.writeBytes(data);
+            return new ResponseEntity<>(zipFileData, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        // 합쳐진 byte 배열
-        byte[] mergedData = baos.toByteArray();
-        System.out.println("mergedData:" + mergedData);
-        // HTTP 응답 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setContentDispositionFormData("attachment", studyKey + ".dcm");
-        return new ResponseEntity<>(mergedData, headers, HttpStatus.OK);
     }
 
     @GetMapping("/getSeriesInsUids/{studyInsUid}")

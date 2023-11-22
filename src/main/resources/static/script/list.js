@@ -319,28 +319,36 @@ $(".download-btn").click(function() {
     }
 });
 
-// 서버에 이미지 다운로드 요청을 보내는 함수
-function downloadImages(selectedStudyKeys) {
-    // 각 studyKey에 대해 다운로드 요청을 보냄
-    selectedStudyKeys.forEach(function(studyKey) {
-        const downloadUrl = `/studies/download/${studyKey}`;
 
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", downloadUrl, true);
-        xhr.responseType = "arraybuffer";
 
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                const blob = new Blob([xhr.response], { type: "application/octet-stream" });
-                const link = document.createElement("a");
-                link.href = window.URL.createObjectURL(blob);
-                link.download = `${studyKey}.dcm`;
-                link.click();
-            } else {
-                alert(`StudyKey ${studyKey} 이미지 다운로드에 실패했습니다.`);
+
+async function downloadImages(selectedStudyKeys) {
+    try {
+        for (const studyKey of selectedStudyKeys) {
+            const downloadUrl = `/studies/download/${studyKey}`;
+            const response = await fetch(downloadUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add CSRF token if applicable
+                    // 'X-CSRF-TOKEN': 'your-csrf-token'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-        };
 
-        xhr.send();
-    });
+            const blob = await response.blob();
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `${studyKey}.zip`;
+
+
+            // Automatically click the link to trigger the download
+            link.click();
+        }
+    } catch (error) {
+        console.error("이미지 다운로드에 실패했습니다.", error);
+    }
 }
