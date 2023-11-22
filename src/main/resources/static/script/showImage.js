@@ -30,26 +30,3 @@ function displayImages(images) {
 }
 
 
-
-
-
-/***********************************
- 민재민재민재민재민재민재민재민재민재민재민재
- **********************************/
-function showDicomImagesMJ(studyinsuid) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/studies/takeuidgiveseriesnum/" + studyinsuid, true);
-    xhr.setRequestHeader("Content-Type", "application/json")
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                var imagesData = JSON.parse(xhr.responseText);
-                displayImages(imagesData);
-            } else {
-                alert("Failed to retrieve images. Status code: " + xhr.status);
-            }
-        }
-    };
-    xhr.send();
-}

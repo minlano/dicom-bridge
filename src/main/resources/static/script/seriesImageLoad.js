@@ -297,3 +297,23 @@ function boxHandler(event, divById) {
     divById.style.border = '3px solid red';
     divById.className = 'checked';
 }
+
+/* cornerstone tool */
+
+var invertButton = document.getElementById('invert');
+invertButton.addEventListener('click', function() {
+    invertImageWithWWWC();
+});
+
+/* black-white invert */
+function invertImageWithWWWC() {
+    const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
+    console.log("selectedDiv",selectedDiv);
+
+    var viewport = cornerstone.getViewport(selectedDiv);
+    console.log("viewport",viewport);
+
+    viewport.invert = false;
+
+    cornerstone.setViewport(selectedDiv, viewport);
+}
