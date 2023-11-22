@@ -149,9 +149,28 @@
                     <img src="/images/play.6f437ab2591fe6a6c319e7e77f01df3e.png" alt="clip">
                     <div>플레이 클립</div>
                 </li>
-                <li>
-                    <img src="/images/tools.2d1068915b14d4ae8a087ca1036b65b2.png" alt=" tool">
-                    <div>도구</div>
+                <li class="tool" onclick="showToolBox()">
+                    <img class="tool" src="/images/tools.2d1068915b14d4ae8a087ca1036b65b2.png" alt=" tool">
+                    <div class="tool">도구</div>
+                    <div id="toolBox">
+                        <div id="toolContent">
+                            <ul>
+                                <div><img src="/images/toolbox/glasses.png"></div>
+                                <div><img src="/images/toolbox/zoomin.png"></div>
+                            </ul>
+                            <ul>
+                                <div><img src="/images/toolbox/rotate.png"></div>
+                                <div><img src="/images/toolbox/rotate_right.png"></div>
+                            </ul>
+                            <ul>
+                                <div><img src="/images/toolbox/rotate_left.png"></div>
+                                <div><img src="/images/toolbox/vertical_change.png"></div>
+                            </ul>
+                            <ul>
+                                <div><img src="/images/toolbox/horizontal_change.png"></div>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <img src="/images/annotation.19ee74cd3ecff2134a423009b58463aa.png" alt="주석">
@@ -161,9 +180,10 @@
                     <img src="/images/refresh.6a8fba2767a97749fd00e3e6f59935f3.png" alt="재설정">
                     <div>재설정</div>
                 </li>
-                <li>
-                    <img src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png" alt="Series">
-                    <div class="tooltip" onclick="showBox('Series')">Series</div>
+                <li id="seriesInfoBox" class="info" onclick="showInfoBox()">
+                    <img class="info" src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png">
+                    <div class="info">Series</div>
+                    <%-- <div class="tooltip info">Series</div>--%>
                     <div id="infoBox">
                         <div id="infoContent">
                             <ul>
@@ -219,18 +239,6 @@
             </div>
         </section>
         <section id="image-container">
-<%--            <div class="image">--%>
-<%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지1">--%>
-<%--            </div>--%>
-<%--            <div class="image">--%>
-<%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지2">--%>
-<%--            </div>--%>
-<%--            <div class="image">--%>
-<%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지3">--%>
-<%--            </div>--%>
-<%--            <div class="image">--%>
-<%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지4">--%>
-<%--            </div>--%>
         </section>
     </section>
 </div>
@@ -238,9 +246,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://unpkg.com/cornerstone-core"></script>
 <script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
+<script src="https://unpkg.com/cornerstone-tools/dist/cornerstoneTools.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="/script/dicomParser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dicom-parser/dist/dicomParser.min.js"></script>
+<%--<script src="/script/dicomParser.js"></script>--%>
 <script src="/script/viewer.js"></script>
 <script src="/script/seriesImageLoad.js"></script>
+<script src="/script/tool.js"></script>
 <script src="/script/report.js"></script>
 </html>

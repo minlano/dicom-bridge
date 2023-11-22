@@ -3,6 +3,7 @@ package com.example.dicombridge.repository;
 import com.example.dicombridge.domain.common.ThumbnailDto;
 import com.example.dicombridge.domain.image.Image;
 import com.example.dicombridge.domain.image.ImageId;
+import com.example.dicombridge.domain.series.Series;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -40,10 +41,15 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
            "ORDER BY to_number(i.instancenum) ASC")
     List<Image> findNthImageBySeriesinsuid(@Param("seriesinsuid") String seriesinsuid, Pageable pageable);
 
-    @Query("SELECT MAX(i.imageId.serieskey) FROM Image i WHERE i.studyinsuid = :studyinsuid")
-    Integer findMaxStudyKeyByStudyKey(@Param("studyinsuid") String studyinsuid); // serieskey의 최댓값을 구하지만 1부터 숫자가 늘어나기에 count와 같다.
+    @Query("SELECT COUNT(DISTINCT i.seriesinsuid) " +
+           "FROM Image i " +
+           "WHERE i.studyinsuid = :studyInsUid")
+    Long countDistinctSeries(@Param("studyInsUid") String studyInsUid);
 
-    int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
+    int countByseriesinsuid(String seriesinsuid);
 
-
+    @Query("SELECT DISTINCT(i.seriesinsuid) " +
+           "FROM Image i " +
+           "WHERE i.studyinsuid = :studyInsuid")
+    List<String> findDistinctSeriesInsUidByStudyinsuid(@Param("studyInsuid") String studyInsuid);
 }

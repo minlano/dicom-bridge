@@ -241,17 +241,19 @@ section#image-container {
 	width: 50%;
 }
 
+/* 시리즈 그리드 레이아웃 */
 #infoBox {
 	display: none;
 	position: fixed;
 	width: 110px;
 	height: 130px;
 	transform: translate(0%, 0%);
-	background-color: #dddddd;
+	background-color: #9B9B9B;
 	border: 2px solid #090900;
 	margin: 0 0 0 0;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	z-index: 1000;
+	border-radius: 5px;
 }
 
 #infoContent ul {
@@ -265,6 +267,36 @@ section#image-container {
 	padding: 1px;
 }
 
+/* 도구 toolBox */
+#toolBox {
+	display: none;
+	position: fixed;
+	width: 130px;
+	height: 200px;
+	transform: translate(0%, 0%);
+	background-color: #9B9B9B;
+	border: 2px solid #090900;
+	margin: 0 0 0 0;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	border-radius: 5px;
+}
+
+#toolContent ul {
+	margin: 0 0 0 0;
+}
+
+#toolContent img {
+	display: block;
+	width: 40px;
+	height: 40px;
+	padding: 3px;
+	margin-left: 12px;
+}
+
+#toolContent img:hover {
+	background-color: darkolivegreen;
+}
 
 /* thumbnail 스크롤바 */
 #thumbnail-container .table-wrapper {

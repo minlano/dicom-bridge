@@ -173,9 +173,16 @@ public class ImageRestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setContentDispositionFormData("attachment", studyKey + ".dcm");
-
-        // 파일을 byte 배열로 응답
         return new ResponseEntity<>(mergedData, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/getSeriesInsUids/{studyInsUid}")
+    public List<String> getSeriesInsUids(@PathVariable String studyInsUid) {
+//        List<Image> images = imageService.getSeriesInsUids(studyInsUid);
+//        return images.stream()
+//                .map(image -> image.getSeriesinsuid())
+//                .collect(Collectors.toList());
+        List<String> images = imageService.getSeriesInsUids(studyInsUid);
+        return images;
+    }
 }
