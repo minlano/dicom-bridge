@@ -86,7 +86,6 @@ async function imageDisplay() {
             var div = document.createElement('div');
             var id = `image_${i}_${j}`;
             div.id = id;
-            div.className = 'image';
             div.setAttribute('order', FIRST_ORDER);
             imageContainer.appendChild(div);
 
@@ -271,8 +270,24 @@ async function countBySeriesInsUid(seriesInsUid) {
     }
 }
 
+function createBoxHandler(id, seriesInsUid) {
+    let divById = document.getElementById(id);
+    divById.addEventListener('click', function (event) {
+        boxHandler(event, divById);
+    })
+
+    divById.addEventListener('dblclick', function (event) {
+        rowCol.row = 1; rowCol.col = 1;
+        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+        imageDisplayBySeriesInsUid(seriesInsUid);
+    })
+}
+
 function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
+
+    console.log(divCollectionByClass.length)
 
     for(let div of divCollectionByClass) {
         div.style.border = '';
@@ -324,4 +339,67 @@ function createBoxHandler(id, seriesInsUid) {
         imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
         imageDisplayBySeriesInsUid(seriesInsUid);
     })
+}
+
+
+/* 소현이 윈도우 레벨 추가 부분 */
+
+var invertBtn = document.getElementById('invert');
+var windowLvBtn = document.getElementById('window-level');
+invertBtn.addEventListener('click', function() {
+    invertImage();
+});
+windowLvBtn.addEventListener('click', function() {
+    windowLevel();
+});
+
+/* black-white invert */
+function invertImage() {
+
+    const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
+
+    var viewport = cornerstone.getViewport(selectedDiv);
+
+    viewport.invert = !viewport.invert;
+
+    cornerstone.setViewport(selectedDiv, viewport);
+}
+
+
+function windowLevel() {
+
+    const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
+
+    var viewport = cornerstone.getViewport(selectedDiv);
+
+    cornerstone.setViewport(selectedDiv, viewport);
+
+    addMouseDragHandler(selectedDiv);
+}
+
+function addMouseDragHandler(element) {
+    element.addEventListener('mousedown', function (e) {
+        let lastX = e.pageX;
+        let lastY = e.pageY;
+
+        function mouseMoveHandler(e) {
+            const deltaX = e.pageX - lastX;
+            const deltaY = e.pageY - lastY;
+            lastX = e.pageX;
+            lastY = e.pageY;
+
+            let viewport = cornerstone.getViewport(element);
+            viewport.voi.windowWidth += (deltaX / viewport.scale);
+            viewport.voi.windowCenter += (deltaY / viewport.scale);
+            cornerstone.setViewport(element, viewport);
+        }
+
+        function mouseUpHandler() {
+            document.removeEventListener('mousemove', mouseMoveHandler);
+            document.removeEventListener('mouseup', mouseUpHandler);
+        }
+
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+    });
 }
