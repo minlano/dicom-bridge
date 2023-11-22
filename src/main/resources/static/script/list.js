@@ -126,10 +126,7 @@ $(document).on("dblclick", "tr.subTr", function() {
             url: "/studies/seriescount/" + studyinsuid,
             success: function(data) {
                 var seriesCount = data; // 시리즈 갯수.
-                //페이지 이동 후
-                //var seriesCount = localStorage.getItem("seriesCount"); 로 사용
 
-                // LocalStorage에 데이터 저장
                 localStorage.setItem("seriesCount", seriesCount);
                 localStorage.setItem("studyinsuid", studyinsuid);
 

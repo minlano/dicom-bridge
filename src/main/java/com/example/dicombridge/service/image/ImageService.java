@@ -3,9 +3,7 @@ package com.example.dicombridge.service.image;
 import com.example.dicombridge.domain.common.ThumbnailDto;
 import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
-import com.example.dicombridge.domain.series.Series;
 import com.example.dicombridge.repository.ImageRepository;
-import com.example.dicombridge.repository.SeriesRepository;
 import com.example.dicombridge.service.fileRead.FileRead;
 import jcifs.Address;
 import jcifs.CIFSContext;
@@ -17,7 +15,6 @@ import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
 
-import lombok.NoArgsConstructor;
 import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -222,6 +219,14 @@ public class ImageService {
         return fileRead2(map);
     }
 
+//    public List<File> getFiles(int studyKey) throws IOException {
+//        List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
+//        Map<String, Image> map = images.stream().collect(Collectors.toMap(
+//                i -> i.getFname(),
+//                i -> i
+//        ));
+//        return fileReadForDownload(map);
+//    }
 
     public List<ByteArrayOutputStream> getFiles(int studyKey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
@@ -260,8 +265,6 @@ public class ImageService {
 
     public File getFileByseriesinsuidNcount(String seriesinsuid, int order) throws IOException  {
         Pageable pageable = PageRequest.of(order-1,1);
-        // int로 전달할 수 있지만 하면 모든 결과를 메모리에 로드하므로 결과 집합이 큰 경우 성능 이슈가 발생할 수 있다.
-        // 결과 집합이 크다면 Pageable을 사용하여 페이징 처리하는 것이 좋다
         List<Image> images = imageRepository.findNthImageBySeriesinsuid(seriesinsuid, pageable);
         FileRead<Image> fileRead = new FileRead(this);
         return fileRead.getFile(images);
@@ -278,6 +281,19 @@ public class ImageService {
         return null;
     }
 
+//    private List<File> fileRead3(Map<String, Image> imageMap) throws IOException {
+//        List<File> tempFiles = new ArrayList<>();
+//
+//        for (String fname : imageMap.keySet()) {
+//            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
+//            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+//            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
+//
+//            tempFiles.add(tempDcmFile);
+//        }
+//        return tempFiles;
+//    }
+
     private List<File> fileRead3(Map<String, Image> imageMap) throws IOException {
         List<File> tempFiles = new ArrayList<>();
 
@@ -291,17 +307,17 @@ public class ImageService {
         return tempFiles;
     }
 
-
     public ByteArrayOutputStream convert2DcmFileDownload(byte[] data) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byteArrayOutputStream.write(data);
         return byteArrayOutputStream;
     }
 
+    public int findMaxStudyKeyByStudyKey(String studyInsUid) {
+        return imageRepository.countDistinctSeries(studyInsUid).intValue();
+    }
 
-
-
-    public int findMaxStudyKeyByStudyKey(String studyinsuid) {
-        return imageRepository.findMaxStudyKeyByStudyKey(studyinsuid);
+    public List<String> getSeriesInsUids(String studyInsUid) {
+        return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyInsUid);
     }
 }
