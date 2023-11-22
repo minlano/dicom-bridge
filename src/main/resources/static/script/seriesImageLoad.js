@@ -300,20 +300,63 @@ function boxHandler(event, divById) {
 
 /* cornerstone tool */
 
-var invertButton = document.getElementById('invert');
-invertButton.addEventListener('click', function() {
-    invertImageWithWWWC();
+var invertBtn = document.getElementById('invert');
+var windowLvBtn = document.getElementById('window-level');
+invertBtn.addEventListener('click', function() {
+    invertImage();
+});
+windowLvBtn.addEventListener('click', function() {
+    windowLevel();
 });
 
 /* black-white invert */
-function invertImageWithWWWC() {
+function invertImage() {
+
     const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
-    console.log("selectedDiv",selectedDiv);
 
     var viewport = cornerstone.getViewport(selectedDiv);
-    console.log("viewport",viewport);
 
-    viewport.invert = false;
+    viewport.invert = !viewport.invert;
 
     cornerstone.setViewport(selectedDiv, viewport);
 }
+
+
+function windowLevel() {
+
+    const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
+
+    var viewport = cornerstone.getViewport(selectedDiv);
+
+    cornerstone.setViewport(selectedDiv, viewport);
+
+    addMouseDragHandler(selectedDiv);
+}
+
+function addMouseDragHandler(element) {
+    element.addEventListener('mousedown', function (e) {
+        let lastX = e.pageX;
+        let lastY = e.pageY;
+
+        function mouseMoveHandler(e) {
+            const deltaX = e.pageX - lastX;
+            const deltaY = e.pageY - lastY;
+            lastX = e.pageX;
+            lastY = e.pageY;
+
+            let viewport = cornerstone.getViewport(element);
+            viewport.voi.windowWidth += (deltaX / viewport.scale);
+            viewport.voi.windowCenter += (deltaY / viewport.scale);
+            cornerstone.setViewport(element, viewport);
+        }
+
+        function mouseUpHandler() {
+            document.removeEventListener('mousemove', mouseMoveHandler);
+            document.removeEventListener('mouseup', mouseUpHandler);
+        }
+
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+    });
+}
+
