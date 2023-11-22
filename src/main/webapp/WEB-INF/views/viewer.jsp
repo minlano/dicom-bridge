@@ -109,7 +109,7 @@
                     <img src="/images/worklist.0c26b996e226a3db09e77ef62d440241.png" alt="List">
                     <div>List</div>
                 </li>
-                <li>
+                <li id="back">
                     <img src="/images/previous_study.3cb78eecd6d2385b44cb9176ba1fc87c.png" alt="이전">
                     <div>이전</div>
                 </li>
@@ -121,15 +121,15 @@
                     <img src="/images/default.fa9b027b98a164fb3b5849c0d3ca39ca.png" alt="DefaultTool">
                     <div>Default Tool</div>
                 </li>
-                <li>
+                <li id="window-level">
                     <img src="/images/wwwc.1cc5a0ecda9fd93a085688cedaa8a78b.png" alt="windowLevel">
                     <div>윈도우 레벨</div>
                 </li>
-                <li>
+                <li id="invert">
                     <img src="/images/invert.ede51ece1c3d447e625c3191b6a2af9c.png" alt="blackAndWhite">
                     <div>흑백 반전</div>
                 </li>
-                <li>
+                <li id="move">
                     <img src="/images/pan.47e8cd9f65cf64c8f2fb3d08c6f205ab.png" alt="이동">
                     <div>이동</div>
                 </li>
@@ -236,9 +236,18 @@
 </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://unpkg.com/cornerstone-core"></script>
-<script src="https://unpkg.com/cornerstone-wado-image-loader"></script>
+<%--<script src="https://unpkg.com/cornerstone-core"></script>--%>
+<%--<script src="https://unpkg.com/cornerstone-tools@6.0.10/dist/cornerstoneTools.js"></script>--%>
+<%--<script src="https://unpkg.com/cornerstone-wado-image-loader"></script>--%>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/cornerstone-core/dist/cornerstone.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cornerstone-math@0.1.10/dist/cornerstoneMath.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cornerstone-tools@6.0.10/dist/cornerstoneTools.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cornerstone-web-image-loader@2.1.1/dist/cornerstoneWebImageLoader.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cornerstone-wado-image-loader@4.13.2/dist/cornerstoneWADOImageLoader.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dicom-parser@1.8.21/dist/dicomParser.min.js"></script>
 <script src="/script/dicomParser.js"></script>
 <script src="/script/viewer.js"></script>
 <script src="/script/seriesImageLoad.js"></script>
