@@ -34,6 +34,8 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class ImageService {
@@ -220,13 +222,40 @@ public class ImageService {
         return fileRead2(map);
     }
 
-    public List<File> getFiles(int studyKey) throws IOException {
+
+    public List<ByteArrayOutputStream> getFiles(int studyKey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
                 i -> i.getFname(),
                 i -> i
         ));
-        return fileReadForDownload(map);
+
+        List<ByteArrayOutputStream> tempFiles = new ArrayList<>();
+        for (String fname : map.keySet()) {
+            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(map.get(fname));
+            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+
+            tempFiles.add(byteArrayOutputStream);
+        }
+
+        return tempFiles;
+    }
+    public byte[] createZipFile(List<ByteArrayOutputStream> imageStreams, int studyKey) throws IOException {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ZipOutputStream zos = new ZipOutputStream(baos)) {
+
+            int index = 1;
+            for (ByteArrayOutputStream imageStream : imageStreams) {
+                zos.putNextEntry(new ZipEntry("image" + index + ".dcm"));
+                imageStream.writeTo(zos);
+                zos.closeEntry();
+                index++;
+            }
+
+            zos.finish();
+
+            return baos.toByteArray();
+        }
     }
 
     public File getFileByseriesinsuidNcount(String seriesinsuid, int order) throws IOException  {
@@ -262,16 +291,15 @@ public class ImageService {
         return tempFiles;
     }
 
-    private List<File> fileReadForDownload(Map<String, Image> imageMap) throws IOException {
-        List<File> tempFiles = new ArrayList<>();
-        for (String fname : imageMap.keySet()) {
-            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
-            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
-            tempFiles.add(tempDcmFile);
-        }
-        return tempFiles;
+
+    public ByteArrayOutputStream convert2DcmFileDownload(byte[] data) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byteArrayOutputStream.write(data);
+        return byteArrayOutputStream;
     }
+
+
+
 
     public int findMaxStudyKeyByStudyKey(String studyinsuid) {
         return imageRepository.findMaxStudyKeyByStudyKey(studyinsuid);

@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @RestController
 @RequestMapping("/studies")
@@ -27,7 +30,9 @@ public class ImageRestController {
 
     private final ImageService imageService;
 
-    /** ThumbNale **/
+    /**
+     * ThumbNale
+     **/
     @PostMapping("/getThumbnail/{studyKey}")
     public ResponseEntity<Map<String, ThumbnailWithFileDto>> getThumbnailData(@PathVariable String studyKey) throws IOException {
         Map<String, ThumbnailWithFileDto> images = imageService.getThumbnail(Integer.valueOf(studyKey));
@@ -45,10 +50,10 @@ public class ImageRestController {
      *****************************************************************************************/
 
     @PostMapping("/takeuidgiveseriesnum/{seriesinsuid}")
-    public ResponseEntity<byte[]> getSeriesNum(@PathVariable String seriesinsuid, Model model) throws IOException{
+    public ResponseEntity<byte[]> getSeriesNum(@PathVariable String seriesinsuid, Model model) throws IOException {
         //List list = imageService.getSeriesNum(studyinsuid);
         //System.out.println(list.size());
-       File file = imageService.getSeriesNum(seriesinsuid);
+        File file = imageService.getSeriesNum(seriesinsuid);
         // 파일을 byte 배열로 읽기
         Path path = file.toPath();
         byte[] data = Files.readAllBytes(path);
@@ -61,8 +66,9 @@ public class ImageRestController {
         // 파일을 byte 배열로 응답
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
     @PostMapping("/takeuidgiveseriesnum2/{seriesinsuid}")
-    public ResponseEntity<List<byte[]>> getSeriesNum2(@PathVariable String seriesinsuid, Model model) throws IOException{
+    public ResponseEntity<List<byte[]>> getSeriesNum2(@PathVariable String seriesinsuid, Model model) throws IOException {
         List<File> files = imageService.getSeriesNum2(seriesinsuid);
 
         List<byte[]> byteArrayList = new ArrayList<>();
@@ -119,7 +125,7 @@ public class ImageRestController {
      ****************************Seriesinsuid count 조회***************************************
      *****************************************************************************************/
     @GetMapping("/getSeriesInsUidCount/{seriesInsUid}")
-    public ResponseEntity<Integer> seriesinsuidCount(@PathVariable String seriesInsUid) throws IOException{
+    public ResponseEntity<Integer> seriesinsuidCount(@PathVariable String seriesInsUid) throws IOException {
         int count = imageService.seriesinsuidCount(seriesInsUid);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -143,39 +149,34 @@ public class ImageRestController {
 
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
+
     /*****************************************************************************************
      ***********************************Series의 갯수******************************************
      *****************************************************************************************/
     @PostMapping("/seriescount/{studyinsuid}")
-    public int seriesCount(@PathVariable("studyinsuid") String studyinsuid){
+    public int seriesCount(@PathVariable("studyinsuid") String studyinsuid) {
 
         return imageService.findMaxStudyKeyByStudyKey(studyinsuid);
     }
 
+
     @PostMapping("/download/{studyKey}")
-    public ResponseEntity<byte[]> downloadImages(@PathVariable int studyKey) throws IOException {
-        System.out.println("studyKey : "+studyKey);
+    public ResponseEntity<byte[]> downloadImages(@PathVariable int studyKey) {
+        try {
+            List<ByteArrayOutputStream> imageStreams = imageService.getFiles(studyKey);
+            byte[] zipFileData = imageService.createZipFile(imageStreams, studyKey);
 
-        // 여러 파일을 하나의 byte 배열로 합치기
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", studyKey + ".zip");
 
-        List<File> fileList = imageService.getFiles(studyKey);
-        for (File file : fileList) {
-            Path path = file.toPath();
-            byte[] data = Files.readAllBytes(path);
-            System.out.println("data:"+data);
-            baos.writeBytes(data);
+            return new ResponseEntity<>(zipFileData, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        // 합쳐진 byte 배열
-        byte[] mergedData = baos.toByteArray();
-        System.out.println("mergedData:" + mergedData);
-        // HTTP 응답 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setContentDispositionFormData("attachment", studyKey + ".dcm");
-
-        // 파일을 byte 배열로 응답
-        return new ResponseEntity<>(mergedData, headers, HttpStatus.OK);
     }
+
+
 
 }
