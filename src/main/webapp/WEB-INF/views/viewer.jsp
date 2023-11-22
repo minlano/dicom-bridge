@@ -154,8 +154,78 @@
                     <div>도구</div>
                 </li>
                 <li>
-                    <img src="/images/annotation.19ee74cd3ecff2134a423009b58463aa.png" alt="주석">
-                    <div>주석</div>
+                    <button data-tool="8" class="toolModalParent">
+                        <img src="/images/annotation.19ee74cd3ecff2134a423009b58463aa.png" alt="주석">
+                        <div>주석</div>
+                        <div class="toolModalChildren displayNone">
+                            <div>
+                                <div data-tool="angle" class="currentTool angle" data-parent="annotation">
+                                    <img src="/images/angle.1e52dac1b36046ae8e3b17f7212d09e3.png" data-tool="angle" data-parent="annotation">
+                                    <span data-tool="angle" data-parent="annotation">각도</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="arrowAnnotate" class="currentTool arrowAnnotate" data-parent="annotation">
+                                    <img src="/images/arrowAnnotate.3b3e8aff47cbcad5127d6ef07404f4e3.png" data-tool="arrowAnnotate" data-parent="annotation">
+                                    <span data-tool="arrowAnnotate" data-parent="annotation">화살표</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="probe" class="currentTool probe" data-parent="annotation">
+                                    <img src="/images/probe.c1bbaff5b3a138e4d0a91ed67b54bc2d.png" data-tool="probe" data-parent="annotation">
+                                    <span data-tool="probe" data-parent="annotation">Probe</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="length" class="currentTool length" data-parent="annotation">
+                                    <img src="/images/length.62b344c23d7eb391d08d2ece39f69926.png" data-tool="length" data-parent="annotation">
+                                    <span data-tool="length" data-parent="annotation">길이</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="rectangleROI" class="currentTool rectangleROI" data-parent="annotation">
+                                    <img src="/images/rectangleROI.6d28dc65ff156314a3f7679742611563.png" data-tool="rectangleROI" data-parent="annotation">
+                                    <span data-tool="rectangleROI" data-parent="annotation">사각형 그리기</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="ellipticalROI" class="currentTool ellipticalROI" data-parent="annotation">
+                                    <img src="/images/ellipticalROI.75a48af081b131624797edd4373c1b22.png" data-tool="ellipticalROI" data-parent="annotation">
+                                    <span data-tool="ellipticalROI" data-parent="annotation">원 그리기</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="freeHand" class="currentTool freeHand" data-parent="annotation">
+                                    <img src="/images/freeHand.ccc90ff2cacb2a39f092e59689485f92.png" data-tool="freeHand" data-parent="annotation">
+                                    <span data-tool="freeHand" data-parent="annotation">자율 그리기</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="bidirectional" class="currentTool bidirectional" data-parent="annotation">
+                                    <img src="/images/bidirectional.9a08aab170feb4e1ede185075f4fdaa6.png" data-tool="bidirectional" data-parent="annotation">
+                                    <span data-tool="bidirectional" data-parent="annotation">Bidirectional</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="cobbAngle" class="currentTool cobbAngle" data-parent="annotation">
+                                    <img src="/images/cobbAngle.1b412c3001b7d430c1064115fe845d79.png" data-tool="cobbAngle" data-parent="annotation">
+                                    <span data-tool="cobbAngle" data-parent="annotation">콥 각도</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="TextMarker" class="currentTool TextMarker" data-parent="annotation">
+                                    <img src="/images/textMarker.c203289c93466e8a10569367935d8b07.png" data-tool="TextMarker" data-parent="annotation">
+                                    <span data-tool="TextMarker" data-parent="annotation">텍스트 마커</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div data-tool="eraser" class="currentTool eraser" data-parent="annotation">
+                                    <img src="/images/eraser.bf8a01d63d3fddbbe86da109fdaa188b.png" data-tool="eraser" data-parent="annotation">
+                                    <span data-tool="eraser" data-parent="annotation">선택 삭제</span>
+                                </div>
+                            </div>
+                        </div>
+                    </button>
                 </li>
                 <li>
                     <img src="/images/refresh.6a8fba2767a97749fd00e3e6f59935f3.png" alt="재설정">
