@@ -1,7 +1,7 @@
 package com.example.dicombridge.service.image;
 
-import com.example.dicombridge.domain.common.ThumbnailDto;
-import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
+import com.example.dicombridge.domain.dto.thumbnail.ThumbnailDto;
+import com.example.dicombridge.domain.dto.thumbnail.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
 import com.example.dicombridge.repository.ImageRepository;
 import com.example.dicombridge.service.fileRead.FileRead;

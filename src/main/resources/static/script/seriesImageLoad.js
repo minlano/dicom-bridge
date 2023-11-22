@@ -86,6 +86,7 @@ async function imageDisplay() {
             var div = document.createElement('div');
             var id = `image_${i}_${j}`;
             div.id = id;
+            div.className = 'image';
             div.setAttribute('order', FIRST_ORDER);
             imageContainer.appendChild(div);
 
@@ -270,24 +271,8 @@ async function countBySeriesInsUid(seriesInsUid) {
     }
 }
 
-function createBoxHandler(id, seriesInsUid) {
-    let divById = document.getElementById(id);
-    divById.addEventListener('click', function (event) {
-        boxHandler(event, divById);
-    })
-
-    divById.addEventListener('dblclick', function (event) {
-        rowCol.row = 1; rowCol.col = 1;
-        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-        imageDisplayBySeriesInsUid(seriesInsUid);
-    })
-}
-
 function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
-
-    console.log(divCollectionByClass.length)
 
     for(let div of divCollectionByClass) {
         div.style.border = '';
@@ -298,22 +283,45 @@ function boxHandler(event, divById) {
     divById.className = 'checked';
 }
 
-/* cornerstone tool */
-
+/**
+ * cornerstone tool
+ */
+/* black-white invert */
 var invertButton = document.getElementById('invert');
+var invertCheck = false;
+function invertImageWithWWWC(divById) {
+    const selectedDiv = cornerstone.getEnabledElement(divById).element;
+    var viewport = cornerstone.getViewport(selectedDiv);
+    viewport.invert = invertCheck;
+    cornerstone.setViewport(selectedDiv, viewport);
+}
+
 invertButton.addEventListener('click', function() {
-    invertImageWithWWWC();
+    var color;
+    if(invertCheck)
+        color = 'rgb(0, 0, 0)';
+    else
+        color = 'none';
+    invertButton.style.background = color;
+    invertCheck = !invertCheck;
+    invertImageWithWWWC(selectedDivById);
 });
 
-/* black-white invert */
-function invertImageWithWWWC() {
-    const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
-    console.log("selectedDiv",selectedDiv);
+var selectedDivById = '';
+function createBoxHandler(id, seriesInsUid) {
+    let divById = document.getElementById(id);
+    divById.addEventListener('click', function (event) {
+        boxHandler(event, divById);
 
-    var viewport = cornerstone.getViewport(selectedDiv);
-    console.log("viewport",viewport);
+        /* invert */
+        selectedDivById = divById;
+        invertCheck = false;
+    })
 
-    viewport.invert = false;
-
-    cornerstone.setViewport(selectedDiv, viewport);
+    divById.addEventListener('dblclick', function (event) {
+        rowCol.row = 1; rowCol.col = 1;
+        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+        imageDisplayBySeriesInsUid(seriesInsUid);
+    })
 }

@@ -1,7 +1,7 @@
 package com.example.dicombridge.service.image;
 
 import com.example.dicombridge.domain.study.Study;
-import com.example.dicombridge.domain.study.StudyResponseDto;
+import com.example.dicombridge.domain.dto.study.StudyResponseDto;
 import com.example.dicombridge.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,6 @@ public class StudyService {
     public List<StudyResponseDto> getStudiesByStudyKey(int studykey) {
         // studykey에 해당하는 studies를 가져오는 로직 추가
         List<Study> studyList = studyRepository.findByStudykey(studykey);
-        System.out.println("studyList : "+studyList);
         return studyList.stream()
                 .map(StudyResponseDto::new)
                 .collect(Collectors.toList());

@@ -1,13 +1,11 @@
 package com.example.dicombridge.controller.image;
 
-import com.example.dicombridge.domain.study.StudyResponseDto;
-import com.example.dicombridge.service.image.ImageService;
+import com.example.dicombridge.domain.dto.study.StudyResponseDto;
 import com.example.dicombridge.service.image.StudyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +35,6 @@ public class StudyController {
     @ResponseBody
     public ResponseEntity<List<StudyResponseDto>> getStudiesByStudyKey(@PathVariable int studykey) {
         List<StudyResponseDto> studies = studyService.getStudiesByStudyKey(studykey);
-        System.out.println("studies:" +studies);
         if (studies != null && !studies.isEmpty()) {
             return new ResponseEntity<>(studies, HttpStatus.OK);
         } else {

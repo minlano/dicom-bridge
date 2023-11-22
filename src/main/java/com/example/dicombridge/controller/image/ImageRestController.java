@@ -1,10 +1,8 @@
 package com.example.dicombridge.controller.image;
 
-import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
-import com.example.dicombridge.domain.image.Image;
+import com.example.dicombridge.domain.dto.thumbnail.ThumbnailWithFileDto;
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +16,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/studies")

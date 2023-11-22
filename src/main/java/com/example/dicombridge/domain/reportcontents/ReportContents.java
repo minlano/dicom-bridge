@@ -1,5 +1,6 @@
 package com.example.dicombridge.domain.reportcontents;
 
+import com.example.dicombridge.domain.dto.report.ReportContentsRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

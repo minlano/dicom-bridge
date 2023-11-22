@@ -1,9 +1,8 @@
 package com.example.dicombridge.repository;
 
-import com.example.dicombridge.domain.common.ThumbnailDto;
+import com.example.dicombridge.domain.dto.thumbnail.ThumbnailDto;
 import com.example.dicombridge.domain.image.Image;
 import com.example.dicombridge.domain.image.ImageId;
-import com.example.dicombridge.domain.series.Series;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,7 +21,7 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
     List<String> findDistinctSeriesinsuidByStudyinsuid(@Param("studyInsUid") String studyInsUid);
 
     @Query(
-            value = "SELECT new com.example.dicombridge.domain.common.ThumbnailDto(image.imageId.imagekey, image.imageId.serieskey, image.studyinsuid, image.seriesinsuid, image.sopinstanceuid, image.sopclassuid, image.path, image.fname, image.delflag, series.seriesdesc) " +
+            value = "SELECT new com.example.dicombridge.domain.dto.thumbnail.ThumbnailDto(image.imageId.imagekey, image.imageId.serieskey, image.studyinsuid, image.seriesinsuid, image.sopinstanceuid, image.sopclassuid, image.path, image.fname, image.delflag, series.seriesdesc) " +
                     "FROM Image image, Series series " +
                     "WHERE image.seriesinsuid = series.seriesId.seriesinsuid " +
                     "  AND image.imageId.studykey = :studykey " +
