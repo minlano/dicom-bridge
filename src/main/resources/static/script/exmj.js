@@ -35,15 +35,15 @@ async function viewDicomByStudykey(studykey) { //studykey로 다이콩 찾기
         //         },
         //         responseType: 'arraybuffer'
         //     });
-        let response = await axios.post("/studies/getFile/"+ studykey, null, {
+        let response = await axios.post("/studies/saveredis/"+ studykey, null, {
 
             responseType: 'arraybuffer'
         });
-            if (response.status === 200) {
-                let arrayBuffer = response.data;
-                const dataSet = await getDicomMetadata(arrayBuffer);
-                displayDicomImage(arrayBuffer);
-            }
+        if (response.status === 200) {
+            let arrayBuffer = response.data;
+            const dataSet = await getDicomMetadata(arrayBuffer);
+            displayDicomImage(arrayBuffer);
+        }
 
     } catch (error) {
         console.error(error);

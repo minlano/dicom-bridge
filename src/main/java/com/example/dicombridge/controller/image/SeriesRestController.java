@@ -22,4 +22,11 @@ public class SeriesRestController {
                 .map(series -> series.getSeriesId().getSeriesinsuid())
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/getComparisonTest/{studyInsUid}")
+    public List<String> getComparisonTest(@PathVariable String studyInsUid) {
+
+        return null;
+    }
+
 }

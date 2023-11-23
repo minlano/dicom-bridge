@@ -170,6 +170,30 @@ public class ImageService {
 
         return fileRead3(map);
     }
+    public List<File> getComparisonImage(String seriesinsuid) throws IOException {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findImagesBySeriesinsuidOrderedByInstancenum(seriesinsuid);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            map.put(image.getFname(), image);
+        }
+
+
+        return fileRead3(map);
+    }
+    public List<File> getcomparisonbyte(String seriesinsuid) throws IOException {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            map.put(image.getFname(), image);
+        }
+
+
+        return fileRead3(map);
+    }
 
     public int seriesinsuidCount(String seriesinsuid) {
         return imageRepository.countByseriesinsuid(seriesinsuid);
@@ -276,4 +300,10 @@ public class ImageService {
     public int findMaxStudyKeyByStudyKey(String studyinsuid) {
         return imageRepository.findMaxStudyKeyByStudyKey(studyinsuid);
     }
+
+    public  List<String> saveRedisValSeriesinsuid(String studyinsuid) {
+        String studyInsUid = studyinsuid;
+        return imageRepository.findDistinctSeriesinsuidByStudyinsuid(studyInsUid);
+    }
+
 }

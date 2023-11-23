@@ -103,6 +103,72 @@
             </div>
         </div>
 
+        <!-- 비교검사 모달 창 -->
+        <div id="comparisonModal" class="modal">
+            <div id="comparisonGrid" class="modal-content">
+                <header id="comparisonHeader">
+                    <span id = "comparisonExit"class="close" onclick="closeComparisonModal()">&times;</span>
+                    <aside id="study-search">
+                        <div class="search-bar">
+                            <a class="subtitle">검색</a>
+                        </div>
+                        <ul>
+                            <li class="nohover"><input type="text" class="keyword" id="Pid-input" placeholder="환자 아이디">
+                                <input type="text" class="keyword" id="Pname-input" placeholder="환자 이름">
+                                <select id="category" class="keyword">
+                                    <option value="">판독상태</option>
+                                    <option value="3">읽지않음</option>
+                                    <option value="4">열람중</option>
+                                    <option value="5">예비판독</option>
+                                    <option value="6">판독</option>
+                                </select>
+                                <button id="search">검색</button>
+                            </li>
+                        </ul>
+                    </aside>
+                </header>
+                <div id="comparisonTable" class="comparisonTable">
+                    <div class="search-bar">
+                        <a class="subtitle">WorkList</a>
+                    </div>
+                    <table id="modalComparisonTable" class="modalcomparisonTable">
+                        <thead id="header-container" class="header-container">
+                        <tr id="trTitle">
+                           <th>번호</th>
+                           <th>환자 아이디</th>
+                           <th>환자 이름</th>
+                          <th>검사장비</th>
+                          <th class="study">검사설명</th>
+                           <th>검사일시</th>
+                           <th>시리즈</th>
+                           <th>이미지</th>
+                            <th>Verify</th>
+                      </tr>
+                      </thead>
+                    </table>
+                 </div>
+                <footer id="comparisonFooter">
+                    <div class="table-div" class="comparisonTable">
+                        <div class="search-bar">
+                            <a class="subtitle">Previous</a>
+                        </div>
+                        <table id="comparisonPreviousTable" class="modalcomparisonTable">
+                            <thead class="header-container">
+                            <tr>
+                                <th>환자이름</th>
+                                <th>검사장비</th>
+                                <th class="study">검사설명</th>
+                                <th>검사일시</th>
+                                <th>시리즈</th>
+                                <th>이미지</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
         <aside id="toolbar">
             <ul>
                 <li id="list_btn">
@@ -141,7 +207,7 @@
                     <img src="/images/changeImageLayout.2294818a3aa0403736162eb1a10a89b7.png" alt="1시리즈">
                     <div>1시리즈</div>
                 </li>
-                <li>
+                <li id="comparison">
                     <img src="/images/comparison.07c6226e96a236664e9ac4c5ff078c44.png" alt="비교검사">
                     <div>비교검사</div>
                 </li>
@@ -231,6 +297,9 @@
 <%--            <div class="image">--%>
 <%--                <img src="/images/화면 캡처 2023-11-07 104120.png" alt="이미지4">--%>
 <%--            </div>--%>
+        </section>
+        <section id="image-container2">
+
         </section>
     </section>
 </div>

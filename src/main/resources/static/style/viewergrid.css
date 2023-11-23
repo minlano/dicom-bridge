@@ -82,7 +82,7 @@ aside li div, nav li div {
 	margin-top: 2px;
 }
 
-aside ul li:hover {
+aside ul li:not(.nohover):hover {
 	background-color: black;
 }
 
@@ -357,11 +357,26 @@ section#image-container {
 .subtitleAndButton a{
 	margin-right: 3px;
 }
-
+#Pid-input, #Pname-input {
+	font: inherit;
+	letter-spacing: inherit;
+	color: currentcolor;
+	border: 0px;
+	box-sizing: content-box;
+	height: 1.4375em;
+	padding: 8.5px 14px;
+}
 #studyCount {
 	margin-right: auto; /* 왼쪽 끝에 배치 */
 }
-
+#category {
+	height: 30px;
+	background-color: #373737;
+	border-radius: 12px;
+	padding-left: 10px;
+	color : #9B9B9B;
+	cursor: pointer;
+}
 .subtitleAndButton button {
 	padding-left: 5px;
 	border-radius: 15px ;
@@ -472,4 +487,150 @@ section#image-container {
 .horizontalStudy .studytime {
 	font-weight: bold; /* 형광펜처럼 강조합니다. */
 	color: blue; /* 색상을 변경합니다. */
+}
+
+#comparisonModal {
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	width : 100%;
+	height : 100%;
+}
+#comparisonGrid {
+	width : 75%;
+	height : 75%;
+	display: grid;
+	grid-template-rows: 2fr 4fr 3fr;
+	overflow-y: auto;
+	max-height: 80vh; /* 내용이 높이의 80% 이상이 되면 스크롤 출현. */
+	grid-template-areas:
+	"header"
+	"contents"
+	"footer";
+}
+#comparisonHeader{
+	grid-area: header;
+	background-color: #242424;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+}
+#comparisonExit{
+	align-self: flex-end;
+}
+#study-search{
+	width: 95%;
+	background-color:#2B2B2B;
+	color: white;
+	padding: 10px;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
+#study-search ul{
+	list-style:none;
+	white-space: nowrap;
+}
+.search-bar{
+	color: white;
+	size : 15px;
+	margin-left: 20px;
+	margin-top: 5px;
+}
+#search {
+	background-color: #621212;
+	line-height: 40px;
+	width : 40px;
+	height: 40px;
+	border-radius: 50%;
+	color: white;
+	margin-left: 15px;
+	font-size: 12px;
+	font-weight: bold;
+	cursor: pointer;
+}
+.keyword {
+	 height: 30px;
+	 background-color: #373737;
+	 border-radius: 12px;
+	 padding-left: 10px;
+	 color: white;
+	 width: 77%;
+ }
+.subtitleAndButton {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.subtitleAndButton a{
+	margin-right: 3px;
+}
+.subtitleAndButton button {
+	padding-left: 5px;
+	border-radius: 15px ;
+	height: 30px;
+	width: 12.5%;
+	background-color: #090900;
+	color: white;
+}
+.comparisonTable{
+	grid-area: contents;
+}
+.modalComparisonTable {
+
+	width: 90%;
+	height: 15px;
+	background-color: #090909;
+	color: white;
+	border-collapse: collapse;
+	font-size: 12px;
+	margin: 0 auto;/**/
+}
+.modalComparisonTable th, .modalComparisonTable td {
+	text-align: center;
+	border: 2px solid #2B2B2B;
+	padding: 8px;
+}
+.modalComparisonTable th {
+	height: 35px;
+	background-color: #393939;
+}
+.header-container {
+	position: sticky;
+	top: 0;
+	background-color: #393939;
+	z-index: 2;
+}
+
+.modalComparisonTable td{
+	z-index: 1;
+}
+.study, .studyList {
+	width: 550px;
+}
+#comparisonFooter{
+	grid-area: footer;
+}
+.subTr:hover {
+	cursor: pointer;
+	background-color: darkolivegreen;
+}
+#image-container{
+/*	width:47%;
+	float:left;*/
+}
+#image-container2 {
+	width:47%;
+	height: calc(100% - 87px);
+	display: none;
+	align-items: center; /* 수직 가운데 정렬 */
+	justify-content: center; /* 수평 가운데 정렬 */
+	background-color: blueviolet;
+	margin: 0px 40px 40px 1px;
+
+	float:right;
+
+	/*display: grid; !* 이미지 컨테이너를 그리드 컨테이너로 설정합니다. *!*/
+	grid-template-columns: repeat(2, 1fr); /* 2개의 열을 만듭니다. */
+	grid-template-rows: repeat(2, 1fr); /* 2개의 행을 만듭니다. */
+	gap: 5px; /* 이미지 사이의 간격을 조절합니다. */
 }

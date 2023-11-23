@@ -8,6 +8,11 @@ const axiosInstance = axios.create({
 var rowCol = {row: 2, col: 2};
 var imageContainer = document.getElementById('image-container');
 
+/**
+ * 비교검사 상태
+ */
+let comparisonFalse = true;
+
 function showBox() {
     document.getElementById('infoBox').style.display = 'inline-block';
 }
@@ -61,6 +66,10 @@ infoBox.addEventListener(('click'), function(e) {
 const FIRST_ORDER = 1;
 var seriesCount = localStorage.getItem("seriesCount");
 var studyInsUid = localStorage.getItem("studyinsuid");
+var modality = localStorage.getItem("modality");
+var pname = localStorage.getItem("pname");
+var pid = localStorage.getItem("pid");
+const studyinsuidKey = JSON.parse(localStorage.getItem("studyinsuidKey"));
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
 cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
 
@@ -198,4 +207,170 @@ async function countBySeriesInsUid(seriesInsUid) {
     } catch (error) {
         console.error(error);
     }
+}
+
+/*
+* 비교검사
+ */
+
+var comparison =  document.getElementById('comparison');
+comparison.addEventListener(('click'), function(e) {
+    alert(comparisonFalse);
+    if(comparisonFalse ===false){comparisonFalse=true}
+    alert(comparisonFalse);
+    //alert(modality);
+    $.ajax({
+        url: "/comparison-study-list",
+        method: "GET",
+        data: { modality:modality },
+        success: function(response) {
+            console.log("기능 입장");
+            comparisonList(response);
+
+        },
+        error: function() {
+            alert("Error Occur!");
+        }
+    });
+
+    $.ajax({
+        url: "/study-list",
+        success: function(response) {
+            comparisonPrevious(response);
+        },
+        error: function() {
+            alert("Error Occur!");
+        }
+    });
+    openComparisonModal();
+
+})
+
+function comparisonList(response){
+    //modal창에 출력
+    let comparisonListStr = "";
+    for(let i=0; i< response.length; i++){
+        comparisonListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}' data-modality='${response[i].modality}'>`;
+        comparisonListStr +=     "<td>" + (i+1) + "</td>";
+        comparisonListStr +=     "<td class='pid'>" + response[i].pid + "</td>";
+        comparisonListStr +=     "<td class='pname'>" + response[i].pname + "</td>";
+        comparisonListStr +=     "<td>" + response[i].modality + "</td>";
+        comparisonListStr +=     "<td class='studyList'>" + response[i].studydesc + "</td>";
+        comparisonListStr +=     "<td>" + response[i].studydate + "</td>";
+        comparisonListStr +=     "<td>" + response[i].seriescnt + "</td>";
+        comparisonListStr +=     "<td>" + response[i].imagecnt + "</td>";
+        comparisonListStr +=     "<td>" + response[i].verifyflag + "</td>";
+        comparisonListStr += "</tr>";
+    }
+    const table = document.getElementById("modalComparisonTable");
+    table.insertAdjacentHTML('beforeend', comparisonListStr);
+}
+function comparisonPrevious(response) {
+    let comparisonPreviousListStr = "";
+    for (let i = 0; i < response.length; i++) {
+        if (pid === response[i].pid) {
+
+                comparisonPreviousListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}'>`;
+                comparisonPreviousListStr += "<td>" + pname + "</td>";
+                comparisonPreviousListStr += "<td>" + response[i].modality + "</td>";
+                comparisonPreviousListStr += "<td>" + response[i].studydesc + "</td>";
+                comparisonPreviousListStr += "<td>" + response[i].studydate + "</td>";
+                comparisonPreviousListStr += "<td>" + response[i].seriescnt + "</td>";
+                comparisonPreviousListStr += "<td>" + response[i].imagecnt + "</td>";
+                comparisonPreviousListStr += "</tr>";
+
+        }
+
+    }
+        const table = document.getElementById("comparisonPreviousTable");
+        table.insertAdjacentHTML('beforeend', comparisonPreviousListStr);
+
+
+
+}
+
+function closeComparisonModal() {
+    // 모달 닫기
+    var modal = document.getElementById("comparisonModal");
+    modal.style.display = "none";
+
+    // 바디 스크롤 허용
+    document.body.style.overflow = "auto";
+}
+function openComparisonModal() {
+    // 모달 열기
+    var comparisonModal = document.getElementById("comparisonModal");
+    comparisonModal.style.display = "block";
+
+    // 바디 스크롤 막기
+    document.body.style.overflow = "hidden";
+}
+
+//비교검사 라인 클릭.
+$(document).on("dblclick", "tr.subTr", function() {
+    alert(comparisonFalse);
+    comparisonFalse = false;
+    // #image-container2의 display: grid, float: right로 변경,
+    $("#image-container").css({
+        "width": "47%",
+        "float" : "left"
+    });
+    $("#image-container2").css({
+        "display": "grid",
+        "float" : "right"
+    });
+    // $("#image-container > *").css({
+    //     "width": "50% !important",
+    //     "height": "50% !important"
+    // });
+    $(".cornerstone-canvas").css({
+        "width": "100%",
+        "height": "100%"
+    });
+    // 모달 닫기
+    var modal = document.getElementById("comparisonModal");
+    modal.style.display = "none";
+    // 바디 스크롤 허용
+    document.body.style.overflow = "auto";
+    // #image-container의 width: 47%, float: left로 변경
+
+    // const studyinsuid = $(this).data('studyinsuid');
+    // const studykey = $(this).data('studykey');
+    // const modality = $(this).data('modality');
+    // const pname = $(this).data('pname');
+    // const pid = $(this).find('.pid').text();
+    // if (studyinsuid && studykey) {
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/studies/seriescount/" + studyinsuid,
+    //         success: function(data) {
+    //             var seriesCount = data; // 시리즈 갯수.
+    //             //페이지 이동 후
+    //             //var seriesCount = localStorage.getItem("seriesCount"); 로 사용
+    //
+    //             // LocalStorage에 데이터 저장
+    //             localStorage.setItem("modality", modality);
+    //             localStorage.setItem("seriesCount", seriesCount);
+    //             localStorage.setItem("studyinsuid", studyinsuid);
+    //             localStorage.setItem("pname", pname);
+    //             localStorage.setItem("pid", pid);
+    //
+    //             // 성공적으로 요청을 받아온 후에 페이지 리디렉션을 수행
+    //             window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
+    //         },
+    //         error: function(xhr, status, error) {
+    //             alert("실패 사유: " + xhr.status);
+    //         }
+    //     });
+    // } else {
+    //     alert("Data not available");
+    // }
+});
+
+function handleComparisonTrueChangeEvent() {
+
+}
+if (!comparisonFalse) {
+    alert(comparisonFalse);
+    handleComparisonFalseChangeEvent();
 }

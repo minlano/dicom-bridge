@@ -45,5 +45,6 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
 
     int countByseriesinsuid(String seriesinsuid); // seriesinsuid로 갯수 확인
 
-
+    @Query(value = "SELECT * FROM imagetab WHERE seriesinsuid = :seriesinsuid ORDER BY to_number(instancenum) ASC", nativeQuery = true)
+    List<Image> findImagesBySeriesinsuidOrderedByInstancenum(@Param("seriesinsuid") String seriesinsuid);
 }
