@@ -29,5 +29,4 @@ public class Image {
     public Image(String seriesinsuid) {
         this.seriesinsuid = seriesinsuid;
     }
-
 }

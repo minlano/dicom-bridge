@@ -11,14 +11,10 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, ImageId> {
+
     List<Image> findByImageIdStudykey(int studykey);
 
-    List<Image> findByStudyinsuid(String studyInsUid);
-
-    @Query("SELECT DISTINCT i.seriesinsuid " +
-           "FROM Image i " +
-           "WHERE i.studyinsuid = :studyInsUid")
-    List<String> findDistinctSeriesinsuidByStudyinsuid(@Param("studyInsUid") String studyInsUid);
+    int countByseriesinsuid(String seriesinsuid);
 
     @Query(
             value = "SELECT new com.example.dicombridge.domain.dto.thumbnail.ThumbnailDto(image.imageId.imagekey, image.imageId.serieskey, image.studyinsuid, image.seriesinsuid, image.sopinstanceuid, image.sopclassuid, image.path, image.fname, image.delflag, series.seriesdesc) " +
@@ -27,12 +23,6 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
                     "  AND image.imageId.studykey = :studykey " +
                     "  AND series.seriesId.studykey = :studykey")
     List<ThumbnailDto> findImageAndSeriesDesc(@Param("studykey") int studykey);
-
-    List<Image> findByseriesinsuid(String seriesinsuid);//studyinsuid로 imagetab 조회
-
-    //List<Image> findByseriesinsuidAndImageIdImagekey(String seriesinsuid, int imagenum);
-
-    List<Image> findBySeriesinsuidAndInstancenum(String seriesinsuid, String insnum);
 
     @Query("SELECT i " +
            "FROM Image i " +
@@ -44,8 +34,6 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
            "FROM Image i " +
            "WHERE i.studyinsuid = :studyInsUid")
     Long countDistinctSeries(@Param("studyInsUid") String studyInsUid);
-
-    int countByseriesinsuid(String seriesinsuid);
 
     @Query("SELECT DISTINCT(i.seriesinsuid) " +
            "FROM Image i " +

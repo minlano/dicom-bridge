@@ -2,14 +2,11 @@ const axiosInstance = axios.create({
     baseURL: "http://localhost:8080" // 서버의 URL
 });
 
-/**
- * Grid Config
- */
+/** Grid Config **/
 var rowCol = {row: 2, col: 2};
 var imageContainer = document.getElementById('image-container');
 var infoBox = document.getElementById('infoBox');
 var infoContent =  document.getElementById('infoContent');
-
 
 function showInfoBox() {
     infoBox.style.display = 'inline-block';
@@ -60,9 +57,7 @@ infoBox.addEventListener(('click'), function(e) {
     imageDisplay();
 })
 
-/**
- * SeriesImageLoad
- */
+/** Series Image Load **/
 const FIRST_ORDER = 1;
 var seriesCount = localStorage.getItem("seriesCount");
 var studyInsUid = localStorage.getItem("studyinsuid");
@@ -100,6 +95,7 @@ async function imageDisplay() {
     }
 }
 
+/** Series Grid 1 **/
 async function imageDisplayBySeriesInsUid(seriesInsUid) {
     while (imageContainer.firstChild)
         imageContainer.removeChild(imageContainer.firstChild);
@@ -112,7 +108,6 @@ async function imageDisplayBySeriesInsUid(seriesInsUid) {
     imageContainer.appendChild(div);
 
     createWheelHandler(id, seriesInsUid);
-
     await viewDicomBySeriesInsUid(id, seriesInsUid, FIRST_ORDER);
     createBoxHandler(id);
 }
@@ -138,15 +133,13 @@ async function viewDicomBySeriesInsUid(id, seriesInsUid, order) {
     }
 }
 
-/* cornerstoneTool */
-cornerstoneTools.init();
+/** Cornerstone Image Load **/
 async function displayDicomImage(arrayBuffer, divId, seriesInsUid) {
     const imageData = `dicomweb:${URL.createObjectURL(new Blob([arrayBuffer], {type: 'application/dicom'}))}`;
     const existingDiv = document.getElementById(divId);
     existingDiv.style.position = 'relative';
 
-    // 이미 cornerstone이 활성화되었는지 확인
-    if (!existingDiv.hasAttribute('data-cornerstone-enabled')) {
+    if (!existingDiv.hasAttribute('data-cornerstone-enabled')) { // 이미 cornerstone이 활성화되었는지 확인
         cornerstone.enable(existingDiv);
         existingDiv.setAttribute('data-cornerstone-enabled', 'true');
     }
@@ -297,10 +290,7 @@ function boxHandler(event, divById) {
     divById.className = 'checked';
 }
 
-/**
- * cornerstone tool
- */
-/* black-white invert */
+/** Cornerstone Invert **/
 var invertButton = document.getElementById('invert');
 var invertCheck;
 function invertImageWithWWWC(divById) {
@@ -344,65 +334,3 @@ function createBoxHandler(id, seriesInsUid) {
         imageDisplayBySeriesInsUid(seriesInsUid);
     })
 }
-
-/* 소현이 윈도우 레벨 추가 부분 */
-
-// var invertBtn = document.getElementById('invert');
-// var windowLvBtn = document.getElementById('window-level');
-// invertBtn.addEventListener('click', function() {
-//     invertImage();
-// });
-// windowLvBtn.addEventListener('click', function() {
-//     windowLevel();
-// });
-//
-// /* black-white invert */
-// function invertImage() {
-//
-//     const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
-//
-//     var viewport = cornerstone.getViewport(selectedDiv);
-//
-//     viewport.invert = !viewport.invert;
-//
-//     cornerstone.setViewport(selectedDiv, viewport);
-// }
-//
-//
-// function windowLevel() {
-//
-//     const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
-//
-//     var viewport = cornerstone.getViewport(selectedDiv);
-//
-//     cornerstone.setViewport(selectedDiv, viewport);
-//
-//     addMouseDragHandler(selectedDiv);
-// }
-//
-// function addMouseDragHandler(element) {
-//     element.addEventListener('mousedown', function (e) {
-//         let lastX = e.pageX;
-//         let lastY = e.pageY;
-//
-//         function mouseMoveHandler(e) {
-//             const deltaX = e.pageX - lastX;
-//             const deltaY = e.pageY - lastY;
-//             lastX = e.pageX;
-//             lastY = e.pageY;
-//
-//             let viewport = cornerstone.getViewport(element);
-//             viewport.voi.windowWidth += (deltaX / viewport.scale);
-//             viewport.voi.windowCenter += (deltaY / viewport.scale);
-//             cornerstone.setViewport(element, viewport);
-//         }
-//
-//         function mouseUpHandler() {
-//             document.removeEventListener('mousemove', mouseMoveHandler);
-//             document.removeEventListener('mouseup', mouseUpHandler);
-//         }
-//
-//         document.addEventListener('mousemove', mouseMoveHandler);
-//         document.addEventListener('mouseup', mouseUpHandler);
-//     });
-// }

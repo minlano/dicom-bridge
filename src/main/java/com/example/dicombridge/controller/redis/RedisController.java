@@ -21,24 +21,22 @@ public class RedisController {
         this.redisTemplate = redisTemplate;
     }
 
-    // set
+    /** Set **/
     @PostMapping("")
     public String setRedisKey(@RequestBody Map<String, String> req){
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
         try {
-            // Redis Set Key-value
-            vop.set(req.get("key").toString(), req.get("value").toString());
+            vop.set(req.get("key").toString(), req.get("value").toString()); // Redis Set Key-value
             return "set message success";
         } catch (Exception e) {
             return "set message fail";
         }
     }
 
-    // get
+    /** Get **/
     @GetMapping("/{key}")
     public String getRedisKey(@PathVariable String key) {
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
         return vop.get(key);
     }
-
 }

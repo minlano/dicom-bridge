@@ -12,27 +12,21 @@ import java.util.List;
 
 @Controller
 public class StudyController {
-    @RequestMapping(method = RequestMethod.GET, path = {"/" , "/index"})
-    public String index(){return "index";}
 
-    @GetMapping("/testImageMJ")
-    public String testImageMJ(){return "testImageMJ";}
+    @Autowired
+    private StudyService studyService;
 
     @GetMapping("/list")
     public String list(){return "list";}
 
-    @Autowired
-    private StudyService studyService;
     @GetMapping("/getReportStatus")
     public ResponseEntity<List<Integer>> getReportStatus(@RequestParam int studykey) {
-
         List<Integer> reportStatusList = studyService.getReportStatusByStudyKey(studykey);
-
         return new ResponseEntity<>(reportStatusList, HttpStatus.OK);
     }
 
-    @GetMapping("/getStudies/{studykey}")
     @ResponseBody
+    @GetMapping("/getStudies/{studykey}")
     public ResponseEntity<List<StudyResponseDto>> getStudiesByStudyKey(@PathVariable int studykey) {
         List<StudyResponseDto> studies = studyService.getStudiesByStudyKey(studykey);
         if (studies != null && !studies.isEmpty()) {

@@ -243,9 +243,6 @@
 </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<%--<script src="https://unpkg.com/cornerstone-core"></script>--%>
-<%--<script src="https://unpkg.com/cornerstone-tools@6.0.10/dist/cornerstoneTools.js"></script>--%>
-<%--<script src="https://unpkg.com/cornerstone-wado-image-loader"></script>--%>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>

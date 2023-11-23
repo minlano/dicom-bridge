@@ -20,6 +20,7 @@ public class StudyResponseDto {
     private Integer verifyflag;
     private String pbirthdatetime;
     private String studytime;
+
     public StudyResponseDto(Study study) {
         this.studykey = study.getStudykey();
         this.studyinsuid = study.getStudyinsuid();
@@ -35,5 +36,4 @@ public class StudyResponseDto {
         this.pbirthdatetime = study.getPbirthdatetime();
         this.studytime = study.getStudytime();
     }
-
 }
