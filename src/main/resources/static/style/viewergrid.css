@@ -268,11 +268,12 @@ section#image-container {
 }
 
 /* 도구 toolBox */
-#toolBox {
+#toolBox, #annotationBox {
 	display: none;
 	position: fixed;
 	width: 130px;
-	height: 200px;
+	/*height: 200px;*/
+	height: fit-content;
 	transform: translate(0%, 0%);
 	background-color: #9B9B9B;
 	border: 2px solid #090900;
@@ -282,11 +283,11 @@ section#image-container {
 	border-radius: 5px;
 }
 
-#toolContent ul {
+#toolContent ul, #annotationContent ul {
 	margin: 0 0 0 0;
 }
 
-#toolContent img {
+#toolContent img, #annotationContent img {
 	display: block;
 	width: 40px;
 	height: 40px;
@@ -294,7 +295,7 @@ section#image-container {
 	margin-left: 12px;
 }
 
-#toolContent img:hover {
+#toolContent img:hover, #annotationContent img:hover{
 	background-color: darkolivegreen;
 }
 

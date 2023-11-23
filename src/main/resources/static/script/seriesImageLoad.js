@@ -155,6 +155,7 @@ async function displayDicomImage(arrayBuffer, divId, seriesInsUid) {
         cornerstone.loadImage(imageData).then(async image => {
             await cornerstone.displayImage(existingDiv, image);
             await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid);
+
         });
     } else {
         console.error(`Div with ID '${divId}' not found.`);
@@ -205,7 +206,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     metadataLeftTop.style.color = 'white';
     metadataLeftTop.style.padding = '5px';
     metadataLeftTop.innerHTML = metadataArray.leftTop;
-    metadataLeftTop.style.zIndex = '10'; // 다른 엘리먼트 위에 표시되도록 함
+    metadataLeftTop.style.zIndex = '2'; // 다른 엘리먼트 위에 표시되도록 함
     metadataLeftTop.style.visibility = 'visible';
     existingDiv.appendChild(metadataLeftTop);
 
@@ -220,7 +221,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     metadataRightTop.style.color = 'white';
     metadataRightTop.style.padding = '5px';
     metadataRightTop.innerHTML  = metadataArray.rightTop;
-    metadataRightTop.style.zIndex = '10'; // 다른 엘리먼트 위에 표시되도록 함
+    metadataRightTop.style.zIndex = '2'; // 다른 엘리먼트 위에 표시되도록 함
     metadataRightTop.style.visibility = 'visible';
     existingDiv.appendChild(metadataRightTop);
 
@@ -234,7 +235,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     metadataRightBottom.style.color = 'white';
     metadataRightBottom.style.padding = '5px';
     metadataRightBottom.innerHTML  = metadataArray.rightBottom;
-    metadataRightBottom.style.zIndex = '10'; // 다른 엘리먼트 위에 표시되도록 함
+    metadataRightBottom.style.zIndex = '2'; // 다른 엘리먼트 위에 표시되도록 함
     metadataRightBottom.style.visibility = 'visible';
     existingDiv.appendChild(metadataRightBottom);
 }
@@ -287,8 +288,6 @@ function createBoxHandler(id, seriesInsUid) {
 function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
 
-    console.log(divCollectionByClass.length)
-
     for(let div of divCollectionByClass) {
         div.style.border = '';
         div.className = 'unChecked';
@@ -298,22 +297,115 @@ function boxHandler(event, divById) {
     divById.className = 'checked';
 }
 
-/* cornerstone tool */
-
-var invertButton = document.getElementById('invert');
-invertButton.addEventListener('click', function() {
-    invertImageWithWWWC();
-});
-
+/**
+ * cornerstone tool
+ */
 /* black-white invert */
-function invertImageWithWWWC() {
-    const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
-    console.log("selectedDiv",selectedDiv);
-
+var invertButton = document.getElementById('invert');
+var invertCheck;
+function invertImageWithWWWC(divById) {
+    const selectedDiv = cornerstone.getEnabledElement(divById).element;
     var viewport = cornerstone.getViewport(selectedDiv);
-    console.log("viewport",viewport);
-
-    viewport.invert = false;
-
+    viewport.invert = invertCheck;
     cornerstone.setViewport(selectedDiv, viewport);
 }
+
+invertButton.addEventListener('click', function() {
+    if(selectedDivById.getAttribute('invert') === 'unchecked') {
+        selectedDivById.setAttribute('invert', 'checked');
+        invertCheck = true;
+    }else {
+        selectedDivById.setAttribute('invert', 'unchecked');
+        invertCheck = false;
+    }
+    invertImageWithWWWC(selectedDivById);
+});
+
+function invertHandler(divById) {
+    selectedDivById = divById;
+
+    var invertVal =  divById.getAttribute('invert');
+    if(invertVal === null)
+        divById.setAttribute('invert', 'unchecked'); // checked
+}
+
+var selectedDivById = '';
+function createBoxHandler(id, seriesInsUid) {
+    let divById = document.getElementById(id);
+    divById.addEventListener('click', function (event) {
+        boxHandler(event, divById);
+        invertHandler(divById);
+        activateFlipRotate(divById);
+        activateReset(divById);
+
+    })
+
+    divById.addEventListener('dblclick', function (event) {
+        rowCol.row = 1; rowCol.col = 1;
+        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+        imageDisplayBySeriesInsUid(seriesInsUid);
+    })
+}
+
+/* 소현이 윈도우 레벨 추가 부분 */
+
+// var invertBtn = document.getElementById('invert');
+// var windowLvBtn = document.getElementById('window-level');
+// invertBtn.addEventListener('click', function() {
+//     invertImage();
+// });
+// windowLvBtn.addEventListener('click', function() {
+//     windowLevel();
+// });
+//
+// /* black-white invert */
+// function invertImage() {
+//
+//     const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
+//
+//     var viewport = cornerstone.getViewport(selectedDiv);
+//
+//     viewport.invert = !viewport.invert;
+//
+//     cornerstone.setViewport(selectedDiv, viewport);
+// }
+//
+//
+// function windowLevel() {
+//
+//     const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
+//
+//     var viewport = cornerstone.getViewport(selectedDiv);
+//
+//     cornerstone.setViewport(selectedDiv, viewport);
+//
+//     addMouseDragHandler(selectedDiv);
+// }
+//
+// function addMouseDragHandler(element) {
+//     element.addEventListener('mousedown', function (e) {
+//         let lastX = e.pageX;
+//         let lastY = e.pageY;
+//
+//         function mouseMoveHandler(e) {
+//             const deltaX = e.pageX - lastX;
+//             const deltaY = e.pageY - lastY;
+//             lastX = e.pageX;
+//             lastY = e.pageY;
+//
+//             let viewport = cornerstone.getViewport(element);
+//             viewport.voi.windowWidth += (deltaX / viewport.scale);
+//             viewport.voi.windowCenter += (deltaY / viewport.scale);
+//             cornerstone.setViewport(element, viewport);
+//         }
+//
+//         function mouseUpHandler() {
+//             document.removeEventListener('mousemove', mouseMoveHandler);
+//             document.removeEventListener('mouseup', mouseUpHandler);
+//         }
+//
+//         document.addEventListener('mousemove', mouseMoveHandler);
+//         document.addEventListener('mouseup', mouseUpHandler);
+//     });
+// }

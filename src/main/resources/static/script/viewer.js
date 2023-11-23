@@ -90,3 +90,15 @@ function displayImages(images) {
 document.getElementById("list_btn").addEventListener("click", function() {
     window.location.href = "/list";
 })
+function activateReset() {
+// 모든 이미지 요소 가져오기
+    const elements = document.querySelectorAll('.cornerstone-enabled-image');
+    console.log(elements);
+// 각 이미지에 대해 뷰포트 초기화
+    elements.forEach(element => {
+        cornerstone.reset(element);
+    });
+    //document.getElementById('reset').addEventListener('click', function (e) {
+        //cornerstone.reset();
+    //});
+}

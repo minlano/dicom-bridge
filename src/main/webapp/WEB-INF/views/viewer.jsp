@@ -155,100 +155,77 @@
                     <div id="toolBox">
                         <div id="toolContent">
                             <ul>
-                                <div><img src="/images/toolbox/glasses.png"></div>
-                                <div><img src="/images/toolbox/zoomin.png"></div>
+                                <div onclick="activateMagnify()">
+                                    <img src="/images/magnify.233d000e41a3ad1cf9707d94950e6158.png"></div>
+                                <div onclick="activateZoom()">
+                                    <img src="/images/zoom.b259899b24b710fa9f31e433cc5b4e7e.png"></div>
                             </ul>
                             <ul>
-                                <div><img src="/images/toolbox/rotate.png"></div>
-                                <div><img src="/images/toolbox/rotate_right.png"></div>
+                                <div onclick="activateRotate()">
+                                    <img src="/images/rotate.94c480f210401d6f6adabcf17115d1e5.png"></div>
+                                <div id="rRotate" onclick="activateFlipRotate()">
+                                    <img src="/images/rightRotate.053a9e994df6b6be59bb0c3d702741e6.png"></div>
                             </ul>
                             <ul>
-                                <div><img src="/images/toolbox/rotate_left.png"></div>
-                                <div><img src="/images/toolbox/vertical_change.png"></div>
+                                <div id="lRotate" onclick="activateFlipRotate()">
+                                    <img src="/images/leftRotate.8a64a37656bf3e1a3eba2c1d82b98c7d.png"></div>
+                                <div id="hFlip" onclick="activateFlipRotate()">
+                                    <img src="/images/hFlip.80d6a0b3bd0b788f42da409f5d115877.png"></div>
                             </ul>
                             <ul>
-                                <div><img src="/images/toolbox/horizontal_change.png"></div>
+                                <div id ="vFlip" onclick="activateFlipRotate()">
+                                    <img src="/images/vFlip.1a75c203d6207c94829eb64a96bf952b.png"></div>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </li>
+                <li class="annotation" onclick="showAnnotationBox()">
+                    <img class="annotation" src="/images/annotation.19ee74cd3ecff2134a423009b58463aa.png" alt="annotation">
+                    <div class="annotation">주석</div>
+                    <div id="annotationBox">
+                        <div id="annotationContent">
+                            <ul>
+                                <div onclick="activateAngle()">
+                                    <img src="/images/angle.1e52dac1b36046ae8e3b17f7212d09e3.png">각도</div>
+                                <div onclick="activateArrowAnnotate()">
+                                    <img src="/images/arrowAnnotate.3b3e8aff47cbcad5127d6ef07404f4e3.png">화살표</div>
+                            </ul>
+                            <ul>
+                                <div onclick="activateProbe()">
+                                    <img src="/images/probe.c1bbaff5b3a138e4d0a91ed67b54bc2d.png">Probe</div>
+                                <div onclick="activateLength()">
+                                    <img src="/images/length.62b344c23d7eb391d08d2ece39f69926.png">길이</div>
+                            </ul>
+                            <ul>
+                                <div onclick="activateRectangleROI()">
+                                    <img src="/images/rectangleROI.6d28dc65ff156314a3f7679742611563.png">사각형 그리기</div>
+                                <div onclick="activateEllipticalROI()">
+                                    <img src="/images/ellipticalROI.75a48af081b131624797edd4373c1b22.png">원 그리기</div>
+                            </ul>
+                            <ul>
+                                <div onclick="activateFreeHand()">
+                                    <img src="/images/freeHand.ccc90ff2cacb2a39f092e59689485f92.png">자율 그리기</div>
+                                <div onclick="activateBidirectional()">
+                                    <img src="/images/bidirectional.9a08aab170feb4e1ede185075f4fdaa6.png">Bidirectional</div>
+                            </ul>
+                            <ul>
+                                <div onclick="activateCobbAngle()">
+                                    <img src="/images/cobbAngle.1b412c3001b7d430c1064115fe845d79.png">콥 각도</div>
+                                <div onclick="activateTextMarker()">
+                                    <img src="/images/textMarker.c203289c93466e8a10569367935d8b07.png">텍스트 마커</div>
+                            </ul>
+                            <ul>
+                                <div onclick="activateEraser()">
+                                    <img src="/images/eraser.bf8a01d63d3fddbbe86da109fdaa188b.png">선택 삭제</div>
                             </ul>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <button data-tool="8" class="toolModalParent">
-                        <img src="/images/annotation.19ee74cd3ecff2134a423009b58463aa.png" alt="주석">
-                        <div>주석</div>
-                        <div class="toolModalChildren displayNone">
-                            <div>
-                                <div data-tool="angle" class="currentTool angle" data-parent="annotation">
-                                    <img src="/images/angle.1e52dac1b36046ae8e3b17f7212d09e3.png" data-tool="angle" data-parent="annotation">
-                                    <span data-tool="angle" data-parent="annotation">각도</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="arrowAnnotate" class="currentTool arrowAnnotate" data-parent="annotation">
-                                    <img src="/images/arrowAnnotate.3b3e8aff47cbcad5127d6ef07404f4e3.png" data-tool="arrowAnnotate" data-parent="annotation">
-                                    <span data-tool="arrowAnnotate" data-parent="annotation">화살표</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="probe" class="currentTool probe" data-parent="annotation">
-                                    <img src="/images/probe.c1bbaff5b3a138e4d0a91ed67b54bc2d.png" data-tool="probe" data-parent="annotation">
-                                    <span data-tool="probe" data-parent="annotation">Probe</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="length" class="currentTool length" data-parent="annotation">
-                                    <img src="/images/length.62b344c23d7eb391d08d2ece39f69926.png" data-tool="length" data-parent="annotation">
-                                    <span data-tool="length" data-parent="annotation">길이</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="rectangleROI" class="currentTool rectangleROI" data-parent="annotation">
-                                    <img src="/images/rectangleROI.6d28dc65ff156314a3f7679742611563.png" data-tool="rectangleROI" data-parent="annotation">
-                                    <span data-tool="rectangleROI" data-parent="annotation">사각형 그리기</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="ellipticalROI" class="currentTool ellipticalROI" data-parent="annotation">
-                                    <img src="/images/ellipticalROI.75a48af081b131624797edd4373c1b22.png" data-tool="ellipticalROI" data-parent="annotation">
-                                    <span data-tool="ellipticalROI" data-parent="annotation">원 그리기</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="freeHand" class="currentTool freeHand" data-parent="annotation">
-                                    <img src="/images/freeHand.ccc90ff2cacb2a39f092e59689485f92.png" data-tool="freeHand" data-parent="annotation">
-                                    <span data-tool="freeHand" data-parent="annotation">자율 그리기</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="bidirectional" class="currentTool bidirectional" data-parent="annotation">
-                                    <img src="/images/bidirectional.9a08aab170feb4e1ede185075f4fdaa6.png" data-tool="bidirectional" data-parent="annotation">
-                                    <span data-tool="bidirectional" data-parent="annotation">Bidirectional</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="cobbAngle" class="currentTool cobbAngle" data-parent="annotation">
-                                    <img src="/images/cobbAngle.1b412c3001b7d430c1064115fe845d79.png" data-tool="cobbAngle" data-parent="annotation">
-                                    <span data-tool="cobbAngle" data-parent="annotation">콥 각도</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="TextMarker" class="currentTool TextMarker" data-parent="annotation">
-                                    <img src="/images/textMarker.c203289c93466e8a10569367935d8b07.png" data-tool="TextMarker" data-parent="annotation">
-                                    <span data-tool="TextMarker" data-parent="annotation">텍스트 마커</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div data-tool="eraser" class="currentTool eraser" data-parent="annotation">
-                                    <img src="/images/eraser.bf8a01d63d3fddbbe86da109fdaa188b.png" data-tool="eraser" data-parent="annotation">
-                                    <span data-tool="eraser" data-parent="annotation">선택 삭제</span>
-                                </div>
-                            </div>
-                        </div>
-                    </button>
-                </li>
-                <li>
                     <img src="/images/refresh.6a8fba2767a97749fd00e3e6f59935f3.png" alt="재설정">
-                    <div>재설정</div>
+                    <div id ="reset" onclick="activateReset()">재설정</div>
                 </li>
                 <li id="seriesInfoBox" class="info" onclick="showInfoBox()">
                     <img class="info" src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png">
@@ -330,4 +307,5 @@
 <script src="/script/seriesImageLoad.js"></script>
 <script src="/script/tool.js"></script>
 <script src="/script/report.js"></script>
+<script src="/script/annotation.js"></script>
 </html>
