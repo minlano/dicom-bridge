@@ -30,4 +30,21 @@ public class StudyRestController {
         }
         return studyService.getStudies();
     }
+
+    @GetMapping("/comparison-study-list")
+    public List<StudyResponseDto> comparisonList(
+            @RequestParam(name = "modality") String modality
+    ){
+        if(modality != null){
+           return studyService.getComparison(modality);
+        }
+        return null;
+    }
+
+    @GetMapping("/getsameModalstudyinsuid")
+    public List<String> getSameModalStudyinsuid(
+            @RequestParam(name = "modality") String modality
+    ){
+        return studyService.getSameModalStudyinsuid(modality);
+    }
 }

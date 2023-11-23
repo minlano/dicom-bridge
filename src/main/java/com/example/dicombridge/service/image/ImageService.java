@@ -252,4 +252,9 @@ public class ImageService {
     public List<String> getSeriesInsUids(String studyInsUid) {
         return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyInsUid);
     }
+
+    public  List<String> saveRedisValSeriesinsuid(String studyinsuid) {
+        String studyInsUid = studyinsuid;
+        return imageRepository.findDistinctSeriesinsuidByStudyinsuid(studyInsUid);
+    }
 }

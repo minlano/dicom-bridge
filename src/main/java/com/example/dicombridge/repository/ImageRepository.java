@@ -39,4 +39,7 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
            "FROM Image i " +
            "WHERE i.studyinsuid = :studyInsuid")
     List<String> findDistinctSeriesInsUidByStudyinsuid(@Param("studyInsuid") String studyInsuid);
+
+    @Query(value = "SELECT * FROM imagetab WHERE seriesinsuid = :seriesinsuid ORDER BY to_number(instancenum) ASC", nativeQuery = true)
+    List<Image> findImagesBySeriesinsuidOrderedByInstancenum(@Param("seriesinsuid") String seriesinsuid);
 }

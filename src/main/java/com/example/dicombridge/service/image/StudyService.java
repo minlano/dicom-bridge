@@ -39,4 +39,16 @@ public class StudyService {
                 .map(StudyResponseDto::new)
                 .collect(Collectors.toList());
     }
+    public List<StudyResponseDto> getComparison(String modality){
+        List<Study> comparisonStudyList = studyRepository.findByModality(modality);
+
+        return comparisonStudyList.stream()
+                .map(StudyResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getSameModalStudyinsuid(String modality){ //같은 modal의 studyinsuid 종류
+        return studyRepository.findDistinctStudyinsuidByModality(modality);
+    }
+
 }

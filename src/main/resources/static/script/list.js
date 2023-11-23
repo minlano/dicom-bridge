@@ -82,7 +82,7 @@ function displayItems(response, startIndex, batchSize, totalItems) {
             default:
                 reportStatusText = "알 수 없음";
         }
-        studyListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}'>`;
+        studyListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}' data-modality='${response[i].modality}' data-pname='${response[i].pname}'>`;
         studyListStr +=     "<td><input type='checkbox' class='rowCheckbox'></td>";
         studyListStr +=     "<td>" + (i+1) + "</td>";
         studyListStr +=     "<td class='pid'>" + response[i].pid + "</td>";
@@ -114,16 +114,24 @@ function displayItems(response, startIndex, batchSize, totalItems) {
 $(document).on("dblclick", "tr.subTr", function() {
     const studyinsuid = $(this).data('studyinsuid');
     const studykey = $(this).data('studykey');
-
-    if (studyinsuid && studykey) {
+    const modality = $(this).data('modality');
+    const pname = $(this).data('pname');
+    const pid = $(this).find('.pid').text();
+    if (studyinsuid && studykey) { //같은 modal의 studyinsuid 종류별로 찾기
+        saveRedis(modality);
         $.ajax({
             type: "POST",
             url: "/studies/seriescount/" + studyinsuid,
             success: function(data) {
                 var seriesCount = data; // 시리즈 갯수.
 
+                // LocalStorage에 데이터 저장
+                //localStorage.setItem("studyinsuidKey", JSON.stringify(data)); // studyinsuid키값 배열
+                localStorage.setItem("modality", modality);
                 localStorage.setItem("seriesCount", seriesCount);
                 localStorage.setItem("studyinsuid", studyinsuid);
+                localStorage.setItem("pname", pname);
+                localStorage.setItem("pid", pid);
 
                 window.location.href = "/viewer/" + studyinsuid + "/" + studykey; // 성공적으로 요청을 받아온 후에 페이지 리디렉션을 수행
             },
@@ -199,7 +207,6 @@ $(document).ready(function() {
 
     $(document).on("change", "#reportStatusSelectContainer select", function() { // reportstatus 값이 변경될 때 호출되는 이벤트 처리
         const selectedStatus = $(this).val();
-
         setReportInput(parseInt(selectedStatus)); // 기존 input 요소의 값을 변경
     });
 });

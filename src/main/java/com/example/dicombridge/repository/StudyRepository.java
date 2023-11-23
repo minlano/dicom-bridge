@@ -20,4 +20,10 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
             @Param("pid") String pid,
             @Param("pname") String pname,
             @Param("reportstatus") Integer reportstatus);
+
+    List<Study> findByModality(String modality);
+
+    @Query(value = "SELECT DISTINCT studyinsuid FROM studytab WHERE modality = :modality", nativeQuery = true)
+    List<String> findDistinctStudyinsuidByModality(@Param("modality") String modality);
 }
+
