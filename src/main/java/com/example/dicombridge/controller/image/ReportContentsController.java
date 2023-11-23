@@ -19,10 +19,7 @@ public class ReportContentsController {
 
     @GetMapping("/getInterpretation")
     public ResponseEntity<List<String>> getInterpretation(@RequestParam int studykey) {
-        // 실제 로직 구현
-
         List<String> interpretationlist = reportContentsService.getInterpretationByStudyKey(studykey);
-
         return new ResponseEntity<>(interpretationlist, HttpStatus.OK);
     }
 }

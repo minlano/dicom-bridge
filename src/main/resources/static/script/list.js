@@ -17,7 +17,7 @@ $(document).on("click", "#search", function () {
 
 });
 
-// 엔터 키인 경우
+/** Enter **/
 $(document).on("keypress", function (event) {
     if (event.which === 13 || event.keyCode === 13) {
         // 여기에 엔터 키를 처리하는 코드 추가
@@ -39,7 +39,7 @@ $(document).on("keypress", function (event) {
 
 function fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize) {
     $.ajax({
-        url: "/search-list",
+        url: "/search/list",
         method: "GET",
         data: { pid: pid, pname: pname, reportstatus: reportstatus, startIndex: startIndex, batchSize: batchSize },
         success: function(response) {
@@ -185,12 +185,9 @@ $(document).on("dblclick", "tr.subTr", function() {
     }
 });
 
-
-
-// 리포트
+/** Report **/
 $(document).ready(function() {
-    // reportstatus에 따라 입력될 값을 설정하는 함수
-    function setReportInput(reportstatus) {
+    function setReportInput(reportstatus) { // reportstatus에 따라 입력될 값을 설정하는 함수
         const adminInput = "administrator";
         const empty = "";
 
@@ -206,43 +203,34 @@ $(document).ready(function() {
         }
     }
 
-    // 클릭 이벤트에 reportstatus를 받아와서 처리하는 코드
-    $(document).on("click", "tr.subTr", function() {
+    $(document).on("click", "tr.subTr", function() { // 클릭 이벤트에 reportstatus를 받아와서 처리하는 코드
         const studykey = $(this).data('studykey');
 
         if (studykey) {
-            // 서버에 studykey를 전송하여 reportstatus 값을 가져오는 요청
-            $.ajax({
+            $.ajax({ // 서버에 studykey를 전송하여 reportstatus 값을 가져오는 요청
                 url: "/getReportStatus",
                 method: "GET",
                 data: { studykey: studykey },
                 success: function(response) {
-                    // 서버로부터 받은 reportstatus 값을 기반으로 <select> 요소 생성
-                    const reportStatusSelect = $("<select>");
+                    const reportStatusSelect = $("<select>"); // 서버로부터 받은 reportstatus 값을 기반으로 <select> 요소 생성
 
-                    // response에는 적절한 reportstatus 값들이 들어있어야 함
-                    for (const status of response) {
+                    for (const status of response) { // response에는 적절한 reportstatus 값들이 들어있어야 함
                         reportStatusSelect.append(`<option value="${status}">${status}</option>`);
                     }
 
-                    // 기존의 <select> 요소를 제거하고 새로 생성된 <select> 요소 추가
-                    $("#reportStatusSelectContainer").empty().append(reportStatusSelect);
+                    $("#reportStatusSelectContainer").empty().append(reportStatusSelect); // 기존의 <select> 요소를 제거하고 새로 생성된 <select> 요소 추가
 
-                    // reportstatus에 따라 입력될 값을 설정
-                    const selectedStatus = reportStatusSelect.val();
+                    const selectedStatus = reportStatusSelect.val(); // reportstatus에 따라 입력될 값을 설정
                     setReportInput(parseInt(selectedStatus));
 
-                    // 서버에 getInterpretation 요청을 보내고 결과를 받아 처리
-                    $.ajax({
+                    $.ajax({ // 서버에 getInterpretation 요청을 보내고 결과를 받아 처리
                         url: "/getInterpretation",
                         method: "GET",
                         data: { studykey: studykey },
                         success: function(interpretationResponse) {
-                            // interpretationResponse가 배열이라면 첫 번째 요소를 선택
-                            const interpretationValue = interpretationResponse.length > 0 ? interpretationResponse[0] : '';
+                            const interpretationValue = interpretationResponse.length > 0 ? interpretationResponse[0] : ''; // interpretationResponse가 배열이라면 첫 번째 요소를 선택
 
-                            // <textarea> 요소에 값을 설정
-                            $("#interpretation").val(interpretationValue);
+                            $("#interpretation").val(interpretationValue); // <textarea> 요소에 값을 설정
                         },
                         error: function() {
                             alert("Error fetching interpretation");
@@ -258,21 +246,19 @@ $(document).ready(function() {
         }
     });
 
-    // reportstatus 값이 변경될 때 호출되는 이벤트 처리
-    $(document).on("change", "#reportStatusSelectContainer select", function() {
+    $(document).on("change", "#reportStatusSelectContainer select", function() { // reportstatus 값이 변경될 때 호출되는 이벤트 처리
         const selectedStatus = $(this).val();
 
-        // 기존 input 요소의 값을 변경
-        setReportInput(parseInt(selectedStatus));
+        setReportInput(parseInt(selectedStatus)); // 기존 input 요소의 값을 변경
     });
 });
 
 
 
-/* 이전검색 */
+/** Previous Search **/
 function previousItems() {
     $.ajax({
-        url: "/study-list",
+        url: "/study/list",
         success: function(response) {
             previous(response);
         },
@@ -282,7 +268,6 @@ function previousItems() {
     });
 }
 
-//Previous 동일한 환자 정보 불러오기
 function previous(response) {
     $(document).on("click", "#mainTable .subTr", function () {
         $('#previousTable tr:gt(0)').remove();
@@ -313,8 +298,7 @@ function previous(response) {
     });
 }
 
-
-//세부검색
+/** Detail Search **/
 $(document).on("click", "#Dsearch", function() {
     var detailedSearch = $("#Detailed-search");
 
@@ -324,19 +308,18 @@ $(document).on("click", "#Dsearch", function() {
         detailedSearch.css('display', 'block');
     }
 });
+
+/** Download Checkbox **/
 $(document).ready(function() {
-    // 마스터 체크박스 클릭 시 모든 체크박스 상태 변경
-    $("#masterCheckbox").click(function(){
+    $("#masterCheckbox").click(function(){ // 마스터 체크박스 클릭 시 모든 체크박스 상태 변경
         $(".rowCheckbox").prop('checked', $(this).prop('checked'));
     });
 
-    // 맨 위에 있는 체크박스 클릭 시 모든 체크박스 상태 변경
-    $(document).on("click", "#masterCheckbox", function() {
+    $(document).on("click", "#masterCheckbox", function() { // 맨 위에 있는 체크박스 클릭 시 모든 체크박스 상태 변경
         $(".rowCheckbox").prop('checked', $(this).prop('checked'));
     });
 
-    // 검색 결과 리스트의 체크박스가 하나라도 선택되어 있으면 맨 위의 체크박스도 선택 상태로 변경
-    $(document).on("click", ".rowCheckbox", function() {
+    $(document).on("click", ".rowCheckbox", function() { // 검색 결과 리스트의 체크박스가 하나라도 선택되어 있으면 맨 위의 체크박스도 선택 상태로 변경
         if ($(".rowCheckbox:checked").length > 0) {
             $("#masterCheckbox").prop('checked', true);
         } else {
@@ -344,10 +327,10 @@ $(document).ready(function() {
         }
     });
 });
-// 이미지 다운로드 버튼 클릭 시 이벤트 처리
+
+/** Download **/
 $(".download-btn").click(function() {
-    // 체크된 체크박스들의 studykey를 추출
-    const selectedStudyKeys = [];
+    const selectedStudyKeys = []; // 체크된 체크박스들의 studykey를 추출
     $(".rowCheckbox:checked").each(function() {
         const studyKey = $(this).closest('tr').data('studykey');
         if (studyKey) {
@@ -356,22 +339,26 @@ $(".download-btn").click(function() {
     });
 
     if (selectedStudyKeys.length > 0) {
-        // 서버에 이미지 다운로드 요청
-        downloadImages(selectedStudyKeys);
+        downloadImages(selectedStudyKeys); // 서버에 이미지 다운로드 요청
     } else {
         alert("선택된 이미지가 없습니다.");
     }
 });
 
-// 서버에 이미지 다운로드 요청을 보내는 함수
-function downloadImages(selectedStudyKeys) {
-    // 각 studyKey에 대해 다운로드 요청을 보냄
-    selectedStudyKeys.forEach(function(studyKey) {
-        const downloadUrl = `/studies/download/${studyKey}`;
+async function downloadImages(selectedStudyKeys) {
+    try {
+        for (const studyKey of selectedStudyKeys) {
+            const downloadUrl = `/studies/download/${studyKey}`;
+            const response = await fetch(downloadUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", downloadUrl, true);
-        xhr.responseType = "arraybuffer";
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
 
         xhr.onload = function() {
             if (xhr.status === 200) {
@@ -437,4 +424,14 @@ function saveRedisValSeriesinsuid(studyinsuid){
     };
     xhr.send();
 
+            const blob = await response.blob();
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `${studyKey}.zip`;
+
+            link.click(); // Automatically click the link to trigger the download
+        }
+    } catch (error) {
+        console.error("이미지 다운로드에 실패했습니다.", error);
+    }
 }
