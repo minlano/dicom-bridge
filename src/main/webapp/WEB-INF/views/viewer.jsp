@@ -113,13 +113,9 @@
                     <img src="/images/previous_study.3cb78eecd6d2385b44cb9176ba1fc87c.png" alt="이전">
                     <div>이전</div>
                 </li>
-                <li>
+                <li id="next">
                     <img src="/images/next_study.09fbf5daceba6ace2519e74bde2e8420.png" alt="다음">
                     <div>다음</div>
-                </li>
-                <li>
-                    <img src="/images/default.fa9b027b98a164fb3b5849c0d3ca39ca.png" alt="DefaultTool">
-                    <div>Default Tool</div>
                 </li>
                 <li id="window-level">
                     <img src="/images/wwwc.1cc5a0ecda9fd93a085688cedaa8a78b.png" alt="windowLevel">

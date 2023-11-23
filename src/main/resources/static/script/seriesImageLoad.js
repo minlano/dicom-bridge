@@ -300,20 +300,28 @@ function boxHandler(event, divById) {
 
 /* cornerstone tool */
 
-var invertBtn = document.getElementById('invert');
-var windowLvBtn = document.getElementById('window-level');
+const invertBtn = document.getElementById('invert');
+const windowLvBtn = document.getElementById('window-level');
+const moveBtn = document.getElementById('move');
+const defaultBtn = document.getElementById('default');
+
+let isPanToolActive = false;
+let isWwwcToolActive = false;
+
 invertBtn.addEventListener('click', function() {
     invertImage();
 });
 windowLvBtn.addEventListener('click', function() {
     windowLevel();
 });
+moveBtn.addEventListener('click', function() {
+    movement_pan();
+});
 
-/* black-white invert */
+
 function invertImage() {
 
     const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
-
     var viewport = cornerstone.getViewport(selectedDiv);
 
     viewport.invert = !viewport.invert;
@@ -322,41 +330,37 @@ function invertImage() {
 }
 
 
-function windowLevel() {
+function windowLevel(){
+    cornerstoneTools.init();
 
-    const selectedDiv = cornerstone.getEnabledElement(document.getElementById('image_0_0')).element;
+    const WwwcTool = cornerstoneTools.WwwcTool;
 
-    var viewport = cornerstone.getViewport(selectedDiv);
+    if (isWwwcToolActive){
+        cornerstoneTools.setToolDisabled('Wwwc');
 
-    cornerstone.setViewport(selectedDiv, viewport);
-
-    addMouseDragHandler(selectedDiv);
+    }else {
+        cornerstoneTools.addTool(WwwcTool);
+        cornerstoneTools.setToolActive('Wwwc', {mouseButtonMask: 1});
+    }
+    isWwwcToolActive = !isWwwcToolActive;
 }
 
-function addMouseDragHandler(element) {
-    element.addEventListener('mousedown', function (e) {
-        let lastX = e.pageX;
-        let lastY = e.pageY;
 
-        function mouseMoveHandler(e) {
-            const deltaX = e.pageX - lastX;
-            const deltaY = e.pageY - lastY;
-            lastX = e.pageX;
-            lastY = e.pageY;
+function movement_pan(){
+    cornerstoneTools.init();
+    const PanTool = cornerstoneTools.PanTool;
 
-            let viewport = cornerstone.getViewport(element);
-            viewport.voi.windowWidth += (deltaX / viewport.scale);
-            viewport.voi.windowCenter += (deltaY / viewport.scale);
-            cornerstone.setViewport(element, viewport);
-        }
+    if (isPanToolActive) {
+        cornerstoneTools.setToolDisabled('Pan');
 
-        function mouseUpHandler() {
-            document.removeEventListener('mousemove', mouseMoveHandler);
-            document.removeEventListener('mouseup', mouseUpHandler);
-        }
+    }else{
+        cornerstoneTools.addTool(PanTool);
+        cornerstoneTools.setToolActive('Pan', {mouseButtonMask: 1});
 
-        document.addEventListener('mousemove', mouseMoveHandler);
-        document.addEventListener('mouseup', mouseUpHandler);
-    });
+    }
+    isPanToolActive = !isPanToolActive;
 }
+
+
+
 
