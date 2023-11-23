@@ -14,6 +14,8 @@ public interface ImageRepository extends JpaRepository<Image, ImageId> {
 
     List<Image> findByImageIdStudykey(int studykey);
 
+    List<Image> findByseriesinsuid(String seriesinsuid);
+
     int countByseriesinsuid(String seriesinsuid);
 
     @Query(

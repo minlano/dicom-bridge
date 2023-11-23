@@ -2,18 +2,12 @@ package com.example.dicombridge.controller.image;
 
 import com.example.dicombridge.domain.dto.thumbnail.ThumbnailWithFileDto;
 
-import com.example.dicombridge.domain.common.ThumbnailWithFileDto;
-import com.example.dicombridge.domain.image.Image;
-import com.example.dicombridge.repository.ImageRepository;
 import com.example.dicombridge.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 
@@ -21,7 +15,6 @@ import java.io.File;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 @RestController

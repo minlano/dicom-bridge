@@ -1,7 +1,7 @@
 package com.example.dicombridge.service.image;
 
 import com.example.dicombridge.domain.study.Study;
-import com.example.dicombridge.domain.study.StudyResponseDto;
+import com.example.dicombridge.domain.dto.study.StudyResponseDto;
 import com.example.dicombridge.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

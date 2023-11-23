@@ -3,8 +3,8 @@ package com.example.dicombridge.service.image;
 import com.example.dicombridge.domain.dto.thumbnail.ThumbnailDto;
 import com.example.dicombridge.domain.dto.thumbnail.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
+import com.example.dicombridge.service.fileRead.*;
 import com.example.dicombridge.repository.ImageRepository;
-import com.example.dicombridge.service.fileRead.FileRead;
 import com.example.dicombridge.util.ImageConvert;
 import jcifs.Address;
 import jcifs.CIFSContext;
@@ -15,20 +15,20 @@ import jcifs.smb.NtlmPasswordAuthenticator;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
-
 import lombok.RequiredArgsConstructor;
 import org.dcm4che3.tool.dcm2jpg.Dcm2Jpg;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
-
-
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -232,18 +232,18 @@ public class ImageService {
 //        return tempFiles;
 //    }
 
-//    private List<File> fileRead3(Map<String, Image> imageMap) throws IOException {
-//        List<File> tempFiles = new ArrayList<>();
-//
-//        for (String fname : imageMap.keySet()) {
-//            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
-//            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-//            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
-//
-//            tempFiles.add(tempDcmFile);
-//        }
-//        return tempFiles;
-//    }
+    private List<File> fileRead3(Map<String, Image> imageMap) throws IOException {
+        List<File> tempFiles = new ArrayList<>();
+
+        for (String fname : imageMap.keySet()) {
+            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
+            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
+
+            tempFiles.add(tempDcmFile);
+        }
+        return tempFiles;
+    }
 
     public int findMaxStudyKeyByStudyKey(String studyInsUid) {
         return imageRepository.countDistinctSeries(studyInsUid).intValue();
@@ -255,6 +255,27 @@ public class ImageService {
 
     public  List<String> saveRedisValSeriesinsuid(String studyinsuid) {
         String studyInsUid = studyinsuid;
-        return imageRepository.findDistinctSeriesinsuidByStudyinsuid(studyInsUid);
+        return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyInsUid);
+    }
+
+    public List<File> getComparisonImage(String seriesinsuid) throws IOException {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findImagesBySeriesinsuidOrderedByInstancenum(seriesinsuid);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            map.put(image.getFname(), image);
+        }
+        return fileRead3(map);
+    }
+    public List<File> getcomparisonbyte(String seriesinsuid) throws IOException {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            map.put(image.getFname(), image);
+        }
+        return fileRead3(map);
     }
 }

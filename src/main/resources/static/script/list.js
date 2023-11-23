@@ -118,7 +118,7 @@ $(document).on("dblclick", "tr.subTr", function() {
     const pname = $(this).data('pname');
     const pid = $(this).find('.pid').text();
     if (studyinsuid && studykey) { //같은 modal의 studyinsuid 종류별로 찾기
-        saveRedis(modality);
+       saveRedis(modality);
         $.ajax({
             type: "POST",
             url: "/studies/seriescount/" + studyinsuid,
@@ -327,4 +327,53 @@ async function downloadImages(selectedStudyKeys) {
     } catch (error) {
         console.error("이미지 다운로드에 실패했습니다.", error);
     }
+}
+
+/**
+ * Redis Save
+ * key:studyinsuid,
+ * value:seriesinsuid
+ */
+function saveRedis(modality){
+    $.ajax({
+        url: "/getsameModalstudyinsuid",
+        method: "GET",
+        data: {
+            modality: modality,
+        },
+        success: function (data) {
+            const studyinsuidKey = data; //studyinsuid키, seriesinsuid벨류 의 배열
+            for (var i = 0; i < data.length; i++) {
+                var studyinsuid = data[i];
+                //studyinsuid키값으로 seriesinsuid벨류값으로 해서 redis에 저장하는 함수
+                saveRedisValSeriesinsuid(studyinsuid);
+                //사용법.
+                //키:studyinsuid 벨류:seriesinsuid의 종류를 ,로 나눠서 저장
+                // 저장된 값을 다시 리스트로 변환
+                //List<String> retrievedList = Arrays.asList(storedValue.split(","));
+                //키:seriesinsuid 벨류:seriesinsuid의 사진 갯수
+                //키:seriesinsuid:이미지번호.getBytes() 벨류:이미지 바이트
+
+            }
+            localStorage.setItem("studyinsuidKey", JSON.stringify(data)); // studyinsuid키값 배열
+        }
+    });
+}
+
+function saveRedisValSeriesinsuid(studyinsuid){
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/studies/saveRedisValSeriesinsuid/" + studyinsuid, true);
+    xhr.setRequestHeader("Content-Type", "application/json")
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var imagesData = JSON.parse(xhr.responseText);
+                displayImages(imagesData);
+            } else {
+                alert("Failed - Status code: " + xhr.status);
+            }
+        }
+    };
+    xhr.send();
 }

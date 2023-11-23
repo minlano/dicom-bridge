@@ -23,28 +23,21 @@ public class StudyRestController {
     public List<StudyResponseDto> searchList(
             @RequestParam(name = "pid", required = false) String pid,
             @RequestParam(name = "pname", required = false) String pname,
-            @RequestParam(name = "reportstatus", required = false) Integer reportstatus)
-    {
-        if(pid != null || pname != null || reportstatus != null){
+            @RequestParam(name = "reportstatus", required = false) Integer reportstatus){
+        if(pid != null || pname != null || reportstatus != null)
             return studyService.getSearch(pid, pname, reportstatus);
-        }
         return studyService.getStudies();
     }
 
     @GetMapping("/comparison-study-list")
-    public List<StudyResponseDto> comparisonList(
-            @RequestParam(name = "modality") String modality
-    ){
-        if(modality != null){
+    public List<StudyResponseDto> comparisonList(@RequestParam(name = "modality") String modality){
+        if(modality != null)
            return studyService.getComparison(modality);
-        }
         return null;
     }
 
     @GetMapping("/getsameModalstudyinsuid")
-    public List<String> getSameModalStudyinsuid(
-            @RequestParam(name = "modality") String modality
-    ){
+    public List<String> getSameModalStudyinsuid(@RequestParam(name = "modality") String modality){
         return studyService.getSameModalStudyinsuid(modality);
     }
 }
