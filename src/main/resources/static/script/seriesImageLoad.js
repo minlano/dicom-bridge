@@ -148,7 +148,6 @@ async function displayDicomImage(arrayBuffer, divId, seriesInsUid) {
         cornerstone.loadImage(imageData).then(async image => {
             await cornerstone.displayImage(existingDiv, image);
             await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid);
-
         });
     } else {
         console.error(`Div with ID '${divId}' not found.`);
@@ -199,7 +198,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     metadataLeftTop.style.color = 'white';
     metadataLeftTop.style.padding = '5px';
     metadataLeftTop.innerHTML = metadataArray.leftTop;
-    metadataLeftTop.style.zIndex = '2'; // 다른 엘리먼트 위에 표시되도록 함
+    metadataLeftTop.style.zIndex = '2';
     metadataLeftTop.style.visibility = 'visible';
     existingDiv.appendChild(metadataLeftTop);
 
@@ -214,7 +213,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     metadataRightTop.style.color = 'white';
     metadataRightTop.style.padding = '5px';
     metadataRightTop.innerHTML  = metadataArray.rightTop;
-    metadataRightTop.style.zIndex = '2'; // 다른 엘리먼트 위에 표시되도록 함
+    metadataRightTop.style.zIndex = '2';
     metadataRightTop.style.visibility = 'visible';
     existingDiv.appendChild(metadataRightTop);
 
@@ -228,7 +227,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     metadataRightBottom.style.color = 'white';
     metadataRightBottom.style.padding = '5px';
     metadataRightBottom.innerHTML  = metadataArray.rightBottom;
-    metadataRightBottom.style.zIndex = '2'; // 다른 엘리먼트 위에 표시되도록 함
+    metadataRightBottom.style.zIndex = '2';
     metadataRightBottom.style.visibility = 'visible';
     existingDiv.appendChild(metadataRightBottom);
 }
