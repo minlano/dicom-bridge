@@ -324,6 +324,8 @@ function createBoxHandler(id, seriesInsUid) {
     divById.addEventListener('click', function (event) {
         boxHandler(event, divById);
         invertHandler(divById);
+        activateFlipRotate(divById);
+        activateReset(divById);
     })
 
     divById.addEventListener('dblclick', function (event) {
