@@ -289,9 +289,11 @@ function boxHandler(event, divById) {
     divById.className = 'checked';
 }
 
-/** Cornerstone Invert **/
+/** Cornerstone **/
+/* Invert */
 var invertButton = document.getElementById('invert');
 var invertCheck;
+
 function invertImageWithWWWC(divById) {
     const selectedDiv = cornerstone.getEnabledElement(divById).element;
     var viewport = cornerstone.getViewport(selectedDiv);
@@ -312,7 +314,6 @@ invertButton.addEventListener('click', function() {
 
 function invertHandler(divById) {
     selectedDivById = divById;
-
     var invertVal =  divById.getAttribute('invert');
     if(invertVal === null)
         divById.setAttribute('invert', 'unchecked'); // checked
@@ -334,4 +335,45 @@ function createBoxHandler(id, seriesInsUid) {
         imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
         imageDisplayBySeriesInsUid(seriesInsUid);
     })
+}
+
+/* Window Level */
+const windowLvBtn = document.getElementById('window-level');
+const moveBtn = document.getElementById('move');
+let isPanToolActive = false;
+let isWwwcToolActive = false;
+
+windowLvBtn.addEventListener('click', function() {
+    windowLevel();
+});
+moveBtn.addEventListener('click', function() {
+    movement_pan();
+});
+
+function windowLevel(){
+    cornerstoneTools.init();
+
+    const WwwcTool = cornerstoneTools.WwwcTool;
+
+    if (isWwwcToolActive){
+        cornerstoneTools.setToolDisabled('Wwwc');
+
+    }else {
+        cornerstoneTools.addTool(WwwcTool);
+        cornerstoneTools.setToolActive('Wwwc', {mouseButtonMask: 1});
+    }
+    isWwwcToolActive = !isWwwcToolActive;
+}
+
+function movement_pan(){
+    cornerstoneTools.init();
+    const PanTool = cornerstoneTools.PanTool;
+
+    if (isPanToolActive) {
+        cornerstoneTools.setToolDisabled('Pan');
+    }else{
+        cornerstoneTools.addTool(PanTool);
+        cornerstoneTools.setToolActive('Pan', {mouseButtonMask: 1});
+    }
+    isPanToolActive = !isPanToolActive;
 }

@@ -118,6 +118,14 @@ nav li {
 	display: block;
 }
 
+.Report_btn .hover-image {
+	display: none;
+}
+
+.Report_btn .normal-image {
+	display: block;
+}
+
 .nav_li:hover .hover-image {
 	display: block;
 }
@@ -134,7 +142,15 @@ nav li {
 	display: none;
 }
 
-.image-container {
+.Report_btn:hover .hover-image {
+	display: block;
+}
+
+.Report_btn:hover .normal-image {
+	display: none;
+}
+
+.image-container ,.Report_btn{
 	display: flex;
 	align-items: center; /* 수직 가운데 정렬 */
 	justify-content: center; /* 수평 가운데 정렬 */
