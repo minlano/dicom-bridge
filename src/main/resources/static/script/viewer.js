@@ -2,6 +2,7 @@ var toolbarBtn = document.getElementById("Toolbar_btn");
 const thumbnailBtn = document.getElementById("thumbnail_btn");
 let isThumbnailVisible = true;
 let isToolbarVisible = true;
+var activeDiv = null;
 
 /** Thumbnail **/
 thumbnailBtn.addEventListener("click", () => {
@@ -59,12 +60,16 @@ function displayImages(images) {
         var base64Image = sortedImages[i].image;
         var seriesKey = sortedImages[i].serieskey;
         var seriesDesc = sortedImages[i].seriesdesc;
+        var seriesInsUid = sortedImages[i].seriesinsuid;
 
         var tr = document.createElement("tr");
         var td = document.createElement("td");
         var divImg = document.createElement("div");
         var img = document.createElement("img");
         var divDesc = document.createElement("div");
+
+        divImg.id = "thumbnail-div-" + i;
+        divImg.dataset.seriesInsUid = seriesInsUid;
 
         divDesc.className = "thumbnail-desc";
         divDesc.innerHTML = `Series Number : ${seriesKey}<br> &nbsp&nbsp&nbsp Series Desc : ${seriesDesc}`;
@@ -75,6 +80,25 @@ function displayImages(images) {
         td.appendChild(divImg);
         tr.appendChild(td);
         tbody.appendChild(tr);
+
+        divImg.addEventListener('click', function(event) {
+            var clickedDiv = event.currentTarget;
+            var seriesInsUid = clickedDiv.dataset.seriesInsUid;
+
+            if (activeDiv) {
+                activeDiv.style.border = ""; // 현재 활성화된 divImg의 border 초기화
+            }
+
+            clickedDiv.style.border = "1px solid #00AFEF";
+            activeDiv = clickedDiv;
+
+            rowCol.row = 1; rowCol.col = 1;
+            imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+            imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+
+            imageDisplayBySeriesInsUid(seriesInsUid);
+        });
+
     }
 }
 
@@ -94,3 +118,4 @@ function activateReset() {
         //cornerstone.reset();
     //});
 }
+

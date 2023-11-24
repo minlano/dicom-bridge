@@ -273,11 +273,11 @@ function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
 
     for(let div of divCollectionByClass) {
-        div.style.border = '';
+        div.style.outline = '';
         div.className = 'unChecked';
     }
 
-    divById.style.border = '3px solid red';
+    divById.style.outline = '3px solid #00AFEF';
     divById.className = 'checked';
 }
 
@@ -349,10 +349,11 @@ function windowLevel(){
 
     if (isWwwcToolActive){
         cornerstoneTools.setToolDisabled('Wwwc');
-
+        windowLvBtn.style.backgroundColor ="";
     }else {
         cornerstoneTools.addTool(WwwcTool);
         cornerstoneTools.setToolActive('Wwwc', {mouseButtonMask: 1});
+        windowLvBtn.style.backgroundColor ="red";
     }
     isWwwcToolActive = !isWwwcToolActive;
 }
@@ -398,7 +399,6 @@ comparison.addEventListener(('click'), function(e) {
     $.ajax({
         url: "/study/list",
         success: function(response) {
-            console.log("기능 입장");
             comparisonPrevious(response);
         },
         error: function() {

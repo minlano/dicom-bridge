@@ -9,7 +9,7 @@ body{
 }
 
 #viewer {
-	background: #423F3E;
+	background: #0D243D;
 	display: grid;
 	grid-template-columns: 0.5fr 9.5fr;
 	grid-template-rows: 1fr 9fr;
@@ -30,7 +30,7 @@ body{
 
 header {
 	grid-area: header;
-	background-color: #423F3E;
+	background-color: #0D243D;
 	align-items: center;
 	display: flex;
 	margin: 20px 40px 20px ;
@@ -45,7 +45,7 @@ h1 {
 nav {
 	border-radius: 15px;
 	grid-area: nav;
-	background-color: #2B2B2B;
+	background-color: #2A394B;
 	margin: 0px 15px 40px 40px;
 }
 
@@ -57,7 +57,7 @@ nav {
 
 aside {
 	border-radius: 15px;
-	background-color: #2B2B2B;
+	background-color: #2A394B;
 	margin: 0px 40px 10px 0px;
 }
 
@@ -83,7 +83,7 @@ aside li div, nav li div {
 }
 
 aside ul li:not(.nohover):hover {
-	background-color: black;
+	background-color: #00AFEF;
 }
 
 
@@ -175,7 +175,7 @@ nav ul li:nth-child(1){
 section#thumbnail-container {
 	max-width: 270px;
 	border-radius: 15px;
-	background-color: #2B2B2B;
+	background-color: #2A394B;
 	margin: 0px 10px 40px 0px;
 	display: flex;
 	float: left;
@@ -231,7 +231,7 @@ section#thumbnail-container {
 }
 
 section#image-container {
-	background-color: #2B2B2B;
+	background-color: #2A394B;
 	margin: 0px 40px 40px 1px;
 
 	display: grid; /* 이미지 컨테이너를 그리드 컨테이너로 설정합니다. */

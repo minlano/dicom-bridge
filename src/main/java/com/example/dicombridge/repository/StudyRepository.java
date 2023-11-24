@@ -9,13 +9,16 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface StudyRepository extends JpaRepository<Study, Integer> {
+    @Query("SELECT s FROM Study s ORDER BY s.studydate DESC")
+    List<Study> findAllByOrderByStudyDate();
 
     List<Study> findByStudykey(int studykey);
 
     @Query("SELECT s FROM Study s " +
             "WHERE (:pid IS NULL OR s.pid LIKE %:pid%) " +
             "AND (:pname IS NULL OR s.pname LIKE %:pname%) " +
-            "AND (:reportstatus IS NULL OR s.reportstatus = :reportstatus)")
+            "AND (:reportstatus IS NULL OR s.reportstatus = :reportstatus) " +
+            "ORDER BY s.studydate DESC")
     List<Study> findByPidAndPnameAndReportstatus(
             @Param("pid") String pid,
             @Param("pname") String pname,
