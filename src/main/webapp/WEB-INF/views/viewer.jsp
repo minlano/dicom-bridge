@@ -4,12 +4,13 @@
 <head>
     <title>DicomBridge</title>
     <link rel="stylesheet" href="/style/viewergrid.css">
+    <link rel="icon" href="/images/favicon_logo.png" sizes="16x16" type="image/png">
 </head>
 <body>
 <div id="studyInsUid" style="display: none;">${studyInsUid}</div>
 <div id="viewer">
     <header>
-        <h1>DicomBridge</h1>
+        <img src="/images/dicombridge_logo.png" alt="logo" style="width: 350px;">
     </header>
     <nav>
         <ul>
@@ -207,7 +208,7 @@
                     <img src="/images/comparison.07c6226e96a236664e9ac4c5ff078c44.png" alt="비교검사">
                     <div>비교검사</div>
                 </li>
-                <li>
+                <li id="playClip">
                     <img src="/images/play.6f437ab2591fe6a6c319e7e77f01df3e.png" alt="clip">
                     <div>플레이 클립</div>
                 </li>
@@ -332,10 +333,10 @@
                         </div>
                     </div>
                 </li>
-                <li>
-                    <img src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png" alt="Layout">
-                    <div>이미지레이아웃</div>
-                </li>
+<%--                <li>--%>
+<%--                    <img src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png" alt="Layout">--%>
+<%--                    <div>이미지레이아웃</div>--%>
+<%--                </li>--%>
             </ul>
         </aside>
         <section id="thumbnail-container" style="display: none">

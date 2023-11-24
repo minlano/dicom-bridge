@@ -17,7 +17,8 @@ public class StudyService {
 //    public StudyService(StudyRepository studyRepository) { this.studyRepository = studyRepository; }
 
     public List<StudyResponseDto> getStudies() {
-        List<Study> studyList = studyRepository.findAll();
+        List<Study> studyList = studyRepository.findAllByOrderByStudyDate();
+       // List<Study> studyList = studyRepository.findAll();
         return studyList.stream()
                         .map(StudyResponseDto::new)
                         .collect(Collectors.toList());

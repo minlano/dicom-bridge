@@ -11,7 +11,8 @@ body{
 h1 {
     font-size: 30pt;
     color: white;
-    font-family: 'Noto Sans KR', sans-serif;
+    /*font-family: 'Noto Sans KR', sans-serif;*/
+    font-family: 'Alegreya Sans SC', sans-serif;
 }
 
 .subtitle {
@@ -20,7 +21,7 @@ h1 {
 }
 
 #container {
-    background: #423F3E;
+    background: #0D243D;
     display: grid;
     grid-template-columns: 0.5fr 9.5fr;
     grid-template-rows: 1fr 9fr;
@@ -53,7 +54,7 @@ h1 {
 
 header {
     grid-area: header;
-    background-color: #423F3E;
+    background-color: #0D243D;
     align-items: center;
     display: flex;
     margin: 20px 40px 20px;
@@ -63,7 +64,7 @@ header {
 nav {
     border-radius: 15px;
     grid-area: menu;
-    background-color: #2B2B2B;
+    background-color: #2A394B;
     margin: 0px 10px 40px 40px;
 }
 
@@ -119,7 +120,7 @@ li {
 aside#Detailed-search{
     grid-area: dsearch;
     width: 250px;
-    background-color: #2B2B2B;
+    background-color: #2A394B;
     border-radius: 15px;
     margin: 0px 10px 40px 0px;
 }
@@ -134,8 +135,12 @@ aside li {
     margin-left: 20px;
     border: none;
     text-align: center;
-    background-color: #2B2B2B;
+    background-color: #2A394B;
     cursor: pointer;
+}
+
+aside li:not(:first-child):hover {
+    background-color:#0879A6;
 }
 
 aside li:nth-child(1) {
@@ -144,7 +149,7 @@ aside li:nth-child(1) {
 
 aside li:not(:first-child) {
     border-radius: 50%; /* 동그랗게 만들기 위해 50%로 설정합니다 */
-    background-color: #393939;
+    background-color: #778492;
     line-height: 40px;
     width : 40px;
     height: 40px;
@@ -158,7 +163,7 @@ aside li:not(:first-child) {
 
 aside#study-search {
     grid-area: aside;
-    background-color:#2B2B2B;
+    background-color:#2A394B;
     color: white;
     padding: 10px;
     border-top-right-radius: 10px;
@@ -197,7 +202,7 @@ aside#study-search {
 
 article {
     width: 25vw; /*25%*/
-    background-color: #2B2B2B;
+    background-color: #2A394B;
     height: 20vw;
 }
 
@@ -207,7 +212,7 @@ img{
 
 /*#mainContent {*/
 /*    grid-area: main; !* #mainContent를 section 그리드 영역에 배치 *!*/
-/*    background-color: #2B2B2B;*/
+/*    background-color: #2A394B;*/
 /*    border-bottom-left-radius: 10px;*/
 /*    border-bottom-right-radius: 10px;*/
 /*    display: flex;*/
@@ -219,7 +224,7 @@ img{
 
 #mainContent {
     grid-area: main;
-    background-color: #2B2B2B;
+    background-color: #2A394B;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     display: block;
@@ -245,13 +250,13 @@ img{
 
 #mainTable th, #mainTable td {
     text-align: center;
-    border: 2px solid #2B2B2B;
+    border: 2px solid #2A394B;
     padding: 8px;
 }
 
 #mainTable th {
     height: 35px;
-    background-color: #393939;
+    background-color: #778492;
 }
 
 #header-container {
@@ -289,7 +294,7 @@ footer {
 
 .left-div {
     padding: 15px;
-    background-color: #2B2B2B;
+    background-color: #2A394B;
     color: white;
     list-style: none; /* 목록의 기본 스타일(점) 제거 */
 }
@@ -323,25 +328,25 @@ footer {
     text-align: center;
 }
 #previousTable th, #previousTable td {
-    border: 2px solid #2B2B2B; /* 테두리를 1px 굵기의 검은 선으로 설정 */
+    border: 2px solid #2A394B; /* 테두리를 1px 굵기의 검은 선으로 설정 */
     padding: 8px; /* 셀 안의 내용과 테두리 사이의 간격을 조절 */
 }
 
 #previousTable tr th {
-    background-color: #090909;
+    background-color: #778492;
 }
 
 #previousTable tr:nth-child(odd) {
-    background-color: #393939;
+    /*background-color: #393939;*/
     cursor: pointer;
 }
 #previousTable tr:nth-child(even) {
-    background-color: #2F2F2F;
+    /*background-color: #2F2F2F;*/
     cursor: pointer;
 }
 
 .right-div {
-    background-color: #242424;
+    background-color: #2A394B;
     display: grid; /*grid 형식으로*/
     grid-template : 1fr 6fr 7fr  / 100px auto auto ;
     padding-top: 15px;
@@ -357,7 +362,7 @@ footer {
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
-    background-color: #393939;
+    background-color: #778492;
 }
 
 .right-div > div:first-child {
@@ -405,7 +410,7 @@ footer {
     box-sizing: border-box; /* 내부 여백과 테두리를 포함한 전체 크기를 유지 */
     resize: none; /* 사용자가 크기를 조절할 수 없도록 설정 */
     white-space: pre-line;
-    background-color: #373737;
+    background-color: #778492;
     border: none;
 }
 
@@ -424,7 +429,7 @@ footer {
     box-sizing: border-box; /* 내부 여백과 테두리를 포함한 전체 크기를 유지 */
     resize: none; /* 사용자가 크기를 조절할 수 없도록 설정 */
     white-space: pre-line;
-    background-color: #373737;
+    background-color: #778492;
     border: none;
 }
 
@@ -452,15 +457,15 @@ footer {
     width : 80%;
     height : 100%;
     margin-left: 15px;
-    background-color: #090900;
-    color: white;
+    background-color: #fff;
+    color: black;
     border-radius: 10px;
 }
 .cell-c div div input{
     width : 80%;
     margin-left: 15px;
-    background-color: #090900;
-    color: white;
+    background-color: #fff;
+    color: black;
     border-radius: 10px;
 }
 .cell-c div:nth-child(6) {
@@ -473,29 +478,29 @@ footer {
     border-radius: 15px ;
     height: 30px;
     width: 25%;
-    background-color: #090900;
-    color: white;
+    background-color: #778492;
+    color: black;
 }
 
 
 .keyword {
     height: 30px;
-    background-color: #373737;
+    background-color: #F2F2F2;
     border-radius: 12px;
     padding-left: 10px;
     color: white;
     width: 27%;
 }
 #category {
-    height: 30px;
-    background-color: #373737;
+    height: 36px;
+    background-color: #F2F2F2;
     border-radius: 12px;
     padding-left: 10px;
-    color : #9B9B9B;
+    color : black;
     cursor: pointer;
 }
 #search {
-    background-color: #621212;
+    background-color: #0879A6;
     line-height: 40px;
     width : 40px;
     height: 40px;
@@ -509,7 +514,7 @@ footer {
 
 .subTr:hover {
     cursor: pointer;
-    background-color: darkolivegreen;
+    background-color: #0879A6;
 }
 
 .image-container .hover-image {
@@ -536,14 +541,15 @@ footer {
     display: none;
 }
 
+
 .image-container {
-    display: flex;
+    display: none;
     align-items: center; /* 수직 가운데 정렬 */
     justify-content: center; /* 수평 가운데 정렬 */
 }
 
 #trTitle{
-    background-color: #373737;
+    background-color: #F2F2F2;
 }
 
 #loadMore {
@@ -553,7 +559,7 @@ footer {
 #Pid-input, #Pname-input {
     font: inherit;
     letter-spacing: inherit;
-    color: currentcolor;
+    color: black;
     border: 0px;
     box-sizing: content-box;
     height: 1.4375em;

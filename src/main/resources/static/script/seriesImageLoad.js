@@ -265,29 +265,16 @@ async function countBySeriesInsUid(seriesInsUid) {
     }
 }
 
-function createBoxHandler(id, seriesInsUid) {
-    let divById = document.getElementById(id);
-    divById.addEventListener('click', function (event) {
-        boxHandler(event, divById);
-    })
-
-    divById.addEventListener('dblclick', function (event) {
-        rowCol.row = 1; rowCol.col = 1;
-        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-        imageDisplayBySeriesInsUid(seriesInsUid);
-    })
-}
 
 function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
 
     for(let div of divCollectionByClass) {
-        div.style.border = '';
+        div.style.outline = '';
         div.className = 'unChecked';
     }
 
-    divById.style.border = '3px solid red';
+    divById.style.outline = '3px solid #00AFEF';
     divById.className = 'checked';
 }
 
@@ -342,6 +329,7 @@ function createBoxHandler(id, seriesInsUid) {
 /* Window Level */
 const windowLvBtn = document.getElementById('window-level');
 const moveBtn = document.getElementById('move');
+const playClipBtn = document.getElementById('playClip');
 let isPanToolActive = false;
 let isWwwcToolActive = false;
 
@@ -359,13 +347,15 @@ function windowLevel(){
 
     if (isWwwcToolActive){
         cornerstoneTools.setToolDisabled('Wwwc');
-
+        windowLvBtn.style.backgroundColor ="";
     }else {
         cornerstoneTools.addTool(WwwcTool);
         cornerstoneTools.setToolActive('Wwwc', {mouseButtonMask: 1});
+        windowLvBtn.style.backgroundColor ="red";
     }
     isWwwcToolActive = !isWwwcToolActive;
 }
+
 
 function movement_pan(){
     cornerstoneTools.init();
@@ -379,6 +369,21 @@ function movement_pan(){
     }
     isPanToolActive = !isPanToolActive;
 }
+
+
+playClipBtn.addEventListener('click', function() {
+    playClip();
+});
+
+function playClip(){
+    cornerstoneTools.init();
+    const StackTools = cornerstoneTools.StackTools;
+
+    cornerstoneTools.addTool(StackTools);
+    cornerstoneTools.setToolActive('Stack', {mouseButtonMask: 1});
+
+}
+
 
 /** Comparison **/
 var modality = localStorage.getItem("modality");
@@ -495,10 +500,12 @@ $(document).on("dblclick", "tr.subTr", function() {
     //     "width": "50% !important",
     //     "height": "50% !important"
     // });
+
     $(".cornerstone-canvas").css({
         "width": "100%",
         "height": "100%"
     });
+
     // 모달 닫기
     var modal = document.getElementById("comparisonModal");
     modal.style.display = "none";

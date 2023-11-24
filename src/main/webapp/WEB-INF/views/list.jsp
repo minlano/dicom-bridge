@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style/listgrid.css">
-    <title>Dicom-bridge</title>
+    <link rel="icon" href="/images/favicon_logo.png" sizes="16x16" type="image/png">
+    <title>DicomBridge</title>
 </head>
 <body>
 <div id="container">
     <header>
-        <h1>DicomBridge</h1>
+        <img src="/images/dicombridge_logo.png" alt="logo" style="width: 350px;">
     </header>
 
     <section id="bar-container">
@@ -19,11 +20,11 @@
                     <div>Administrator</div>
                 </li>
                 <li class="nav_li" id="Dsearch">
-                    <div class="image-container">
+                    <div class="image-container" id="Dsearch_div">
                         <img class="normal-image" src="/images/search.png" alt="thumbnail">
                         <img class="hover-image" src="/images/search_click.png" alt="thumbnail">
                     </div>
-                    <div>세부검색</div>
+                    <div></div>
                 </li>
                 <li id="settings_btn">
                     <div class="image-container">
@@ -46,17 +47,15 @@
                     <div id="calender"></div>
                 </li>
                 <li>
-                    <span>검사일자</span>
+                    <span></span>
                 </li>
                 <li>
-                    <span>검사장비</span>
+                    <span></span>
                 </li>
                 <li>
-                    <span>Verify</span>
+                    <span></span>
                 </li>
                 <li>
-                    <button>조회</button>
-                    <button>재설정</button>
                 </li>
             </ul>
         </aside>
@@ -79,13 +78,12 @@
                         <option value="5">예비판독</option>
                         <option value="6">판독</option>
                     </select>
-                    <button id="search">검색</button>
+                    <button id="search" class="search">검색</button>
                 </li>
-                <li>전체</li>
+                <li id="searchAll" class="search">전체</li>
                 <li>1일</li>
                 <li>3일</li>
                 <li>1주일</li>
-                <li>재설정</li>
             </ul>
             <div id="search-result">
                 <a class="subtitle">총 검사 건수 : </a>

@@ -2,6 +2,7 @@ let startIndex = 0;
 const batchSize = 10;
 let totalItems = 0;
 
+
 $(document).on("click", "#search", function () {
 
     $('#mainTable tr:gt(0)').remove(); // 첫번째 tr 제외하고 삭제
@@ -14,6 +15,21 @@ $(document).on("click", "#search", function () {
     const reportstatus = $('#category').val();
 
     fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize);
+
+});
+
+$(document).on("click", "#searchAll", function () {
+
+    $('#mainTable tr:gt(0)').remove(); // 첫번째 tr 제외하고 삭제
+    $('#previousTable tr:gt(0)').remove();
+    startIndex = 0; // 검색 버튼 클릭 시 startIndex 초기화
+    previousItems();
+
+    $('#Pid-input').val('');
+    $('#Pname-input').val('');
+    $('#category').val('');
+
+    fetchDataSomehow('', '', '', startIndex, batchSize);
 
 });
 
