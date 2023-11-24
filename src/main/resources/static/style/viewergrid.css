@@ -702,7 +702,7 @@ section#image-container {
 	display: none;
 	align-items: center; /* 수직 가운데 정렬 */
 	justify-content: center; /* 수평 가운데 정렬 */
-	background-color: blueviolet;
+	background-color: #2B2B2B;
 	margin: 0px 40px 40px 1px;
 
 	float:right;

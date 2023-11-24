@@ -85,6 +85,8 @@ async function imageDisplay() {
             var div = document.createElement('div');
             var id = `image_${i}_${j}`;
             div.id = id;
+            div.style.height = "100%";
+            div.style.width = "100%";
             div.setAttribute('order', FIRST_ORDER);
             imageContainer.appendChild(div);
 
@@ -482,14 +484,7 @@ $(document).on("dblclick", "tr.subTr", function() {
         "display": "grid",
         "float" : "right"
     });
-    // $("#image-container > *").css({
-    //     "width": "50% !important",
-    //     "height": "50% !important"
-    // });
-    $(".cornerstone-canvas").css({
-        "width": "100%",
-        "height": "100%"
-    });
+
     // 모달 닫기
     var modal = document.getElementById("comparisonModal");
     modal.style.display = "none";
@@ -498,35 +493,44 @@ $(document).on("dblclick", "tr.subTr", function() {
 
     imageContainer2.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
     imageContainer2.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-    imageDisplay2(studyinsuidComparison);
+    imageDisplayComparison(studyinsuidComparison);
+
+    $(".cornerstone-canvas").css({
+        "width": "100%",
+        "height": "100%"
+    });
+
 });
 
-async function imageDisplay2(studyinsuidComparison) {
+async function imageDisplayComparison(studyinsuidComparison) {
     while (imageContainer2.firstChild)
         imageContainer2.removeChild(imageContainer2.firstChild);
 
     var index = 0;
-    var seriesInsUids = await findSeriesInsUidByStudyInsUid2(studyinsuidComparison);
+    var seriesInsUids = await findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison);
     seriesInsUids.length
     for (var i = 0; i < rowCol.row; i++) {
         for (var j = 0; j < rowCol.col; j++) {
             var div = document.createElement('div');
             var id = `image2_${i}_${j}`;
             div.id = id;
+            div.style.height="100%";
+            div.style.width="100%";
+
             div.setAttribute('order', FIRST_ORDER);
             imageContainer2.appendChild(div);
 
-            createWheelHandler2(id, seriesInsUids[index]);
+            createWheelHandlerComparison(id, seriesInsUids[index]);
 
             if (index < seriesInsUids.length) {
-                await viewDicomBySeriesInsUid2(id, seriesInsUids[index], COMPARISON_FIRST_ORDER);
+                await viewDicomBySeriesInsUidComparison(id, seriesInsUids[index], COMPARISON_FIRST_ORDER);
                 createBoxHandler(id, seriesInsUids[index]);
             }
             index++;
         }
     }
 }
-async function findSeriesInsUidByStudyInsUid2(studyinsuidComparison) {
+async function findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison) {
     try {
         let response = await axiosInstance.get("/studies/getSeriesInsUidsComparison/" + studyinsuidComparison);
         if (response.status === 200) {
@@ -537,7 +541,7 @@ async function findSeriesInsUidByStudyInsUid2(studyinsuidComparison) {
     }
 }
 
-async function viewDicomBySeriesInsUid2(id, seriesInsUid, order) {
+async function viewDicomBySeriesInsUidComparison(id, seriesInsUid, order) {
     try {
         let response = await axiosInstance.get("/studies/getSeriesInsUidIndexComparison/" + seriesInsUid + "/" + order, { responseType: 'arraybuffer' });
         if (response.status === 200)
@@ -556,10 +560,6 @@ function handleComparisonTrueChangeEvent() {
         "display": "none",
         "float" : "right"
     });
-    // $("#image-container > *").css({
-    //     "width": "50% !important",
-    //     "height": "50% !important"
-    // });
     $(".cornerstone-canvas").css({
         "width": "100%",
         "height": "100%"
@@ -571,23 +571,23 @@ if (!comparisonFalse) {
     handleComparisonFalseChangeEvent();
 }
 
-function createWheelHandler2(id, seriesInsUid) {
+function createWheelHandlerComparison(id, seriesInsUid) {
     var individualDiv = document.getElementById(id);
     individualDiv.addEventListener('wheel', function(event) {
-        handleScroll2(event, id, seriesInsUid);
+        handleScrollComparison(event, id, seriesInsUid);
     });
 }
 
-async function handleScroll2(event, id, seriesInsUid) {
+async function handleScrollComparison(event, id, seriesInsUid) {
     var individualDiv = document.getElementById(id);
-    var order = parseInt(individualDiv.getAttribute('order'), 10) || FIRST_ORDER;
+    var order = parseInt(individualDiv.getAttribute('order'), 10) || COMPARISON_FIRST_ORDER;
     let maxOrder = await countBySeriesInsUid(seriesInsUid);
     let scrollAmount = event.deltaY > 0 ? -1 : 1;
 
     order += scrollAmount;
-    if (order < FIRST_ORDER || order >= maxOrder)
-        order = FIRST_ORDER;
+    if (order < COMPARISON_FIRST_ORDER || order >= maxOrder)
+        order = COMPARISON_FIRST_ORDER;
 
     individualDiv.setAttribute('order', order);
-    await viewDicomBySeriesInsUid2(id, seriesInsUid, order);
+    await viewDicomBySeriesInsUidComparison(id, seriesInsUid, order);
 }

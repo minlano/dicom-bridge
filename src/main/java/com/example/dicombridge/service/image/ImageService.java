@@ -258,7 +258,7 @@ public class ImageService {
     }
 
     public List<File> getComparisonImage(String seriesinsuid) throws IOException {
-        Map<String, Image> map = new HashMap<>();
+        Map<String, Image> map = new LinkedHashMap<>();
         List<Image> images = imageRepository.findImagesBySeriesinsuidOrderedByInstancenum(seriesinsuid);
 
         for (int i = 0; i < images.size(); i++) {
