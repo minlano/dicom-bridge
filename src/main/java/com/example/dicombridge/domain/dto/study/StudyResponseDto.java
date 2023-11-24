@@ -1,5 +1,6 @@
-package com.example.dicombridge.domain.study;
+package com.example.dicombridge.domain.dto.study;
 
+import com.example.dicombridge.domain.study.Study;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
