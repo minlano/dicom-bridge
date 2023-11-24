@@ -1,5 +1,6 @@
 package com.example.dicombridge.domain.image;
 
+import com.example.dicombridge.service.PathAndName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @NoArgsConstructor
 @Table(name = "IMAGETAB")
-public class Image {
+public class Image implements PathAndName {
     @EmbeddedId
     private ImageId imageId;
     private String studyinsuid;

@@ -63,7 +63,6 @@ public class ImageRestController {
     /** Series Count **/
     @PostMapping("/seriescount/{studyinsuid}")
     public int seriesCount(@PathVariable("studyinsuid") String studyinsuid){
-
         return imageService.findMaxStudyKeyByStudyKey(studyinsuid);
     }
 

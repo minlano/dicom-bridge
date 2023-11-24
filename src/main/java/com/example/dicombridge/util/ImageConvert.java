@@ -1,6 +1,8 @@
 package com.example.dicombridge.util;
 
+import com.example.dicombridge.domain.dto.thumbnail.ThumbnailDto;
 import com.example.dicombridge.domain.image.Image;
+import com.example.dicombridge.service.PathAndName;
 import jcifs.smb.SmbFileInputStream;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -21,39 +23,20 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-public class ImageConvert {
+public class ImageConvert<T> {
     private final Storage storage;
 
-    public SmbFileInputStream getSmbFileInputStream(Image image) throws MalformedURLException, SmbException {
+    public <T extends PathAndName> SmbFileInputStream getSmbFileInputStream(T t) throws MalformedURLException, SmbException {
         SmbFile file = new SmbFile(String.join("/",
-                storage.getPROTOCOL(),
-                storage.getHOST(),
-                storage.getSHARED_NAME(),
-                image.getPath().replace('\\', '/') + "/" + image.getFname()),
-                storage.getCifsContext());
+                            storage.getPROTOCOL(),
+                            storage.getHOST(),
+                            storage.getSHARED_NAME(),
+                            t.getPath().replace('\\', '/') + "/" + t.getFname()),
+                            storage.getCifsContext());
         return new SmbFileInputStream(file);
     }
 
-    // 오리지널 convert2ByteArrayOutputStream
-//    @Deprecated
-//    public ByteArrayOutputStream convert2ByteArrayOutputStream2(SmbFileInputStream smbFileInputStream) {
-//        ByteArrayOutputStream byteArrayOutputStream;
-//        byte[] buffer = new byte[1024 * 1024];
-//        try {
-//            byteArrayOutputStream = new ByteArrayOutputStream();
-//            int bytesRead;
-//            while ((bytesRead = smbFileInputStream.read(buffer)) != -1) {
-//                byteArrayOutputStream.write(buffer, 0, bytesRead);
-//            }
-//            smbFileInputStream.close();
-//            byteArrayOutputStream.close();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return byteArrayOutputStream;
-//    }
-
-    public byte[] convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
+    public byte[] convert2ByteArray(SmbFileInputStream smbFileInputStream) {
         byte[] buffer = new byte[1024 * 1024];
         try(ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             int bytesRead;
@@ -94,4 +77,23 @@ public class ImageConvert {
         }
         return null;
     }
+
+    //    public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
+//        ByteArrayOutputStream byteArrayOutputStream;
+//        byte[] buffer = new byte[1024 * 1024];
+//        try {
+//            byteArrayOutputStream = new ByteArrayOutputStream();
+//
+//            int bytesRead;
+//            while ((bytesRead = smbFileInputStream.read(buffer)) != -1) {
+//                byteArrayOutputStream.write(buffer, 0, bytesRead);
+//            }
+//            smbFileInputStream.close();
+//            byteArrayOutputStream.close();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return byteArrayOutputStream;
+//    }
+
 }

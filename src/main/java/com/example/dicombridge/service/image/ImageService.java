@@ -126,34 +126,14 @@ public class ImageService {
         }
         return null;
     }
+    /** ImageConvert 클래스에 구현했으므로 빼야함 **/
 
+    /** Seriesinsuid Count Check **/
     public int seriesinsuidCount(String seriesinsuid) {
         return imageRepository.countByseriesinsuid(seriesinsuid);
     }
 
     /** Thumbnail **/
-    private SmbFileInputStream getSmbFileInputStream(ThumbnailDto thumbnailDto) throws MalformedURLException, SmbException {
-        SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, thumbnailDto.getPath().replace('\\', '/') + "/" + thumbnailDto.getFname()), cifsContext);
-        return new SmbFileInputStream(file);
-    }
-
-    private Map<String, ThumbnailWithFileDto> fileRead4(Map<String, ThumbnailDto> thumbnailDtoMap) throws IOException {
-        Map<String, ThumbnailWithFileDto> thumbnailWithFileDtoMap = new HashMap<>();
-        for (String fname : thumbnailDtoMap.keySet()) {
-            ThumbnailDto thumbnailDto = thumbnailDtoMap.get(fname);
-
-            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(thumbnailDto);
-            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
-            String dcmByte = convertDcm2Jpg(tempDcmFile);
-
-            ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto(thumbnailDto);
-            thumbnailWithFileDto.setImage(dcmByte);
-            thumbnailWithFileDtoMap.put(fname, thumbnailWithFileDto);
-        }
-        return thumbnailWithFileDtoMap;
-    }
-
     public Map<String, ThumbnailWithFileDto> getThumbnail(int studyKey) throws IOException {
         Map<String, ThumbnailDto> map = new HashMap<>();
         List<ThumbnailDto> images = imageRepository.findImageAndSeriesDesc(studyKey);
@@ -164,9 +144,27 @@ public class ImageService {
                 map.put(imageInfo.getFname(), imageInfo);
             }
         }
-        return fileRead4(map);
+        return getThumbnailFile(map);
     }
 
+    private Map<String, ThumbnailWithFileDto> getThumbnailFile(Map<String, ThumbnailDto> thumbnailDtoMap) throws IOException {
+        Map<String, ThumbnailWithFileDto> thumbnailWithFileDtoMap = new HashMap<>();
+        FileRead<Image> fileRead = new FileRead(imageConvert);
+
+        for (String fname : thumbnailDtoMap.keySet()) {
+            ThumbnailDto thumbnailDto = thumbnailDtoMap.get(fname);
+            ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto(thumbnailDto);
+
+            String dcmByte = fileRead.getFileString(thumbnailDto);
+
+            thumbnailWithFileDto.setImage(dcmByte);
+            thumbnailWithFileDtoMap.put(fname, thumbnailWithFileDto);
+        }
+        return thumbnailWithFileDtoMap;
+    }
+
+
+    /** Download **/
     public List<ByteArrayOutputStream> getFiles(int studyKey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
         Map<String, Image> map = images.stream().collect(Collectors.toMap(
@@ -200,6 +198,7 @@ public class ImageService {
         }
     }
 
+    /** Seriesinsuid Image By Count **/
     public File getFileByseriesinsuidNcount(String seriesinsuid, int order) throws IOException  {
         Pageable pageable = PageRequest.of(order-1,1);
         List<Image> images = imageRepository.findNthImageBySeriesinsuid(seriesinsuid, pageable);
@@ -207,30 +206,44 @@ public class ImageService {
         return fileRead.getFile(images);
     }
 
-    // 작업 끝내고 날려야 함
-//    private File fileRead2(Map<String, Image> imageMap) throws IOException {
-//        Map<String, String> fileMap = new HashMap<>();
-//        for (String fname : imageMap.keySet()) {
-//            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
-//            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-//            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
-//            return tempDcmFile;
-//        }
-//        return null;
-//    }
+    /** Series Count **/
+    public int findMaxStudyKeyByStudyKey(String studyInsUid) {
+        return imageRepository.countDistinctSeries(studyInsUid).intValue();
+    }
 
-//    private List<File> fileRead3(Map<String, Image> imageMap) throws IOException {
-//        List<File> tempFiles = new ArrayList<>();
-//
-//        for (String fname : imageMap.keySet()) {
-//            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
-//            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-//            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
-//
-//            tempFiles.add(tempDcmFile);
-//        }
-//        return tempFiles;
-//    }
+    /** Seriesinsuids By Studyinsuid **/
+    public List<String> getSeriesInsUids(String studyInsUid) {
+        return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyInsUid);
+    }
+
+    /** Redis **/
+    public  List<String> saveRedisValSeriesinsuid(String studyinsuid) {
+        String studyInsUid = studyinsuid;
+        return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyInsUid);
+    }
+
+    /** Comparison **/
+    public List<File> getComparisonImage(String seriesinsuid) throws IOException {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findImagesBySeriesinsuidOrderedByInstancenum(seriesinsuid);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            map.put(image.getFname(), image);
+        }
+        return fileRead3(map);
+    }
+
+    public List<File> getcomparisonbyte(String seriesinsuid) throws IOException {
+        Map<String, Image> map = new HashMap<>();
+        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            map.put(image.getFname(), image);
+        }
+        return fileRead3(map);
+    }
 
     private List<File> fileRead3(Map<String, Image> imageMap) throws IOException {
         List<File> tempFiles = new ArrayList<>();
@@ -243,39 +256,5 @@ public class ImageService {
             tempFiles.add(tempDcmFile);
         }
         return tempFiles;
-    }
-
-    public int findMaxStudyKeyByStudyKey(String studyInsUid) {
-        return imageRepository.countDistinctSeries(studyInsUid).intValue();
-    }
-
-    public List<String> getSeriesInsUids(String studyInsUid) {
-        return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyInsUid);
-    }
-
-    public  List<String> saveRedisValSeriesinsuid(String studyinsuid) {
-        String studyInsUid = studyinsuid;
-        return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyInsUid);
-    }
-
-    public List<File> getComparisonImage(String seriesinsuid) throws IOException {
-        Map<String, Image> map = new HashMap<>();
-        List<Image> images = imageRepository.findImagesBySeriesinsuidOrderedByInstancenum(seriesinsuid);
-
-        for (int i = 0; i < images.size(); i++) {
-            Image image = images.get(i);
-            map.put(image.getFname(), image);
-        }
-        return fileRead3(map);
-    }
-    public List<File> getcomparisonbyte(String seriesinsuid) throws IOException {
-        Map<String, Image> map = new HashMap<>();
-        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
-
-        for (int i = 0; i < images.size(); i++) {
-            Image image = images.get(i);
-            map.put(image.getFname(), image);
-        }
-        return fileRead3(map);
     }
 }

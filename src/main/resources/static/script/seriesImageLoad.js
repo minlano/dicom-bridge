@@ -265,20 +265,6 @@ async function countBySeriesInsUid(seriesInsUid) {
     }
 }
 
-function createBoxHandler(id, seriesInsUid) {
-    let divById = document.getElementById(id);
-    divById.addEventListener('click', function (event) {
-        boxHandler(event, divById);
-    })
-
-    divById.addEventListener('dblclick', function (event) {
-        rowCol.row = 1; rowCol.col = 1;
-        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-        imageDisplayBySeriesInsUid(seriesInsUid);
-    })
-}
-
 function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
 
