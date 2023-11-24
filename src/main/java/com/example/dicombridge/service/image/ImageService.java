@@ -163,7 +163,6 @@ public class ImageService {
         return thumbnailWithFileDtoMap;
     }
 
-
     /** Download **/
     public List<ByteArrayOutputStream> getFiles(int studyKey) throws IOException {
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
