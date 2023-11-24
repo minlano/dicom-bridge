@@ -1,6 +1,5 @@
 package com.example.dicombridge.domain.study;
 
-import com.example.dicombridge.domain.dto.study.StudyRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

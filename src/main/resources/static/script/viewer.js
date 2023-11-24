@@ -3,7 +3,9 @@ const thumbnailBtn = document.getElementById("thumbnail_btn");
 let isThumbnailVisible = true;
 let isToolbarVisible = true;
 
-/** Thumbnail **/
+/**
+ * ThumbNail
+ */
 thumbnailBtn.addEventListener("click", () => {
     const thumbnailContainer = document.getElementById("thumbnail-container");
     const studyKey = document.getElementById("studyId").value;
@@ -19,6 +21,7 @@ thumbnailBtn.addEventListener("click", () => {
     isThumbnailVisible = !isThumbnailVisible;
 });
 
+
 toolbarBtn.addEventListener("click", () => {
     var toolbar = document.getElementById("toolbar");
 
@@ -28,6 +31,7 @@ toolbarBtn.addEventListener("click", () => {
         toolbar.style.display = "block";
     }
     isToolbarVisible = !isToolbarVisible;
+
 });
 
 function showThumbnail(path) {
@@ -51,7 +55,8 @@ function showThumbnail(path) {
 function displayImages(images) {
     var tbody = document.querySelector("#thumbnail-container tbody");
 
-    var sortedImages = Object.values(images).sort(function (a, b) { // 이미지 배열을 serieskey에 대해 오름차순으로 정렬
+    // 이미지 배열을 serieskey에 대해 오름차순으로 정렬
+    var sortedImages = Object.values(images).sort(function (a, b) {
         return a.serieskey - b.serieskey;
     });
 
@@ -60,6 +65,7 @@ function displayImages(images) {
         var seriesKey = sortedImages[i].serieskey;
         var seriesDesc = sortedImages[i].seriesdesc;
 
+        // 이미지 표시 로직은 이전과 동일
         var tr = document.createElement("tr");
         var td = document.createElement("td");
         var divImg = document.createElement("div");
@@ -78,7 +84,9 @@ function displayImages(images) {
     }
 }
 
-/** To Worklist **/
+/**
+ * To Worklist
+ */
 document.getElementById("list_btn").addEventListener("click", function() {
     window.location.href = "/list";
 })

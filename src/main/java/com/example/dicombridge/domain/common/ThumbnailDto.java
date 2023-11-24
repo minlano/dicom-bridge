@@ -1,4 +1,4 @@
-package com.example.dicombridge.domain.dto.thumbnail;
+package com.example.dicombridge.domain.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

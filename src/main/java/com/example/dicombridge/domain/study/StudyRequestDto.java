@@ -1,4 +1,4 @@
-package com.example.dicombridge.domain.dto.study;
+package com.example.dicombridge.domain.study;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
