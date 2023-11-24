@@ -103,14 +103,11 @@ public class ImageRestController {
         for(int i=0; i<list.size(); i++){
             List<File> image = imageService.getComparisonImage(list.get(i));
             String key = list.get(i); // seriesinsuid
-            jedis.set(key, String.valueOf(image.size())); // 이미지 사이즈는 왜 저장하는가?
             for(int j=0; j<image.size();j++){
                 String uniqueKey = key + ":" + j;
                 File file = image.get(j);
                 byte[] data = Files.readAllBytes(file.toPath());
                 jedis.set(uniqueKey.getBytes(),data);
-//                System.out.println("저장할 때 유니크키 : "+uniqueKey+" 값의 길이" +
-//                        " : "+data.length);
             }
         }
         long end = System.currentTimeMillis();
@@ -125,21 +122,16 @@ public class ImageRestController {
 
     @GetMapping("/getSeriesInsUidIndexComparison/{seriesInsUid}/{order}")
     public ResponseEntity<byte[]> getSeriesInsUidIndexComparison(@PathVariable String seriesInsUid,
-                                                       @PathVariable int order) throws IOException {
+                                                       @PathVariable int order) {
         String key = seriesInsUid;
         Jedis jedis = new Jedis("localhost", 6379);
-        String seriesCountStr = jedis.get(key); // 시리즈 갯수
-        int seriesCount = Integer.parseInt(seriesCountStr);
-        if(order<=seriesCount){
-            String uniqueKey = key + ":" + order;
-            byte[] data = jedis.get(uniqueKey.getBytes());
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", seriesInsUid + ".jpg");
+        String uniqueKey = key + ":" + order;
+        byte[] data = jedis.get(uniqueKey.getBytes());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", seriesInsUid + ".jpg");
 
-            return new ResponseEntity<>(data, headers, HttpStatus.OK);
-        }
-        return null;
+        return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
 
     @GetMapping("/getSeriesInsUidsComparison/{studyinsuidComparison}")
