@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
     imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
     imageDisplay();
 });
-
+let cornerstoneElements = [];
 async function imageDisplay() {
     while (imageContainer.firstChild)
         imageContainer.removeChild(imageContainer.firstChild);
@@ -83,15 +83,19 @@ async function imageDisplay() {
             var div = document.createElement('div');
             var id = `image_${i}_${j}`;
             div.id = id;
+
             div.setAttribute('order', FIRST_ORDER);
             imageContainer.appendChild(div);
-
             createWheelHandler(id, seriesInsUids[index]);
 
             if (index < seriesCount) {
+
                 await viewDicomBySeriesInsUid(id, seriesInsUids[index], FIRST_ORDER);
                 createBoxHandler(id, seriesInsUids[index]);
+
+                activateReset(id);
             }
+
             index++;
         }
     }
@@ -112,6 +116,7 @@ async function imageDisplayBySeriesInsUid(seriesInsUid) {
     createWheelHandler(id, seriesInsUid);
     await viewDicomBySeriesInsUid(id, seriesInsUid, FIRST_ORDER);
     createBoxHandler(id);
+
 }
 
 async function findSeriesInsUidByStudyInsUid() {
@@ -176,6 +181,7 @@ function setMetadata(arrayBuffer) {
         rightTop: manufacturer + '<br>' + manufacturerModel,
         rightBottom: operatorsName
     };
+
     return metadataArray;
 }
 
@@ -239,6 +245,7 @@ function createWheelHandler(id, seriesInsUid) {
     individualDiv.addEventListener('wheel', function(event) {
         handleScroll(event, id, seriesInsUid);
     });
+
 }
 
 async function handleScroll(event, id, seriesInsUid) {
@@ -265,19 +272,6 @@ async function countBySeriesInsUid(seriesInsUid) {
     }
 }
 
-function createBoxHandler(id, seriesInsUid) {
-    let divById = document.getElementById(id);
-    divById.addEventListener('click', function (event) {
-        boxHandler(event, divById);
-    })
-
-    divById.addEventListener('dblclick', function (event) {
-        rowCol.row = 1; rowCol.col = 1;
-        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-        imageDisplayBySeriesInsUid(seriesInsUid);
-    })
-}
 
 function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
@@ -324,11 +318,12 @@ function invertHandler(divById) {
 var selectedDivById = '';
 function createBoxHandler(id, seriesInsUid) {
     let divById = document.getElementById(id);
+
     divById.addEventListener('click', function (event) {
         boxHandler(event, divById);
         invertHandler(divById);
         activateFlipRotate(divById);
-        activateReset(divById);
+        //activateReset(divById);
     })
 
     divById.addEventListener('dblclick', function (event) {

@@ -1,3 +1,5 @@
+
+cornerstoneTools.init();
 var toolbarBtn = document.getElementById("Toolbar_btn");
 const thumbnailBtn = document.getElementById("thumbnail_btn");
 let isThumbnailVisible = true;
@@ -82,15 +84,34 @@ function displayImages(images) {
 document.getElementById("list_btn").addEventListener("click", function() {
     window.location.href = "/list";
 })
-function activateReset() {
-// 모든 이미지 요소 가져오기
-    const elements = document.querySelectorAll('.cornerstone-enabled-image');
-    console.log(elements);
-// 각 이미지에 대해 뷰포트 초기화
-    elements.forEach(element => {
+
+// function activateReset(element){
+//
+//     cornerstone.enable(element);
+//     console.log("element:"+element);
+//     document.getElementById("reset").addEventListener('click', function (e) {
+//         cornerstone.reset(element);
+//     });
+// }
+
+
+
+
+function activateReset(id) {
+    const element = document.getElementById(id);
+    cornerstone.enable(element);
+    console.log("element:", element);
+    document.getElementById('reset').addEventListener('click', function (e) {
+        console.log("리셋");
         cornerstone.reset(element);
+        const toolStateManager = cornerstoneTools.globalImageIdSpecificToolStateManager; // Reset Annotations
+        toolStateManager.clear(element);
+        cornerstone.updateImage(element);
     });
-    //document.getElementById('reset').addEventListener('click', function (e) {
-        //cornerstone.reset();
-    //});
+
 }
+
+
+
+
+

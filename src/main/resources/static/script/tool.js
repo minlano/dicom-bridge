@@ -15,6 +15,7 @@ function activateMagnify() {
 
     cornerstoneTools.addTool(MagnifyTool)
     cornerstoneTools.setToolActive('Magnify', { mouseButtonMask: 1 })
+    cornerstoneTools
 }
 
 function activateZoom() {
@@ -71,7 +72,18 @@ function activateFlipRotate(element) {
         viewport.rotation += angle;
         cornerstone.setViewport(element, viewport);
     }
+
 }
 
+function playClip(id,dataSet){
+    const element = document.getElementById(id);
+    cornerstone.enable(element);
+
+    document.getElementById('play-clip').addEventListener('click', function (e) {
+
+        cornerstoneTools.playClip(element, FrameRate);
+        console.log("frames",FrameRate);
+    });
+}
 
 
