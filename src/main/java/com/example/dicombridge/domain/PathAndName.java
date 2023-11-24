@@ -1,4 +1,4 @@
-package com.example.dicombridge.service;
+package com.example.dicombridge.domain;
 
 import com.example.dicombridge.domain.image.Image;
 

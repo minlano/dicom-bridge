@@ -1,19 +1,16 @@
-package com.example.dicombridge.service.fileRead;
+package com.example.dicombridge.util;
 
 import com.example.dicombridge.domain.image.Image;
-import com.example.dicombridge.service.PathAndName;
-import com.example.dicombridge.service.image.ImageService;
-import com.example.dicombridge.util.ImageConvert;
-import jcifs.smb.SmbException;
+import com.example.dicombridge.domain.PathAndName;
 import jcifs.smb.SmbFileInputStream;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -426,11 +426,11 @@ function comparisonList(response){
     table.innerHTML="";
     table.insertAdjacentHTML('beforeend', comparisonListStr);
 }
+
 function comparisonPrevious(response) {
     let comparisonPreviousListStr = "";
     for (let i = 0; i < response.length; i++) {
         if (pid === response[i].pid) {
-
             comparisonPreviousListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}'>`;
             comparisonPreviousListStr += "<td>" + pname + "</td>";
             comparisonPreviousListStr += "<td>" + response[i].modality + "</td>";
@@ -439,16 +439,11 @@ function comparisonPrevious(response) {
             comparisonPreviousListStr += "<td>" + response[i].seriescnt + "</td>";
             comparisonPreviousListStr += "<td>" + response[i].imagecnt + "</td>";
             comparisonPreviousListStr += "</tr>";
-
         }
-
     }
     const table = document.getElementById("comparisonPreviousTable");
     table.innerHTML="";
     table.insertAdjacentHTML('beforeend', comparisonPreviousListStr);
-
-
-
 }
 
 function closeComparisonModal() {
@@ -475,7 +470,7 @@ $(document).on("dblclick", "tr.subTr", function() {
     comparisonFalse = false;
     // #image-container2의 display: grid, float: right로 변경,
     $("#image-container").css({
-        "width": "47%",
+        "width": "45%",
         "float" : "left"
     });
     $("#image-container2").css({

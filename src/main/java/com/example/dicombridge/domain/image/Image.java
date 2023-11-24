@@ -1,6 +1,6 @@
 package com.example.dicombridge.domain.image;
 
-import com.example.dicombridge.service.PathAndName;
+import com.example.dicombridge.domain.PathAndName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

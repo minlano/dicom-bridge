@@ -1,14 +1,9 @@
 package com.example.dicombridge.util;
 
-import com.example.dicombridge.domain.dto.thumbnail.ThumbnailDto;
-import com.example.dicombridge.domain.image.Image;
-import com.example.dicombridge.service.PathAndName;
+import com.example.dicombridge.domain.PathAndName;
 import jcifs.smb.SmbFileInputStream;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;

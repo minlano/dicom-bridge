@@ -111,6 +111,10 @@ function displayItems(response, startIndex, batchSize, totalItems) {
     }
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 $(document).on("dblclick", "tr.subTr", function() {
     const studyinsuid = $(this).data('studyinsuid');
     const studykey = $(this).data('studykey');
@@ -118,7 +122,13 @@ $(document).on("dblclick", "tr.subTr", function() {
     const pname = $(this).data('pname');
     const pid = $(this).find('.pid').text();
     if (studyinsuid && studykey) { //같은 modal의 studyinsuid 종류별로 찾기
-       saveRedis(modality);
+        let first = Date.now();
+        saveRedis(modality);
+        let second = Date.now();
+        sleep(2000).then(() => {
+            console.log("Redis 이미지 저장 소요 시간 : " + (second-first));
+        });
+        setTimeout(10000);
         $.ajax({
             type: "POST",
             url: "/studies/seriescount/" + studyinsuid,
@@ -353,7 +363,6 @@ function saveRedis(modality){
                 //List<String> retrievedList = Arrays.asList(storedValue.split(","));
                 //키:seriesinsuid 벨류:seriesinsuid의 사진 갯수
                 //키:seriesinsuid:이미지번호.getBytes() 벨류:이미지 바이트
-
             }
             localStorage.setItem("studyinsuidKey", JSON.stringify(data)); // studyinsuid키값 배열
         }

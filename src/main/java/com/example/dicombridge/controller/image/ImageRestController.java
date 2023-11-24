@@ -94,6 +94,8 @@ public class ImageRestController {
     /** Redis **/
     @PostMapping("/saveRedisValSeriesinsuid/{studyinsuid}")
     public List<String> saveRedisValSeriesinsuid (@PathVariable String studyinsuid) throws IOException {
+        long start = System.currentTimeMillis();
+
         List<String> list = imageService.saveRedisValSeriesinsuid(studyinsuid);
         String keyname = studyinsuid;
         Jedis jedis = new Jedis("localhost", 6379);
@@ -101,16 +103,18 @@ public class ImageRestController {
         for(int i=0; i<list.size(); i++){
             List<File> image = imageService.getComparisonImage(list.get(i));
             String key = list.get(i); // seriesinsuid
-            jedis.set(key, String.valueOf(image.size()));
+            jedis.set(key, String.valueOf(image.size())); // 이미지 사이즈는 왜 저장하는가?
             for(int j=0; j<image.size();j++){
                 String uniqueKey = key + ":" + j;
                 File file = image.get(j);
                 byte[] data = Files.readAllBytes(file.toPath());
                 jedis.set(uniqueKey.getBytes(),data);
-                System.out.println("저장할 때 유니크키 : "+uniqueKey+" 값의 길이" +
-                        " : "+data.length);
+//                System.out.println("저장할 때 유니크키 : "+uniqueKey+" 값의 길이" +
+//                        " : "+data.length);
             }
         }
+        long end = System.currentTimeMillis();
+        System.out.println("한 시리즈에 대한 Redis 이미지 저장 소요 시간 : " + (end-start));
         //키:studyinsuid 벨류:seriesinsuid의 종류를 ,로 나눠서 저장
         // 저장된 값을 다시 리스트로 변환
         //List<String> retrievedList = Arrays.asList(storedValue.split(","));
@@ -135,7 +139,6 @@ public class ImageRestController {
 
             return new ResponseEntity<>(data, headers, HttpStatus.OK);
         }
-
         return null;
     }
 
