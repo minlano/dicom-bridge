@@ -5,6 +5,7 @@ const axiosInstance = axios.create({
 /** Grid Config **/
 var rowCol = {row: 2, col: 2};
 var imageContainer = document.getElementById('image-container');
+var imageContainer2 = document.getElementById('image-container2');
 var infoBox = document.getElementById('infoBox');
 var infoContent =  document.getElementById('infoContent');
 
@@ -59,6 +60,7 @@ infoBox.addEventListener(('click'), function(e) {
 
 /** Series Image Load **/
 const FIRST_ORDER = 1;
+const COMPARISON_FIRST_ORDER = 0;
 var seriesCount = localStorage.getItem("seriesCount");
 var studyInsUid = localStorage.getItem("studyinsuid");
 
@@ -265,20 +267,6 @@ async function countBySeriesInsUid(seriesInsUid) {
     }
 }
 
-function createBoxHandler(id, seriesInsUid) {
-    let divById = document.getElementById(id);
-    divById.addEventListener('click', function (event) {
-        boxHandler(event, divById);
-    })
-
-    divById.addEventListener('dblclick', function (event) {
-        rowCol.row = 1; rowCol.col = 1;
-        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-        imageDisplayBySeriesInsUid(seriesInsUid);
-    })
-}
-
 function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
 
@@ -387,27 +375,28 @@ var pid = localStorage.getItem("pid");
 var comparison =  document.getElementById('comparison');
 let comparisonFalse = true;
 comparison.addEventListener(('click'), function(e) {
-    alert(comparisonFalse);
-    if(comparisonFalse ===false){comparisonFalse=true}
-    alert(comparisonFalse);
+    if(comparisonFalse ===false){
+        return handleComparisonTrueChangeEvent()
+    }
+
     //alert(modality);
     $.ajax({
         url: "/comparison-study-list",
         method: "GET",
         data: { modality:modality },
         success: function(response) {
-            console.log("기능 입장");
             comparisonList(response);
 
         },
         error: function() {
-            alert("Error Occur!");
+            alert("Error Occur!!");
         }
     });
 
     $.ajax({
-        url: "/study-list",
+        url: "/study/list",
         success: function(response) {
+            console.log("기능 입장");
             comparisonPrevious(response);
         },
         error: function() {
@@ -415,7 +404,6 @@ comparison.addEventListener(('click'), function(e) {
         }
     });
     openComparisonModal();
-
 })
 
 function comparisonList(response){
@@ -435,6 +423,7 @@ function comparisonList(response){
         comparisonListStr += "</tr>";
     }
     const table = document.getElementById("modalComparisonTable");
+    table.innerHTML="";
     table.insertAdjacentHTML('beforeend', comparisonListStr);
 }
 function comparisonPrevious(response) {
@@ -455,6 +444,7 @@ function comparisonPrevious(response) {
 
     }
     const table = document.getElementById("comparisonPreviousTable");
+    table.innerHTML="";
     table.insertAdjacentHTML('beforeend', comparisonPreviousListStr);
 
 
@@ -480,7 +470,8 @@ function openComparisonModal() {
 
 //비교검사 라인 클릭.
 $(document).on("dblclick", "tr.subTr", function() {
-    alert(comparisonFalse);
+    const studyinsuidComparison = $(this).data('studyinsuid');
+    var index = 0;
     comparisonFalse = false;
     // #image-container2의 display: grid, float: right로 변경,
     $("#image-container").css({
@@ -504,45 +495,99 @@ $(document).on("dblclick", "tr.subTr", function() {
     modal.style.display = "none";
     // 바디 스크롤 허용
     document.body.style.overflow = "auto";
-    // #image-container의 width: 47%, float: left로 변경
 
-    // const studyinsuid = $(this).data('studyinsuid');
-    // const studykey = $(this).data('studykey');
-    // const modality = $(this).data('modality');
-    // const pname = $(this).data('pname');
-    // const pid = $(this).find('.pid').text();
-    // if (studyinsuid && studykey) {
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/studies/seriescount/" + studyinsuid,
-    //         success: function(data) {
-    //             var seriesCount = data; // 시리즈 갯수.
-    //             //페이지 이동 후
-    //             //var seriesCount = localStorage.getItem("seriesCount"); 로 사용
-    //
-    //             // LocalStorage에 데이터 저장
-    //             localStorage.setItem("modality", modality);
-    //             localStorage.setItem("seriesCount", seriesCount);
-    //             localStorage.setItem("studyinsuid", studyinsuid);
-    //             localStorage.setItem("pname", pname);
-    //             localStorage.setItem("pid", pid);
-    //
-    //             // 성공적으로 요청을 받아온 후에 페이지 리디렉션을 수행
-    //             window.location.href = "/viewer/" + studyinsuid + "/" + studykey;
-    //         },
-    //         error: function(xhr, status, error) {
-    //             alert("실패 사유: " + xhr.status);
-    //         }
-    //     });
-    // } else {
-    //     alert("Data not available");
-    // }
+    imageContainer2.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+    imageContainer2.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+    imageDisplay2(studyinsuidComparison);
 });
 
-function handleComparisonTrueChangeEvent() {
+async function imageDisplay2(studyinsuidComparison) {
+    while (imageContainer2.firstChild)
+        imageContainer2.removeChild(imageContainer2.firstChild);
 
+    var index = 0;
+    var seriesInsUids = await findSeriesInsUidByStudyInsUid2(studyinsuidComparison);
+    seriesInsUids.length
+    for (var i = 0; i < rowCol.row; i++) {
+        for (var j = 0; j < rowCol.col; j++) {
+            var div = document.createElement('div');
+            var id = `image2_${i}_${j}`;
+            div.id = id;
+            div.setAttribute('order', FIRST_ORDER);
+            imageContainer2.appendChild(div);
+
+            createWheelHandler2(id, seriesInsUids[index]);
+
+            if (index < seriesInsUids.length) {
+                await viewDicomBySeriesInsUid2(id, seriesInsUids[index], COMPARISON_FIRST_ORDER);
+                createBoxHandler(id, seriesInsUids[index]);
+            }
+            index++;
+        }
+    }
+}
+async function findSeriesInsUidByStudyInsUid2(studyinsuidComparison) {
+    try {
+        let response = await axiosInstance.get("/studies/getSeriesInsUidsComparison/" + studyinsuidComparison);
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function viewDicomBySeriesInsUid2(id, seriesInsUid, order) {
+    try {
+        let response = await axiosInstance.get("/studies/getSeriesInsUidIndexComparison/" + seriesInsUid + "/" + order, { responseType: 'arraybuffer' });
+        if (response.status === 200)
+            await displayDicomImage(response.data, id, seriesInsUid, order);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function handleComparisonTrueChangeEvent() {
+    $("#image-container").css({
+        "width": "",
+        "float": ""
+    });
+    $("#image-container2").css({
+        "display": "none",
+        "float" : "right"
+    });
+    // $("#image-container > *").css({
+    //     "width": "50% !important",
+    //     "height": "50% !important"
+    // });
+    $(".cornerstone-canvas").css({
+        "width": "100%",
+        "height": "100%"
+    });
+    comparisonFalse = true;
 }
 if (!comparisonFalse) {
-    alert(comparisonFalse);
+    alert("comparisonFalse가 아닐 떄"+comparisonFalse);
     handleComparisonFalseChangeEvent();
+}
+
+function createWheelHandler2(id, seriesInsUid) {
+    var individualDiv = document.getElementById(id);
+    individualDiv.addEventListener('wheel', function(event) {
+        handleScroll2(event, id, seriesInsUid);
+    });
+}
+
+async function handleScroll2(event, id, seriesInsUid) {
+    var individualDiv = document.getElementById(id);
+    var order = parseInt(individualDiv.getAttribute('order'), 10) || FIRST_ORDER;
+    let maxOrder = await countBySeriesInsUid(seriesInsUid);
+    let scrollAmount = event.deltaY > 0 ? -1 : 1;
+
+    order += scrollAmount;
+    if (order < FIRST_ORDER || order >= maxOrder)
+        order = FIRST_ORDER;
+
+    individualDiv.setAttribute('order', order);
+    await viewDicomBySeriesInsUid2(id, seriesInsUid, order);
 }

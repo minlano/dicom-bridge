@@ -98,7 +98,6 @@ public class ImageRestController {
         List<String> list = imageService.saveRedisValSeriesinsuid(studyinsuid);
         String keyname = studyinsuid;
         Jedis jedis = new Jedis("localhost", 6379);
-        // 하나의 키-값 쌍 저장(,로 나눠둠)
         jedis.set(keyname, String.join(",", list));
         for(int i=0; i<list.size(); i++){
             List<File> image = imageService.getComparisonImage(list.get(i));
@@ -109,6 +108,8 @@ public class ImageRestController {
                 File file = image.get(j);
                 byte[] data = Files.readAllBytes(file.toPath());
                 jedis.set(uniqueKey.getBytes(),data);
+                System.out.println("저장할 때 유니크키 : "+uniqueKey+" 값의 길이" +
+                        " : "+data.length);
             }
         }
         //키:studyinsuid 벨류:seriesinsuid의 종류를 ,로 나눠서 저장
@@ -117,5 +118,35 @@ public class ImageRestController {
         //키:seriesinsuid 벨류:seriesinsuid의 사진 갯수
         //키:seriesinsuid:이미지번호.getBytes() 벨류:이미지 바이트
         return null;
+    }
+
+    @GetMapping("/getSeriesInsUidIndexComparison/{seriesInsUid}/{order}")
+    public ResponseEntity<byte[]> getSeriesInsUidIndexComparison(@PathVariable String seriesInsUid,
+                                                       @PathVariable int order) throws IOException {
+        String key = seriesInsUid;
+        Jedis jedis = new Jedis("localhost", 6379);
+        String seriesCountStr = jedis.get(key); // 시리즈 갯수
+        int seriesCount = Integer.parseInt(seriesCountStr);
+        if(order<=seriesCount){
+            String uniqueKey = key + ":" + order;
+            byte[] data = jedis.get(uniqueKey.getBytes());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", seriesInsUid + ".jpg");
+
+            return new ResponseEntity<>(data, headers, HttpStatus.OK);
+        }
+
+        return null;
+    }
+
+    @GetMapping("/getSeriesInsUidsComparison/{studyinsuidComparison}")
+    public List<String> getSeriesInsUidsComparison(@PathVariable String studyinsuidComparison) {
+        String keyname = studyinsuidComparison;
+        // Redis 서버에 연결
+        Jedis jedis = new Jedis("localhost", 6379);
+        String storedData = jedis.get(keyname);
+        List<String> retrievedList = Arrays.asList(storedData.split(","));
+        return retrievedList;
     }
 }

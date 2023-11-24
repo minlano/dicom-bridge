@@ -31,8 +31,9 @@ public class StudyRestController {
 
     @GetMapping("/comparison-study-list")
     public List<StudyResponseDto> comparisonList(@RequestParam(name = "modality") String modality){
-        if(modality != null)
-           return studyService.getComparison(modality);
+        if(modality != null) {
+            return studyService.getComparison(modality);
+        }
         return null;
     }
 

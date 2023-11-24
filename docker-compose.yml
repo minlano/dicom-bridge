@@ -7,14 +7,5 @@ services:
     restart: always
     ports:
       - 6379:6379
-  redis_insight:
-    image: redislabs/redisinsight:latest
-    container_name: redis_insight
-    restart: always
-    ports:
-      - 8081:8081
-    volumes:
-      - redis_insight_volume_data:/db
 volumes:
   redis_volume_data:
-  redis_insight_volume_data:

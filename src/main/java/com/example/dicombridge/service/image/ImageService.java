@@ -254,8 +254,7 @@ public class ImageService {
     }
 
     public  List<String> saveRedisValSeriesinsuid(String studyinsuid) {
-        String studyInsUid = studyinsuid;
-        return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyInsUid);
+        return imageRepository.findDistinctSeriesInsUidByStudyinsuid(studyinsuid);
     }
 
     public List<File> getComparisonImage(String seriesinsuid) throws IOException {
