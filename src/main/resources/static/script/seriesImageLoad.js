@@ -89,12 +89,12 @@ async function imageDisplay() {
             div.style.width = "100%";
             div.setAttribute('order', FIRST_ORDER);
             imageContainer.appendChild(div);
-
             createWheelHandler(id, seriesInsUids[index]);
 
             if (index < seriesCount) {
                 await viewDicomBySeriesInsUid(id, seriesInsUids[index], FIRST_ORDER);
                 createBoxHandler(id, seriesInsUids[index]);
+                activateReset(id);
             }
             index++;
         }
@@ -318,7 +318,6 @@ function createBoxHandler(id, seriesInsUid) {
         boxHandler(event, divById);
         invertHandler(divById);
         activateFlipRotate(divById);
-        activateReset(divById);
     })
 
     divById.addEventListener('dblclick', function (event) {

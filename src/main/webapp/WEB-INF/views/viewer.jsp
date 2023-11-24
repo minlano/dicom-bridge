@@ -208,7 +208,7 @@
                     <img src="/images/comparison.07c6226e96a236664e9ac4c5ff078c44.png" alt="비교검사">
                     <div>비교검사</div>
                 </li>
-                <li id="playClip">
+                <li id="play-clip">
                     <img src="/images/play.6f437ab2591fe6a6c319e7e77f01df3e.png" alt="clip">
                     <div>플레이 클립</div>
                 </li>
@@ -219,25 +219,25 @@
                         <div id="toolContent">
                             <ul>
                                 <div onclick="activateMagnify()">
-                                    <img src="/images/magnify.233d000e41a3ad1cf9707d94950e6158.png"></div>
+                                    <img src="/images/magnify.233d000e41a3ad1cf9707d94950e6158.png">돋보기</div>
                                 <div onclick="activateZoom()">
-                                    <img src="/images/zoom.b259899b24b710fa9f31e433cc5b4e7e.png"></div>
+                                    <img src="/images/zoom.b259899b24b710fa9f31e433cc5b4e7e.png">확대축소</div>
                             </ul>
                             <ul>
                                 <div onclick="activateRotate()">
-                                    <img src="/images/rotate.94c480f210401d6f6adabcf17115d1e5.png"></div>
+                                    <img src="/images/rotate.94c480f210401d6f6adabcf17115d1e5.png">회전</div>
                                 <div id="rRotate" onclick="activateFlipRotate()">
-                                    <img src="/images/rightRotate.053a9e994df6b6be59bb0c3d702741e6.png"></div>
+                                    <img src="/images/rightRotate.053a9e994df6b6be59bb0c3d702741e6.png">오른쪽 회전</div>
                             </ul>
                             <ul>
                                 <div id="lRotate" onclick="activateFlipRotate()">
-                                    <img src="/images/leftRotate.8a64a37656bf3e1a3eba2c1d82b98c7d.png"></div>
+                                    <img src="/images/leftRotate.8a64a37656bf3e1a3eba2c1d82b98c7d.png">왼쪽 회전</div>
                                 <div id="hFlip" onclick="activateFlipRotate()">
-                                    <img src="/images/hFlip.80d6a0b3bd0b788f42da409f5d115877.png"></div>
+                                    <img src="/images/hFlip.80d6a0b3bd0b788f42da409f5d115877.png">수평 뒤집기</div>
                             </ul>
                             <ul>
                                 <div id ="vFlip" onclick="activateFlipRotate()">
-                                    <img src="/images/vFlip.1a75c203d6207c94829eb64a96bf952b.png"></div>
+                                    <img src="/images/vFlip.1a75c203d6207c94829eb64a96bf952b.png">수직 대칭 이동</div>
 
                             </ul>
 
@@ -250,7 +250,7 @@
                     <div id="annotationBox">
                         <div id="annotationContent">
                             <ul>
-                                <div onclick="activateAngle()">
+                                <div id="activateAngle" onclick="activateAngle()">
                                     <img src="/images/angle.1e52dac1b36046ae8e3b17f7212d09e3.png">각도</div>
                                 <div onclick="activateArrowAnnotate()">
                                     <img src="/images/arrowAnnotate.3b3e8aff47cbcad5127d6ef07404f4e3.png">화살표</div>
@@ -286,9 +286,10 @@
                         </div>
                     </div>
                 </li>
-                <li>
+                <li id="reset">
                     <img src="/images/refresh.6a8fba2767a97749fd00e3e6f59935f3.png" alt="재설정">
-                    <div id ="reset" onclick="activateReset()">재설정</div>
+                    <div>재설정</div>
+<%--                    <div id ="reset" onclick="activateReset()">재설정</div>--%>
                 </li>
                 <li id="seriesInfoBox" class="info" onclick="showInfoBox()">
                     <img class="info" src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png">
@@ -333,10 +334,6 @@
                         </div>
                     </div>
                 </li>
-<%--                <li>--%>
-<%--                    <img src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png" alt="Layout">--%>
-<%--                    <div>이미지레이아웃</div>--%>
-<%--                </li>--%>
             </ul>
         </aside>
         <section id="thumbnail-container" style="display: none">
