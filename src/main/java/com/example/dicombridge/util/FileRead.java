@@ -61,9 +61,9 @@ public class FileRead<T> implements Runnable {
     }
 
     public <T extends PathAndName> String getFileString(T t) throws IOException {
-        SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(t);
 
         // 멀티스레드 적용 구간
+        SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(t);
         byte[] byteArray = imageConvert.convert2ByteArray(smbFileInputStream);
         File dcmFile = imageConvert.convert2DcmFile(byteArray);
         String imgString = imageConvert.convertDcm2Jpg(dcmFile);

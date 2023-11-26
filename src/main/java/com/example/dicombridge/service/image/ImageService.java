@@ -151,7 +151,6 @@ public class ImageService {
         Map<String, ThumbnailWithFileDto> thumbnailWithFileDtoMap = new HashMap<>();
         FileRead<Image> fileRead = new FileRead(imageConvert);
 
-//        long start = System.currentTimeMillis();
         for (String fname : thumbnailDtoMap.keySet()) {
             ThumbnailDto thumbnailDto = thumbnailDtoMap.get(fname);
             ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto(thumbnailDto);
@@ -161,9 +160,6 @@ public class ImageService {
             thumbnailWithFileDto.setImage(dcmByte);
             thumbnailWithFileDtoMap.put(fname, thumbnailWithFileDto);
         }
-//        long end = System.currentTimeMillis();
-//        System.out.println("이미지 변환 시간 : " + (end-start));
-
         return thumbnailWithFileDtoMap;
     }
 
