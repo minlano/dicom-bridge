@@ -173,17 +173,18 @@ $(document).on("dblclick", "tr.subTr", function() {
 /** Report **/
 $(document).ready(function() {
     function setReportInput(reportstatus) { // reportstatus에 따라 입력될 값을 설정하는 함수
+        console.log(reportstatus);
         const adminInput = "administrator";
         const empty = "";
 
         // 먼저 text3, text5, text6 값 비워주기
         $("#text3, #text5, #text6").val(empty);
 
-        if (reportstatus === 3) {
+        if (reportstatus === 6) {
             $("#text3").val(adminInput);
         } else if (reportstatus === 5) {
             $("#text5").val(adminInput);
-        } else if (reportstatus === 6) {
+        } else if (reportstatus === 3) {
             $("#text6").val(empty);
         }
     }
