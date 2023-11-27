@@ -225,7 +225,7 @@ section#thumbnail-container {
 	margin: 0px;
 	padding: 0px;
 	position: relative;
-	z-index: 10000;
+	z-index: 9999;
 	color: white;
 	background-color: rgba(0, 0, 0, 0);
 }
@@ -695,14 +695,17 @@ section#image-container {
 	background-color: darkolivegreen;
 }
 
-
+#image-container {
+	overflow: auto;
+}
 #image-container2 {
+	overflow: auto;
 	width:45%;
 	height: calc(100% - 87px);
 	display: none;
 	align-items: center; /* 수직 가운데 정렬 */
 	justify-content: center; /* 수평 가운데 정렬 */
-	background-color: #2B2B2B;
+	background-color: #2A394B;
 	margin: 0px 40px 40px 1px;
 
 	float:right;
