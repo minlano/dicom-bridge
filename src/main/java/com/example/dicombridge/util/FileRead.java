@@ -1,13 +1,11 @@
 package com.example.dicombridge.util;
 
+import com.example.dicombridge.domain.dto.thumbnail.ThumbnailDto;
+import com.example.dicombridge.domain.dto.thumbnail.ThumbnailWithFileDto;
 import com.example.dicombridge.domain.image.Image;
 import com.example.dicombridge.domain.PathAndName;
 import jcifs.smb.SmbFileInputStream;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -15,12 +13,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(force = true)
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class FileRead<T> implements Runnable {
     Map<String, byte[]> baMap = new HashMap<>();
     Map<String, T> baosMap = new HashMap<>();
@@ -28,16 +27,8 @@ public class FileRead<T> implements Runnable {
 
     private final ImageConvert imageConvert;
 
-    private static final int NUMBER_OF_THREADS = 10;
-    private static Executor executor;
-
-    @PostConstruct
-    private void initialize() {
-        createThread();
-    }
-
-    public static void createThread() {
-        executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    public FileRead(ImageConvert imageConvert) {
+        this.imageConvert = imageConvert;
     }
 
     @Override
@@ -61,15 +52,29 @@ public class FileRead<T> implements Runnable {
     }
 
     public <T extends PathAndName> String getFileString(T t) throws IOException {
-
-        // 멀티스레드 적용 구간
         SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(t);
         byte[] byteArray = imageConvert.convert2ByteArray(smbFileInputStream);
         File dcmFile = imageConvert.convert2DcmFile(byteArray);
         String imgString = imageConvert.convertDcm2Jpg(dcmFile);
-        // 멀티스레드 적용 구간
-
         return imgString;
+    }
+
+    public Callable<ThumbnailWithFileDto> getFileStringThread(String fname,
+                                              ThumbnailDto thumbnailDto) {
+        Callable<ThumbnailWithFileDto> task = () -> {
+            ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto(thumbnailDto);
+            SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(thumbnailDto);
+            byte[] byteArray = imageConvert.convert2ByteArray(smbFileInputStream);
+            File dcmFile = imageConvert.convert2DcmFile(byteArray);
+            String imgString = imageConvert.convertDcm2Jpg(dcmFile);
+
+            thumbnailWithFileDto.setImage(imgString);
+
+            // System.out.println("현재 Thread 이름 : " + Thread.currentThread().getName());
+            return thumbnailWithFileDto;
+        };
+
+        return task;
     }
 
     private void getBaos(Map<String, Image> map) throws IOException {
