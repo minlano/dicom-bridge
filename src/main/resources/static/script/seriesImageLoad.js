@@ -3,11 +3,13 @@ const axiosInstance = axios.create({
 });
 
 /** Grid Config **/
+var pastRowCol = {row:2, col:2};
 var rowCol = {row: 2, col: 2};
 var imageContainer = document.getElementById('image-container');
 var imageContainer2 = document.getElementById('image-container2');
 var infoBox = document.getElementById('infoBox');
 var infoContent = document.getElementById('infoContent');
+var seriesInsUids;
 
 let studyinsuidComparison;
 
@@ -33,26 +35,22 @@ function imageLayout(X, Y) {
     });
 
     var boxSize = 22;
-    var X_GAP = 3;
-    var Y_GAP = 3;
-    var row;
-    var col;
-    for (var i = 0; i < 5; i++) {
-        if ((boxSize * i) + X_GAP < X) row = i + 1;
-        if ((boxSize * i) + Y_GAP < Y) col = i + 1;
+    var X_GAP = 3; var Y_GAP = 3;
+    var row; var col;
+    for(var i= 0; i < 5; i++) {
+        if((boxSize * i) + X_GAP < X) row = i + 1;
+        if((boxSize * i) + Y_GAP < Y) col = i + 1;
     }
 
-    var ulRow;
-    var divRow;
-    for (var i = 0; i < row; i++) {
+    var ulRow; var divRow;
+    for(var i = 0; i < row; i++) {
         ulRow = infoContent.querySelectorAll('ul')[i];
-        for (var j = 0; j < col; j++) {
+        for(var j = 0; j < col; j++) {
             divRow = ulRow.querySelectorAll('div')[j];
             divRow.querySelector('img').src = '/images/filled_box.png';
         }
     }
-    rowCol.col = col;
-    rowCol.row = row;
+    rowCol.col = col; rowCol.row = row;
 }
 
 infoBox.addEventListener(('click'), function (e) {
@@ -135,6 +133,15 @@ async function imageDisplayBySeriesInsUid(seriesInsUid) {
     createWheelHandler(id, seriesInsUid);
     await viewDicomBySeriesInsUid(id, seriesInsUid, FIRST_ORDER);
     createBoxHandler(id);
+
+    div.addEventListener('dblclick', function(event) {
+
+        imageContainer.style.gridTemplateRows = `repeat(${pastRowCol.row}, 1fr)`;
+        imageContainer.style.gridTemplateColumns = `repeat(${pastRowCol.col}, 1fr)`;
+        rowCol.row=pastRowCol.row;
+        rowCol.col=pastRowCol.col;
+        imageDisplay();
+    });
 }
 
 async function findSeriesInsUidByStudyInsUid() {
@@ -335,12 +342,16 @@ function createBoxHandler(id, seriesInsUid) {
         activateFlipRotate(divById);
     })
 
-    divById.addEventListener('dblclick', function (event) {
-        rowCol.row = 1; rowCol.col = 1;
-        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-        imageDisplayBySeriesInsUid(seriesInsUid);
-    })
+    if (rowCol.row !== 1 || rowCol.col !== 1){
+        divById.addEventListener('dblclick', function (event) {
+            pastRowCol.col = rowCol.col;
+            pastRowCol.row = rowCol.row;
+            rowCol.row = 1; rowCol.col = 1;
+            imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+            imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+            imageDisplayBySeriesInsUid(seriesInsUid);
+        })
+    }
 }
 
 /* Window Level */
@@ -403,7 +414,6 @@ comparison.addEventListener(('click'), function (e) {
         data: {modality: modality},
         success: function (response) {
             comparisonList(response);
-
         },
         error: function () {
             alert("Error Occur!!");
@@ -546,8 +556,8 @@ function ComparisonChange(){
     // 바디 스크롤 허용
     document.body.style.overflow = "auto";
 
-    imageContainer2.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-    imageContainer2.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+    imageContainer2.style.gridTemplateRows = `repeat(2, 1fr)`;
+    imageContainer2.style.gridTemplateColumns = `repeat(2, 1fr)`;
     imageDisplayComparison(studyinsuidComparison);
 
     $(".cornerstone-canvas").css({
@@ -569,14 +579,15 @@ async function imageDisplayComparison(studyinsuidComparison) {
         imageContainer2.removeChild(imageContainer2.firstChild);
 
     var index = 0;
-    var seriesInsUids = await findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison);
+    seriesInsUids = await findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison);
     seriesInsUids.length
     for (var i = 0; i < rowCol.row; i++) {
         for (var j = 0; j < rowCol.col; j++) {
             var div = document.createElement('div');
             var id = `image2_${i}_${j}`;
             div.id = id;
-            div.style.height = "100%";
+            div.style.height = '100%';
+            div.style.width = '100%';
 
             div.setAttribute('order', FIRST_ORDER);
             imageContainer2.appendChild(div);

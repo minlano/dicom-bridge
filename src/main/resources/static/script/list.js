@@ -2,6 +2,9 @@ let startIndex = 0;
 const batchSize = 10;
 let totalItems = 0;
 
+document.getElementById("title_btn").addEventListener("click", function() {
+    window.location.href = "/list";
+})
 
 $(document).on("click", "#search", function () {
 
