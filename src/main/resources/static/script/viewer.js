@@ -19,6 +19,10 @@ thumbnailBtn.addEventListener("click", () => {
         tbody.innerHTML = "";
     }
     isThumbnailVisible = !isThumbnailVisible;
+    ComparisonCss();
+    ComparisonChange();
+    ComparisonInnerCss();
+
 });
 
 toolbarBtn.addEventListener("click", () => {

@@ -7,18 +7,20 @@ var rowCol = {row: 2, col: 2};
 var imageContainer = document.getElementById('image-container');
 var imageContainer2 = document.getElementById('image-container2');
 var infoBox = document.getElementById('infoBox');
-var infoContent =  document.getElementById('infoContent');
+var infoContent = document.getElementById('infoContent');
+
+let studyinsuidComparison;
 
 function showInfoBox() {
     infoBox.style.display = 'inline-block';
 }
 
 window.addEventListener('click', function (e) {
-    if(e.target.className !== 'info')
+    if (e.target.className !== 'info')
         infoBox.style.display = 'none';
 })
 
-infoBox.addEventListener(('mousemove'), function(e) {
+infoBox.addEventListener(('mousemove'), function (e) {
     var X = e.clientY - infoBox.getBoundingClientRect().top;
     var Y = e.clientX - infoBox.getBoundingClientRect().left;
     imageLayout(X, Y);
@@ -26,36 +28,51 @@ infoBox.addEventListener(('mousemove'), function(e) {
 
 function imageLayout(X, Y) {
     var boxImg = infoContent.querySelectorAll('ul div img');
-    boxImg.forEach(function(img) {
+    boxImg.forEach(function (img) {
         img.src = '/images/blank_box.png';
     });
 
     var boxSize = 22;
-    var X_GAP = 3; var Y_GAP = 3;
-    var row; var col;
-    for(var i= 0; i < 5; i++) {
-        if((boxSize * i) + X_GAP < X) row = i + 1;
-        if((boxSize * i) + Y_GAP < Y) col = i + 1;
+    var X_GAP = 3;
+    var Y_GAP = 3;
+    var row;
+    var col;
+    for (var i = 0; i < 5; i++) {
+        if ((boxSize * i) + X_GAP < X) row = i + 1;
+        if ((boxSize * i) + Y_GAP < Y) col = i + 1;
     }
 
-    var ulRow; var divRow;
-    for(var i = 0; i < row; i++) {
+    var ulRow;
+    var divRow;
+    for (var i = 0; i < row; i++) {
         ulRow = infoContent.querySelectorAll('ul')[i];
-        for(var j = 0; j < col; j++) {
+        for (var j = 0; j < col; j++) {
             divRow = ulRow.querySelectorAll('div')[j];
             divRow.querySelector('img').src = '/images/filled_box.png';
         }
     }
-    rowCol.col = col; rowCol.row = row;
+    rowCol.col = col;
+    rowCol.row = row;
 }
 
-infoBox.addEventListener(('click'), function(e) {
-    e.stopPropagation();
-    infoBox.style.display = 'none';
+infoBox.addEventListener(('click'), function (e) {
+    const isChecked = document.querySelector('#image-container2 .checked');
 
-    imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-    imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-    imageDisplay();
+    if (isChecked) {
+        e.stopPropagation();
+        infoBox.style.display = 'none';
+
+        imageContainer2.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+        imageContainer2.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+        imageDisplayComparison(studyinsuidComparison);
+    } else {
+        e.stopPropagation();
+        infoBox.style.display = 'none';
+
+        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+        imageDisplay();
+    }
 })
 
 /** Series Image Load **/
@@ -67,9 +84,8 @@ var studyInsUid = localStorage.getItem("studyinsuid");
 const studyinsuidKey = JSON.parse(localStorage.getItem("studyinsuidKey"));
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
 cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
-// cornerstoneWADOImageLoader.external.dicomParser = cornerstoneDicomParserUTF8;
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
     imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
     imageDisplay();
@@ -87,7 +103,9 @@ async function imageDisplay() {
             var id = `image_${i}_${j}`;
             div.id = id;
             div.style.height = "100%";
+            div.style.maxWidth ="100%";
             div.style.width = "100%";
+            div.style.maxHeight ="100%";
             div.setAttribute('order', FIRST_ORDER);
             imageContainer.appendChild(div);
             createWheelHandler(id, seriesInsUids[index]);
@@ -132,7 +150,7 @@ async function findSeriesInsUidByStudyInsUid() {
 
 async function viewDicomBySeriesInsUid(id, seriesInsUid, order) {
     try {
-        let response = await axiosInstance.get("/studies/getSeriesInsUidIndex/" + seriesInsUid + "/" + order, { responseType: 'arraybuffer' });
+        let response = await axiosInstance.get("/studies/getSeriesInsUidIndex/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
         if (response.status === 200)
             await displayDicomImage(response.data, id, seriesInsUid, order);
     } catch (error) {
@@ -151,7 +169,7 @@ async function displayDicomImage(arrayBuffer, divId, seriesInsUid) {
         existingDiv.setAttribute('data-cornerstone-enabled', 'true');
     }
 
-    if(existingDiv){
+    if (existingDiv) {
         cornerstone.loadImage(imageData).then(async image => {
             await cornerstone.displayImage(existingDiv, image);
             await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid);
@@ -167,7 +185,6 @@ function setMetadata(arrayBuffer) {
 
     const patientID = dataSet.string('x00100020');
     const patientName = dataSet.string('x00100010');
-
     const patientBirth = dataSet.string('x00100030');
     const seriesNum = dataSet.string('x00200011');
     const instanceNum = dataSet.string('x00200013');
@@ -189,9 +206,9 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     let prevMetadataLeftTop = document.getElementById(`${seriesInsUid}_leftTop`);
     let prevMetadataRightTop = document.getElementById(`${seriesInsUid}_rightTop`);
     let prevMetadataRightBottom = document.getElementById(`${seriesInsUid}_rightBottom`);
-    if(prevMetadataLeftTop) prevMetadataLeftTop.remove();
-    if(prevMetadataRightTop) prevMetadataRightTop.remove();
-    if(prevMetadataRightBottom) prevMetadataRightBottom.remove();
+    if (prevMetadataLeftTop) prevMetadataLeftTop.remove();
+    if (prevMetadataRightTop) prevMetadataRightTop.remove();
+    if (prevMetadataRightBottom) prevMetadataRightBottom.remove();
 
     let metadataLeftTop = document.createElement('div');
     metadataLeftTop.id = `${seriesInsUid}_leftTop`;
@@ -238,7 +255,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
 
 function createWheelHandler(id, seriesInsUid) {
     var individualDiv = document.getElementById(id);
-    individualDiv.addEventListener('wheel', function(event) {
+    individualDiv.addEventListener('wheel', function (event) {
         handleScroll(event, id, seriesInsUid);
     });
 }
@@ -270,7 +287,7 @@ async function countBySeriesInsUid(seriesInsUid) {
 function boxHandler(event, divById) {
     let divCollectionByClass = document.getElementsByClassName('checked');
 
-    for(let div of divCollectionByClass) {
+    for (let div of divCollectionByClass) {
         div.style.outline = '';
         div.className = 'unChecked';
     }
@@ -291,11 +308,11 @@ function invertImageWithWWWC(divById) {
     cornerstone.setViewport(selectedDiv, viewport);
 }
 
-invertButton.addEventListener('click', function() {
-    if(selectedDivById.getAttribute('invert') === 'unchecked') {
+invertButton.addEventListener('click', function () {
+    if (selectedDivById.getAttribute('invert') === 'unchecked') {
         selectedDivById.setAttribute('invert', 'checked');
         invertCheck = true;
-    }else {
+    } else {
         selectedDivById.setAttribute('invert', 'unchecked');
         invertCheck = false;
     }
@@ -304,8 +321,8 @@ invertButton.addEventListener('click', function() {
 
 function invertHandler(divById) {
     selectedDivById = divById;
-    var invertVal =  divById.getAttribute('invert');
-    if(invertVal === null)
+    var invertVal = divById.getAttribute('invert');
+    if (invertVal === null)
         divById.setAttribute('invert', 'unchecked'); // checked
 }
 
@@ -332,36 +349,36 @@ const moveBtn = document.getElementById('move');
 let isPanToolActive = false;
 let isWwwcToolActive = false;
 
-windowLvBtn.addEventListener('click', function() {
+windowLvBtn.addEventListener('click', function () {
     windowLevel();
 });
-moveBtn.addEventListener('click', function() {
+moveBtn.addEventListener('click', function () {
     movement_pan();
 });
 
-function windowLevel(){
+function windowLevel() {
     cornerstoneTools.init();
 
     const WwwcTool = cornerstoneTools.WwwcTool;
 
-    if (isWwwcToolActive){
+    if (isWwwcToolActive) {
         cornerstoneTools.setToolDisabled('Wwwc');
-        windowLvBtn.style.backgroundColor ="";
-    }else {
+        windowLvBtn.style.backgroundColor = "";
+    } else {
         cornerstoneTools.addTool(WwwcTool);
         cornerstoneTools.setToolActive('Wwwc', {mouseButtonMask: 1});
-        windowLvBtn.style.backgroundColor ="red";
+        windowLvBtn.style.backgroundColor = "red";
     }
     isWwwcToolActive = !isWwwcToolActive;
 }
 
-function movement_pan(){
+function movement_pan() {
     cornerstoneTools.init();
     const PanTool = cornerstoneTools.PanTool;
 
     if (isPanToolActive) {
         cornerstoneTools.setToolDisabled('Pan');
-    }else{
+    } else {
         cornerstoneTools.addTool(PanTool);
         cornerstoneTools.setToolActive('Pan', {mouseButtonMask: 1});
     }
@@ -372,10 +389,10 @@ function movement_pan(){
 var modality = localStorage.getItem("modality");
 var pname = localStorage.getItem("pname");
 var pid = localStorage.getItem("pid");
-var comparison =  document.getElementById('comparison');
+var comparison = document.getElementById('comparison');
 let comparisonFalse = true;
-comparison.addEventListener(('click'), function(e) {
-    if(comparisonFalse ===false){
+comparison.addEventListener(('click'), function (e) {
+    if (comparisonFalse === false) {
         return handleComparisonTrueChangeEvent()
     }
 
@@ -383,51 +400,72 @@ comparison.addEventListener(('click'), function(e) {
     $.ajax({
         url: "/comparison-study-list",
         method: "GET",
-        data: { modality:modality },
-        success: function(response) {
+        data: {modality: modality},
+        success: function (response) {
             comparisonList(response);
 
         },
-        error: function() {
+        error: function () {
             alert("Error Occur!!");
         }
     });
 
     $.ajax({
         url: "/study/list",
-        success: function(response) {
+        success: function (response) {
             comparisonPrevious(response);
         },
-        error: function() {
+        error: function () {
             alert("Error Occur!");
         }
     });
     openComparisonModal();
 })
 
-function comparisonList(response){
+function comparisonList(response) {
     //modal창에 출력
     let comparisonListStr = "";
-    for(let i=0; i< response.length; i++){
+    comparisonListStr += `
+        <tr id="trTitle">
+            <th>번호</th>
+            <th>환자 아이디</th>
+            <th>환자 이름</th>
+            <th>검사장비</th>
+            <th class="study">검사설명</th>
+            <th>검사일시</th>
+            <th>시리즈</th>
+            <th>이미지</th>
+            <th>Verify</th>
+        </tr>`;
+    for (let i = 0; i < response.length; i++) {
         comparisonListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}' data-modality='${response[i].modality}'>`;
-        comparisonListStr +=     "<td>" + (i+1) + "</td>";
-        comparisonListStr +=     "<td class='pid'>" + response[i].pid + "</td>";
-        comparisonListStr +=     "<td class='pname'>" + response[i].pname + "</td>";
-        comparisonListStr +=     "<td>" + response[i].modality + "</td>";
-        comparisonListStr +=     "<td class='studyList'>" + response[i].studydesc + "</td>";
-        comparisonListStr +=     "<td>" + response[i].studydate + "</td>";
-        comparisonListStr +=     "<td>" + response[i].seriescnt + "</td>";
-        comparisonListStr +=     "<td>" + response[i].imagecnt + "</td>";
-        comparisonListStr +=     "<td>" + response[i].verifyflag + "</td>";
+        comparisonListStr += "<td>" + (i + 1) + "</td>";
+        comparisonListStr += "<td class='pid'>" + response[i].pid + "</td>";
+        comparisonListStr += "<td class='pname'>" + response[i].pname + "</td>";
+        comparisonListStr += "<td>" + response[i].modality + "</td>";
+        comparisonListStr += "<td class='studyList'>" + response[i].studydesc + "</td>";
+        comparisonListStr += "<td>" + response[i].studydate + "</td>";
+        comparisonListStr += "<td>" + response[i].seriescnt + "</td>";
+        comparisonListStr += "<td>" + response[i].imagecnt + "</td>";
+        comparisonListStr += "<td>" + response[i].verifyflag + "</td>";
         comparisonListStr += "</tr>";
     }
     const table = document.getElementById("modalComparisonTable");
-    table.innerHTML="";
+    table.innerHTML = "";
     table.insertAdjacentHTML('beforeend', comparisonListStr);
 }
 
 function comparisonPrevious(response) {
     let comparisonPreviousListStr = "";
+    comparisonPreviousListStr += `
+                            <tr>
+                                <th>환자이름</th>
+                                <th>검사장비</th>
+                                <th class="study">검사설명</th>
+                                <th>검사일시</th>
+                                <th>시리즈</th>
+                                <th>이미지</th>
+                            </tr>`;
     for (let i = 0; i < response.length; i++) {
         if (pid === response[i].pid) {
             comparisonPreviousListStr += `<tr class='subTr' data-studyinsuid='${response[i].studyinsuid}' data-studykey='${response[i].studykey}'>`;
@@ -441,7 +479,7 @@ function comparisonPrevious(response) {
         }
     }
     const table = document.getElementById("comparisonPreviousTable");
-    table.innerHTML="";
+    table.innerHTML = "";
     table.insertAdjacentHTML('beforeend', comparisonPreviousListStr);
 }
 
@@ -453,6 +491,7 @@ function closeComparisonModal() {
     // 바디 스크롤 허용
     document.body.style.overflow = "auto";
 }
+
 function openComparisonModal() {
     // 모달 열기
     var comparisonModal = document.getElementById("comparisonModal");
@@ -462,20 +501,44 @@ function openComparisonModal() {
     document.body.style.overflow = "hidden";
 }
 
-//비교검사 라인 클릭.
-$(document).on("dblclick", "tr.subTr", function() {
-    const studyinsuidComparison = $(this).data('studyinsuid');
+function ComparisonCss() {
+
+    if (!comparisonFalse) {
+        if (isThumbnailVisible) {
+            $("#image-container").css({
+                "width": "45%",
+                "float": "left"
+            });
+            $("#image-container2").css({
+                "width": "45%",
+                "display": "grid",
+                "float": "right"
+            });
+
+        } else {
+            $("#image-container").css({
+                "width": "40%",
+                "float": "left"
+            });
+            $("#image-container2").css({
+                "width": "40%",
+                "display": "grid",
+                "float": "right"
+            });
+
+        }
+    }
+}
+
+function ComparisonInnerCss(){
+    $(".cornerstone-canvas").css({
+        "width": "40%",
+    });
+}
+
+function ComparisonChange(){
     var index = 0;
-    comparisonFalse = false;
-    // #image-container2의 display: grid, float: right로 변경,
-    $("#image-container").css({
-        "width": "45%",
-        "float" : "left"
-    });
-    $("#image-container2").css({
-        "display": "grid",
-        "float" : "right"
-    });
+    imageDisplay();
 
     // 모달 닫기
     var modal = document.getElementById("comparisonModal");
@@ -491,7 +554,14 @@ $(document).on("dblclick", "tr.subTr", function() {
         "width": "100%",
         "height": "100%"
     });
+}
 
+//비교검사 라인 클릭.
+$(document).on("dblclick", "tr.subTr", function () {
+    comparisonFalse = false;
+    ComparisonCss();
+    studyinsuidComparison = $(this).data('studyinsuid');
+    ComparisonChange()
 });
 
 async function imageDisplayComparison(studyinsuidComparison) {
@@ -506,8 +576,7 @@ async function imageDisplayComparison(studyinsuidComparison) {
             var div = document.createElement('div');
             var id = `image2_${i}_${j}`;
             div.id = id;
-            div.style.height="100%";
-            div.style.width="100%";
+            div.style.height = "100%";
 
             div.setAttribute('order', FIRST_ORDER);
             imageContainer2.appendChild(div);
@@ -522,6 +591,7 @@ async function imageDisplayComparison(studyinsuidComparison) {
         }
     }
 }
+
 async function findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison) {
     try {
         let response = await axiosInstance.get("/studies/getSeriesInsUidsComparison/" + studyinsuidComparison);
@@ -535,7 +605,7 @@ async function findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison) {
 
 async function viewDicomBySeriesInsUidComparison(id, seriesInsUid, order) {
     try {
-        let response = await axiosInstance.get("/studies/getSeriesInsUidIndexComparison/" + seriesInsUid + "/" + order, { responseType: 'arraybuffer' });
+        let response = await axiosInstance.get("/studies/getSeriesInsUidIndexComparison/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
         if (response.status === 200)
             await displayDicomImage(response.data, id, seriesInsUid, order);
     } catch (error) {
@@ -550,7 +620,7 @@ function handleComparisonTrueChangeEvent() {
     });
     $("#image-container2").css({
         "display": "none",
-        "float" : "right"
+        "float": "right"
     });
     $(".cornerstone-canvas").css({
         "width": "100%",
@@ -558,14 +628,15 @@ function handleComparisonTrueChangeEvent() {
     });
     comparisonFalse = true;
 }
+
 if (!comparisonFalse) {
-    alert("comparisonFalse가 아닐 떄"+comparisonFalse);
+    alert("comparisonFalse가 아닐 떄" + comparisonFalse);
     handleComparisonFalseChangeEvent();
 }
 
 function createWheelHandlerComparison(id, seriesInsUid) {
     var individualDiv = document.getElementById(id);
-    individualDiv.addEventListener('wheel', function(event) {
+    individualDiv.addEventListener('wheel', function (event) {
         handleScrollComparison(event, id, seriesInsUid);
     });
 }
@@ -582,4 +653,68 @@ async function handleScrollComparison(event, id, seriesInsUid) {
 
     individualDiv.setAttribute('order', order);
     await viewDicomBySeriesInsUidComparison(id, seriesInsUid, order);
+}
+
+let startIndex = 0;
+const batchSize = 10;
+let totalItems = 0;
+
+
+$(document).on("click", "#search", function () {
+
+    $('#mainTable tr:gt(0)').remove(); // 첫번째 tr 제외하고 삭제
+    $('#previousTable tr:gt(0)').remove();
+    startIndex = 0; // 검색 버튼 클릭 시 startIndex 초기화
+
+    const pid = $('#Pid-input').val();
+    const pname = $('#Pname-input').val();
+    const reportstatus = $('#category').val();
+
+    fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize);
+
+});
+
+$(document).on("click", "#searchAll", function () {
+
+    $('#mainTable tr:gt(0)').remove(); // 첫번째 tr 제외하고 삭제
+    $('#previousTable tr:gt(0)').remove();
+    startIndex = 0; // 검색 버튼 클릭 시 startIndex 초기화
+    previousItems();
+
+    $('#Pid-input').val('');
+    $('#Pname-input').val('');
+    $('#category').val('');
+
+    fetchDataSomehow('', '', '', startIndex, batchSize);
+
+});
+
+/** Enter **/
+$(document).on("keypress", function (event) {
+    if (event.which === 13 || event.keyCode === 13) {
+        $('#modalComparisonTable tr:gt(0)').remove(); // 첫번째 tr 제외하고 삭제
+        startIndex = 0; // 검색 버튼 클릭 시 startIndex 초기화
+
+        const pid = $('#Pid-input').val();
+        const pname = $('#Pname-input').val();
+        const reportstatus = $('#category').val();
+
+        fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize);
+    }
+});
+
+function fetchDataSomehow(pid, pname, reportstatus, startIndex, batchSize) {
+    $.ajax({
+        url: "/search/list",
+        method: "GET",
+        data: {pid: pid, pname: pname, reportstatus: reportstatus, startIndex: startIndex, batchSize: batchSize},
+        success: function (response) {
+            totalItems = response.length; // 전체 아이템 수
+            $('#studyCount').text(totalItems);
+            comparisonList(response);
+        },
+        error: function () {
+            alert("Error fetching reportstatus");
+        }
+    });
 }
