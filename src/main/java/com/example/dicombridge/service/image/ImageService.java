@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -58,18 +59,23 @@ public class ImageService {
     private CIFSContext cifsContext;
 
     // Thread
-    private static final int NUMBER_OF_THREADS = 5;
-//    private static ExecutorService executor;
+    private static final int NUMBER_OF_THREADS = 4;
+    private static ExecutorService executor;
 
     @PostConstruct
     private void initialize() {
         storageConnection();
-//        createThread();
+        createThread();
     }
 
-//    public static void createThread() {
-//        executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-//    }
+    @PreDestroy
+    private void cleanup() {
+        executor.shutdown();
+    }
+
+    public static void createThread() {
+        executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    }
 
     private void storageConnection() {
         Properties properties = new Properties();
@@ -169,13 +175,12 @@ public class ImageService {
         }
 
         // executor.invokeAll(tasks);
-        ExecutorService executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
         Map<String, ThumbnailWithFileDto> thumbnailWithFileDtoMap = new ConcurrentHashMap<>();
         for(Callable<ThumbnailWithFileDto> task : tasks) {
             Future<ThumbnailWithFileDto> future = executor.submit(task);
             thumbnailWithFileDtoMap.put(future.get().getFname(), future.get());
         }
-        executor.shutdown();
+//        executor.shutdown();
         long end = System.currentTimeMillis();
         System.out.println("이미지 변환 총 시간 : " + (end-start));
         return thumbnailWithFileDtoMap;

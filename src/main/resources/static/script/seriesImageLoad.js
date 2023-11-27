@@ -67,6 +67,7 @@ var studyInsUid = localStorage.getItem("studyinsuid");
 const studyinsuidKey = JSON.parse(localStorage.getItem("studyinsuidKey"));
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
 cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
+// cornerstoneWADOImageLoader.external.dicomParser = cornerstoneDicomParserUTF8;
 
 document.addEventListener("DOMContentLoaded", function() {
     imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
@@ -163,6 +164,7 @@ async function displayDicomImage(arrayBuffer, divId, seriesInsUid) {
 function setMetadata(arrayBuffer) {
     const byteArray = new Uint8Array(arrayBuffer);
     const dataSet = dicomParser.parseDicom(byteArray);
+
     const patientID = dataSet.string('x00100020');
     const patientName = dataSet.string('x00100010');
 
@@ -191,9 +193,6 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     if(prevMetadataRightTop) prevMetadataRightTop.remove();
     if(prevMetadataRightBottom) prevMetadataRightBottom.remove();
 
-    let parentWidth = existingDiv.offsetWidth;
-    let parentHeight = existingDiv.offsetHeight;
-
     let metadataLeftTop = document.createElement('div');
     metadataLeftTop.id = `${seriesInsUid}_leftTop`;
 
@@ -213,8 +212,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
 
     metadataRightTop.style.position = 'absolute';
     metadataRightTop.style.top = '0px';
-    // metadataRightTop.style.left = '300px';
-    metadataRightTop.style.left = `${parentWidth-300}px`;
+    metadataRightTop.style.right = '0px';
     metadataRightTop.style.backgroundColor = 'rgba(0, 0, 0, 0)';
     metadataRightTop.style.color = 'white';
     metadataRightTop.style.padding = '5px';
@@ -227,8 +225,8 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     metadataRightBottom.id = `${seriesInsUid}_rightBottom`;
 
     metadataRightBottom.style.position = 'absolute';
-    metadataRightBottom.style.top = `${parentHeight-50}px`;
-    metadataRightBottom.style.left = `${parentWidth-300}px`;
+    metadataRightBottom.style.bottom = '0px';
+    metadataRightBottom.style.right = '0px';
     metadataRightBottom.style.backgroundColor = 'rgba(0, 0, 0, 0)';
     metadataRightBottom.style.color = 'white';
     metadataRightBottom.style.padding = '5px';

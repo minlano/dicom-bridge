@@ -361,10 +361,10 @@
 <script src="https://cdn.jsdelivr.net/npm/cornerstone-tools@6.0.10/dist/cornerstoneTools.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/cornerstone-web-image-loader@2.1.1/dist/cornerstoneWebImageLoader.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/cornerstone-wado-image-loader@4.13.2/dist/cornerstoneWADOImageLoader.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dicom-parser@1.8.21/dist/dicomParser.min.js"></script>
-<script src="/script/dicomParser.js"></script>
-<script src="/script/viewer.js"></script>
+<%--<script src="/script/dicomParser.js"></script>--%>
+<script src="/script/cornerstoneDicomParserUTF8.js"></script>
 <script src="/script/seriesImageLoad.js"></script>
+<script src="/script/viewer.js"></script>
 <script src="/script/tool.js"></script>
 <script src="/script/report.js"></script>
 <script src="/script/annotation.js"></script>
