@@ -15,6 +15,10 @@ h1 {
     font-family: 'Alegreya Sans SC', sans-serif;
 }
 
+#title_btn:hover{
+    cursor: pointer;
+}
+
 .subtitle {
     font-size: 15px;
     font-weight: bold;
@@ -191,11 +195,12 @@ aside#study-search {
 }
 
 #search-result button,select {
+    border : 0;
     padding-left: 5px;
     border-radius: 15px ;
     height: 30px;
     width: 6.25%;
-    background-color: #090900;
+    background-color: #778492;
     color: white;
     margin-right: 20px;
 }
@@ -362,7 +367,7 @@ footer {
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
-    background-color: #778492;
+    background-color: #243040;
 }
 
 .right-div > div:first-child {
@@ -387,11 +392,12 @@ footer {
 }
 
 .subtitleAndButton button {
+    border : 0;
     padding-left: 5px;
     border-radius: 15px ;
     height: 30px;
     width: 12.5%;
-    background-color: #090900;
+    background-color: #778492;
     color: white;
 }
 
@@ -410,7 +416,7 @@ footer {
     box-sizing: border-box; /* 내부 여백과 테두리를 포함한 전체 크기를 유지 */
     resize: none; /* 사용자가 크기를 조절할 수 없도록 설정 */
     white-space: pre-line;
-    background-color: #778492;
+    background-color: #243040;
     border: none;
 }
 
@@ -424,12 +430,13 @@ footer {
 }
 
 .cell-b textarea {
+    color: lightgray;
     width: 100%; /* 부모 요소에 맞게 너비를 설정 */
     height: 100%; /* 부모 요소에 맞게 높이를 설정 */
     box-sizing: border-box; /* 내부 여백과 테두리를 포함한 전체 크기를 유지 */
     resize: none; /* 사용자가 크기를 조절할 수 없도록 설정 */
     white-space: pre-line;
-    background-color: #778492;
+    background-color: #243040;
     border: none;
 }
 
@@ -457,15 +464,15 @@ footer {
     width : 80%;
     height : 100%;
     margin-left: 15px;
-    background-color: #fff;
-    color: black;
+    background-color: #778492;
+    color: white;
     border-radius: 10px;
 }
 .cell-c div div input{
     width : 80%;
     margin-left: 15px;
-    background-color: #fff;
-    color: black;
+    background-color: #778492;
+    color: white;
     border-radius: 10px;
 }
 .cell-c div:nth-child(6) {
@@ -474,12 +481,13 @@ footer {
     padding-left: 5px;
 }
 .cell-c div:nth-child(6) button {
+    border : 0;
     padding-left: 5px;
     border-radius: 15px ;
     height: 30px;
     width: 25%;
     background-color: #778492;
-    color: black;
+    color: white;
 }
 
 
@@ -500,6 +508,7 @@ footer {
     cursor: pointer;
 }
 #search {
+    border : 0;
     background-color: #0879A6;
     line-height: 40px;
     width : 40px;

@@ -3,11 +3,13 @@ const axiosInstance = axios.create({
 });
 
 /** Grid Config **/
+var pastRowCol = {row:2, col:2};
 var rowCol = {row: 2, col: 2};
 var imageContainer = document.getElementById('image-container');
 var imageContainer2 = document.getElementById('image-container2');
 var infoBox = document.getElementById('infoBox');
 var infoContent =  document.getElementById('infoContent');
+var seriesInsUids;
 
 function showInfoBox() {
     infoBox.style.display = 'inline-block';
@@ -79,7 +81,7 @@ async function imageDisplay() {
         imageContainer.removeChild(imageContainer.firstChild);
 
     var index = 0;
-    var seriesInsUids = await findSeriesInsUidByStudyInsUid();
+    seriesInsUids = await findSeriesInsUidByStudyInsUid();
     for (var i = 0; i < rowCol.row; i++) {
         for (var j = 0; j < rowCol.col; j++) {
             var div = document.createElement('div');
@@ -116,6 +118,17 @@ async function imageDisplayBySeriesInsUid(seriesInsUid) {
     createWheelHandler(id, seriesInsUid);
     await viewDicomBySeriesInsUid(id, seriesInsUid, FIRST_ORDER);
     createBoxHandler(id);
+
+    div.addEventListener('dblclick', function(event) {
+
+        imageContainer.style.gridTemplateRows = `repeat(${pastRowCol.row}, 1fr)`;
+        imageContainer.style.gridTemplateColumns = `repeat(${pastRowCol.col}, 1fr)`;
+        rowCol.row=pastRowCol.row;
+        rowCol.col=pastRowCol.col;
+        imageDisplay();
+
+    });
+
 }
 
 async function findSeriesInsUidByStudyInsUid() {
@@ -320,12 +333,17 @@ function createBoxHandler(id, seriesInsUid) {
         activateFlipRotate(divById);
     })
 
-    divById.addEventListener('dblclick', function (event) {
-        rowCol.row = 1; rowCol.col = 1;
-        imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-        imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
-        imageDisplayBySeriesInsUid(seriesInsUid);
-    })
+    if (rowCol.row !== 1 || rowCol.col !== 1){
+        divById.addEventListener('dblclick', function (event) {
+            pastRowCol.col = rowCol.col;
+            pastRowCol.row = rowCol.row;
+            rowCol.row = 1; rowCol.col = 1;
+            imageContainer.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
+            imageContainer.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+            imageDisplayBySeriesInsUid(seriesInsUid);
+        })
+    }
+
 }
 
 /* Window Level */
@@ -485,8 +503,8 @@ $(document).on("dblclick", "tr.subTr", function() {
     // 바디 스크롤 허용
     document.body.style.overflow = "auto";
 
-    imageContainer2.style.gridTemplateRows = `repeat(${rowCol.row}, 1fr)`;
-    imageContainer2.style.gridTemplateColumns = `repeat(${rowCol.col}, 1fr)`;
+    imageContainer2.style.gridTemplateRows = `repeat(2, 1fr)`;
+    imageContainer2.style.gridTemplateColumns = `repeat(2, 1fr)`;
     imageDisplayComparison(studyinsuidComparison);
 
     $(".cornerstone-canvas").css({
@@ -501,7 +519,7 @@ async function imageDisplayComparison(studyinsuidComparison) {
         imageContainer2.removeChild(imageContainer2.firstChild);
 
     var index = 0;
-    var seriesInsUids = await findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison);
+    seriesInsUids = await findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison);
     seriesInsUids.length
     for (var i = 0; i < rowCol.row; i++) {
         for (var j = 0; j < rowCol.col; j++) {

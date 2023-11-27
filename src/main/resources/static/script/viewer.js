@@ -107,6 +107,9 @@ function displayImages(images) {
 document.getElementById("list_btn").addEventListener("click", function() {
     window.location.href = "/list";
 })
+document.getElementById("title_btn").addEventListener("click", function() {
+    window.location.href = "/list";
+})
 
 function activateReset(id) {
     const element = document.getElementById(id);

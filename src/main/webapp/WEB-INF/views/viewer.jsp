@@ -10,7 +10,7 @@
 <div id="studyInsUid" style="display: none;">${studyInsUid}</div>
 <div id="viewer">
     <header>
-        <img src="/images/dicombridge_logo.png" alt="logo" style="width: 350px;">
+        <img src="/images/dicombridge_logo.png" alt="logo" id="title_btn" style="width: 350px;">
     </header>
     <nav>
         <ul>
