@@ -75,15 +75,5 @@ function activateFlipRotate(element) {
 
 }
 
-function playClip(id,dataSet){
-    const element = document.getElementById(id);
-    cornerstone.enable(element);
-
-    document.getElementById('play-clip').addEventListener('click', function (e) {
-
-        cornerstoneTools.playClip(element, FrameRate);
-        console.log("frames",FrameRate);
-    });
-}
 
 
