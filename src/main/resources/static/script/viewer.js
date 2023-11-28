@@ -22,7 +22,6 @@ thumbnailBtn.addEventListener("click", () => {
     ComparisonCss();
     ComparisonChange();
     ComparisonInnerCss();
-
 });
 
 toolbarBtn.addEventListener("click", () => {

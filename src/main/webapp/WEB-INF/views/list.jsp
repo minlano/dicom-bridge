@@ -59,11 +59,8 @@
                 </li>
             </ul>
         </aside>
-
     </section>
-
     <section id="list-contents">
-
         <aside id="study-search">
             <div id="search-bar">
                 <a class="subtitle">검색</a>

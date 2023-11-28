@@ -51,19 +51,14 @@
             </li>
         </ul>
     </nav>
-
     <section id="viewer-contents">
-
-        <!-- Report Modal -->
         <div id="reportModal" class="modal" onclick="closeModal()">
             <div class="modal-content" onclick="event.stopPropagation();">
-                <!-- 모달 내용 -->
                 <span class="close" onclick="closeModal()">&times;</span>
                 <div class="right-div">
                     <div id="studyContainer">
                         <c:forEach var="study" items="${studies}">
                             <div class="horizontalStudy">
-
                             </div>
                         </c:forEach>
                     </div>
@@ -103,8 +98,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- 비교검사 모달 창 -->
         <div id="comparisonModal" class="modal">
             <div id="comparisonGrid" class="modal-content">
                 <header id="comparisonHeader">
@@ -176,14 +169,6 @@
                     <img src="/images/worklist.0c26b996e226a3db09e77ef62d440241.png" alt="List">
                     <div>List</div>
                 </li>
-                <li id="back">
-                    <img src="/images/previous_study.3cb78eecd6d2385b44cb9176ba1fc87c.png" alt="이전">
-                    <div>이전</div>
-                </li>
-                <li id="next">
-                    <img src="/images/next_study.09fbf5daceba6ace2519e74bde2e8420.png" alt="다음">
-                    <div>다음</div>
-                </li>
                 <li id="window-level">
                     <img src="/images/wwwc.1cc5a0ecda9fd93a085688cedaa8a78b.png" alt="windowLevel">
                     <div>윈도우 레벨</div>
@@ -196,21 +181,9 @@
                     <img src="/images/pan.47e8cd9f65cf64c8f2fb3d08c6f205ab.png" alt="이동">
                     <div>이동</div>
                 </li>
-                <li>
-                    <img src="/images/scrollloop.5508766fa02ed78f41fbf1381d8329e4.png" alt="스크롤">
-                    <div>스크롤 루프</div>
-                </li>
-                <li>
-                    <img src="/images/changeImageLayout.2294818a3aa0403736162eb1a10a89b7.png" alt="1시리즈">
-                    <div>1시리즈</div>
-                </li>
                 <li id="comparison">
                     <img src="/images/comparison.07c6226e96a236664e9ac4c5ff078c44.png" alt="비교검사">
                     <div>비교검사</div>
-                </li>
-                <li id="play-clip">
-                    <img src="/images/play.6f437ab2591fe6a6c319e7e77f01df3e.png" alt="clip">
-                    <div>플레이 클립</div>
                 </li>
                 <li class="tool" onclick="showToolBox()">
                     <img class="tool" src="/images/tools.2d1068915b14d4ae8a087ca1036b65b2.png" alt=" tool">
@@ -289,7 +262,6 @@
                 <li id="reset">
                     <img src="/images/refresh.6a8fba2767a97749fd00e3e6f59935f3.png" alt="재설정">
                     <div>재설정</div>
-<%--                    <div id ="reset" onclick="activateReset()">재설정</div>--%>
                 </li>
                 <li id="seriesInfoBox" class="info" onclick="showInfoBox()">
                     <img class="info" src="/images/changeSeriesLayout.6c2935a8c5a52c722e1055e79e316d58.png">
@@ -347,7 +319,6 @@
         <section id="image-container">
         </section>
         <section id="image-container2">
-
         </section>
     </section>
 </div>
@@ -361,11 +332,13 @@
 <script src="https://cdn.jsdelivr.net/npm/cornerstone-tools@6.0.10/dist/cornerstoneTools.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/cornerstone-web-image-loader@2.1.1/dist/cornerstoneWebImageLoader.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/cornerstone-wado-image-loader@4.13.2/dist/cornerstoneWADOImageLoader.bundle.min.js"></script>
-<%--<script src="/script/dicomParser.js"></script>--%>
 <script src="/script/cornerstoneDicomParserUTF8.js"></script>
-<script src="/script/seriesImageLoad.js"></script>
+<script src="/script/cornerstone_window_level.js"></script>
+<script src="/script/cornerstone_annotation.js"></script>
+<script src="/script/cornerstone_invert.js"></script>
+<script src="/script/cornerstone_tool.js"></script>
+<script src="/script/comparison.js"></script>
+<script src="/script/imageLoad.js"></script>
 <script src="/script/viewer.js"></script>
-<script src="/script/tool.js"></script>
 <script src="/script/report.js"></script>
-<script src="/script/annotation.js"></script>
 </html>

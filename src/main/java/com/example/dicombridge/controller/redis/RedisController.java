@@ -40,5 +40,4 @@ public class RedisController {
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
         return vop.get(key);
     }
-
 }

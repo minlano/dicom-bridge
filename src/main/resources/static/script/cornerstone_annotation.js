@@ -1,4 +1,4 @@
-/* cornerstoneTool */
+/** cornerstoneTool **/
 cornerstoneTools.init();
 let annotationBox = document.getElementById('annotationBox');
 
@@ -10,7 +10,6 @@ window.addEventListener('click', function (e) {
     if(e.target.className !== 'annotation')
         annotationBox.style.display = 'none';
 })
-// isAngleToolActive 값에 따라 스타일을 동적으로 변경
 
 let isAngleToolActive = false;
 let isActivateArrowAnnotate = false;

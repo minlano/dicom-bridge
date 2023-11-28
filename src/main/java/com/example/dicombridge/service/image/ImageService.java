@@ -41,30 +41,13 @@ import java.util.zip.ZipOutputStream;
 @Service
 @RequiredArgsConstructor
 public class ImageService {
-    /**
-     * Storage 클래스에 구현했으므로 빼야함
-     */
-    @Value("${storage.server.username}")
-    private String USERNAME;
-    @Value("${storage.server.password}")
-    private String PASSWORD;
-    @Value("${storage.protocol}")
-    private String PROTOCOL;
-    @Value("${storage.host}")
-    private String HOST;
-    @Value("${storage.shared-name}")
-    private String SHARED_NAME;
     private final ImageRepository imageRepository;
     private final ImageConvert imageConvert;
-    private CIFSContext cifsContext;
-
-    // Thread
     private static final int NUMBER_OF_THREADS = 4;
     private static ExecutorService executor;
 
     @PostConstruct
     private void initialize() {
-        storageConnection();
         createThread();
     }
 
@@ -76,73 +59,6 @@ public class ImageService {
     public static void createThread() {
         executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     }
-
-    private void storageConnection() {
-        Properties properties = new Properties();
-        properties.setProperty("jcifs.smb.client.responseTimeout", "5000");
-        try {
-            PropertyConfiguration configuration = new PropertyConfiguration(properties);
-            NtlmPasswordAuthenticator auth = new NtlmPasswordAuthenticator(null, USERNAME, PASSWORD);
-            this.cifsContext = new BaseContext(configuration).withCredentials(auth);
-            Address address = cifsContext.getNameServiceClient().getByName(HOST);
-            cifsContext.getTransportPool().logon(cifsContext, address);
-        } catch (UnknownHostException | CIFSException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /** ImageConvert 클래스에 구현했으므로 빼야함 **/
-    public SmbFileInputStream getSmbFileInputStream(Image image) throws MalformedURLException, SmbException {
-        SmbFile file = new SmbFile(String.join("/", PROTOCOL, HOST, SHARED_NAME, image.getPath().replace('\\', '/') + "/" + image.getFname()), cifsContext);
-        return new SmbFileInputStream(file);
-    }
-
-    public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
-        ByteArrayOutputStream byteArrayOutputStream;
-        byte[] buffer = new byte[1024 * 1024];
-        try {
-            byteArrayOutputStream = new ByteArrayOutputStream();
-
-            int bytesRead;
-            while ((bytesRead = smbFileInputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, bytesRead);
-            }
-            smbFileInputStream.close();
-            byteArrayOutputStream.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return byteArrayOutputStream;
-    }
-
-    public File convert2DcmFile(byte[] fileBytes) throws IOException {
-        File tempFile = File.createTempFile("tempfile", ".dcm");
-        //스토리지에서 cifs로 읽어들인 dicomFile의 temp(로컬에는 저장안되고 메모리에 저장됨)
-        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-            fos.write(fileBytes);
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        return tempFile;
-    }
-
-    public String convertDcm2Jpg(File file) {
-        try {
-            Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
-            BufferedImage image = dcm2Jpg.readImageFromDicomInputStream(file);
-
-            if (image != null) {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(image, "jpg", baos);
-                byte[] imageBytes = baos.toByteArray();
-                return Base64.getEncoder().encodeToString(imageBytes);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    /** ImageConvert 클래스에 구현했으므로 빼야함 **/
 
     /** Seriesinsuid Count Check **/
     public int seriesinsuidCount(String seriesinsuid) {
@@ -164,7 +80,6 @@ public class ImageService {
     }
 
     public Map<String, ThumbnailWithFileDto> getThumbnailFile(Map<String, ThumbnailDto> thumbnailDtoMap) throws ExecutionException, InterruptedException {
-
         FileRead<Image> fileRead = new FileRead(imageConvert);
         List<Callable<ThumbnailWithFileDto>> tasks = new ArrayList<>();
         for (String fname : thumbnailDtoMap.keySet()) {
@@ -179,9 +94,9 @@ public class ImageService {
             Future<ThumbnailWithFileDto> future = executor.submit(task);
             thumbnailWithFileDtoMap.put(future.get().getFname(), future.get());
         }
-//        executor.shutdown();
         return thumbnailWithFileDtoMap;
     }
+
     /** Download **/
     public List<ByteArrayOutputStream> getFiles(int studyKey) throws IOException {
         FileRead<Image> fileRead = new FileRead(imageConvert);
@@ -190,7 +105,6 @@ public class ImageService {
         List<ByteArrayOutputStream> tempFiles = new ArrayList<>();
         for (Image image : images) {
             ByteArrayOutputStream baos = fileRead.getBaos(image);
-
             tempFiles.add(baos);
         }
         return tempFiles;
@@ -246,5 +160,4 @@ public class ImageService {
         }
         return tempFiles;
     }
-
 }

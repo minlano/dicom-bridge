@@ -47,7 +47,6 @@ public class ImageConvert<T> {
 
     public File convert2DcmFile(byte[] fileBytes) throws IOException {
         File tempFile = File.createTempFile("tempfile", ".dcm");
-        //스토리지에서 cifs로 읽어들인 dicomFile의 temp(로컬에는 저장안되고 메모리에 저장됨)
         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
             fos.write(fileBytes);
         } catch (Exception e) {
@@ -73,7 +72,7 @@ public class ImageConvert<T> {
         return null;
     }
 
-        public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
+    public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
         ByteArrayOutputStream byteArrayOutputStream;
         byte[] buffer = new byte[1024 * 1024];
         try {
@@ -90,5 +89,4 @@ public class ImageConvert<T> {
         }
         return byteArrayOutputStream;
     }
-
 }
