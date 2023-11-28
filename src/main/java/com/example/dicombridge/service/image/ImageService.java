@@ -245,11 +245,7 @@ public class ImageService {
     public List<File> getComparisonImage(String seriesinsuid) throws IOException {
         List<Image> images = imageRepository.findImagesBySeriesinsuidOrderedByInstancenum(seriesinsuid);
         FileRead<Image> fileRead = new FileRead(imageConvert);
-        List<File> tempFiles = new ArrayList<>();
-        for (int i = 0; i < images.size(); i++) {
-            tempFiles.add(fileRead.getFile(images));
-        }
-        return tempFiles;
+        return fileRead.getFiles(images);
     }
 
 }

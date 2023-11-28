@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,17 @@ public class FileRead<T> implements Runnable {
         byte[] byteArray = imageConvert.convert2ByteArray(smbFileInputStream);
         File tempDcmFile = imageConvert.convert2DcmFile(byteArray);
         return tempDcmFile;
+    }
+    public List<File> getFiles(List<Image> image) throws IOException {
+        List<File> tempFiles = new ArrayList<>();
+        for(int i=0; i< image.size();i++){
+            SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(image.get(i));
+            byte[] byteArray = imageConvert.convert2ByteArray(smbFileInputStream);
+            File tempDcmFile = imageConvert.convert2DcmFile(byteArray);
+            tempFiles.add(tempDcmFile);
+        }
+
+        return tempFiles;
     }
 
     public <T extends PathAndName> String getFileString(T t) throws IOException {

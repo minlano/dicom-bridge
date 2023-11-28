@@ -156,18 +156,19 @@ async function findSeriesInsUidByStudyInsUid() {
 }
 
 async function viewDicomBySeriesInsUid(id, seriesInsUid, order) {
-    let whereDiv = 1;
+    var wherediv = "first";
     try {
         let response = await axiosInstance.get("/studies/getSeriesInsUidIndex/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
         if (response.status === 200)
-            await displayDicomImage(response.data, id, seriesInsUid, order,whereDiv);
+            await displayDicomImage(response.data, id, seriesInsUid, order, wherediv);
     } catch (error) {
         console.error(error);
     }
 }
 
 /** Cornerstone Image Load **/
-async function displayDicomImage(arrayBuffer, divId, seriesInsUid, whereDiv) {
+async function displayDicomImage(arrayBuffer, divId, seriesInsUid,order, wherediv) {
+    var check = wherediv;
     const imageData = `dicomweb:${URL.createObjectURL(new Blob([arrayBuffer], {type: 'application/dicom'}))}`;
     const existingDiv = document.getElementById(divId);
     existingDiv.style.position = 'relative';
@@ -180,7 +181,12 @@ async function displayDicomImage(arrayBuffer, divId, seriesInsUid, whereDiv) {
     if (existingDiv) {
         cornerstone.loadImage(imageData).then(async image => {
             await cornerstone.displayImage(existingDiv, image);
-            await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid, whereDiv);
+            if(check =="first"){
+                await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid,wherediv);
+            }else{
+                await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid,wherediv);
+            }
+            await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid);
         });
     } else {
         console.error(`Div with ID '${divId}' not found.`);
@@ -210,16 +216,16 @@ function setMetadata(arrayBuffer) {
     return metadataArray;
 }
 
-function updateMetadata(metadataArray, existingDiv, seriesInsUid, whereDiv) {
-    let prevMetadataLeftTop = document.getElementById(`${seriesInsUid}_leftTop`+whereDiv);
-    let prevMetadataRightTop = document.getElementById(`${seriesInsUid}_rightTop`+whereDiv);
-    let prevMetadataRightBottom = document.getElementById(`${seriesInsUid}_rightBottom`+whereDiv);
+function updateMetadata(metadataArray, existingDiv, seriesInsUid,wherediv) {
+    let prevMetadataLeftTop = document.getElementById(wherediv+`${seriesInsUid}_leftTop`);
+    let prevMetadataRightTop = document.getElementById(wherediv+`${seriesInsUid}_rightTop`);
+    let prevMetadataRightBottom = document.getElementById(wherediv+`${seriesInsUid}_rightBottom`);
     if (prevMetadataLeftTop) prevMetadataLeftTop.remove();
     if (prevMetadataRightTop) prevMetadataRightTop.remove();
     if (prevMetadataRightBottom) prevMetadataRightBottom.remove();
 
     let metadataLeftTop = document.createElement('div');
-    metadataLeftTop.id = `${seriesInsUid}_leftTop`+whereDiv;
+    metadataLeftTop.id = wherediv+`${seriesInsUid}_leftTop`;
 
     metadataLeftTop.style.position = 'absolute';
     metadataLeftTop.style.top = '0px';
@@ -233,7 +239,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid, whereDiv) {
     existingDiv.appendChild(metadataLeftTop);
 
     let metadataRightTop = document.createElement('div');
-    metadataRightTop.id = `${seriesInsUid}_rightTop`+whereDiv;
+    metadataRightTop.id = wherediv+`${seriesInsUid}_rightTop`;
 
     metadataRightTop.style.position = 'absolute';
     metadataRightTop.style.top = '0px';
@@ -247,7 +253,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid, whereDiv) {
     existingDiv.appendChild(metadataRightTop);
 
     let metadataRightBottom = document.createElement('div');
-    metadataRightBottom.id = `${seriesInsUid}_rightBottom`+whereDiv;
+    metadataRightBottom.id = wherediv+`${seriesInsUid}_rightBottom`;
 
     metadataRightBottom.style.position = 'absolute';
     metadataRightBottom.style.bottom = '0px';
@@ -619,11 +625,11 @@ async function findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison) {
 }
 
 async function viewDicomBySeriesInsUidComparison(id, seriesInsUid, order) {
-    let whereDiv = 2;
+    var wherediv = "second";
     try {
         let response = await axiosInstance.get("/studies/getSeriesInsUidIndexComparison/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
         if (response.status === 200)
-            await displayDicomImage(response.data, id, seriesInsUid, order, whereDiv);
+            await displayDicomImage(response.data, id, seriesInsUid, order, wherediv);
     } catch (error) {
         console.error(error);
     }
