@@ -156,17 +156,18 @@ async function findSeriesInsUidByStudyInsUid() {
 }
 
 async function viewDicomBySeriesInsUid(id, seriesInsUid, order) {
+    let whereDiv = 1;
     try {
         let response = await axiosInstance.get("/studies/getSeriesInsUidIndex/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
         if (response.status === 200)
-            await displayDicomImage(response.data, id, seriesInsUid, order);
+            await displayDicomImage(response.data, id, seriesInsUid, order,whereDiv);
     } catch (error) {
         console.error(error);
     }
 }
 
 /** Cornerstone Image Load **/
-async function displayDicomImage(arrayBuffer, divId, seriesInsUid) {
+async function displayDicomImage(arrayBuffer, divId, seriesInsUid, whereDiv) {
     const imageData = `dicomweb:${URL.createObjectURL(new Blob([arrayBuffer], {type: 'application/dicom'}))}`;
     const existingDiv = document.getElementById(divId);
     existingDiv.style.position = 'relative';
@@ -179,7 +180,7 @@ async function displayDicomImage(arrayBuffer, divId, seriesInsUid) {
     if (existingDiv) {
         cornerstone.loadImage(imageData).then(async image => {
             await cornerstone.displayImage(existingDiv, image);
-            await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid);
+            await updateMetadata(setMetadata(arrayBuffer), existingDiv, seriesInsUid, whereDiv);
         });
     } else {
         console.error(`Div with ID '${divId}' not found.`);
@@ -209,16 +210,16 @@ function setMetadata(arrayBuffer) {
     return metadataArray;
 }
 
-function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
-    let prevMetadataLeftTop = document.getElementById(`${seriesInsUid}_leftTop`);
-    let prevMetadataRightTop = document.getElementById(`${seriesInsUid}_rightTop`);
-    let prevMetadataRightBottom = document.getElementById(`${seriesInsUid}_rightBottom`);
+function updateMetadata(metadataArray, existingDiv, seriesInsUid, whereDiv) {
+    let prevMetadataLeftTop = document.getElementById(`${seriesInsUid}_leftTop`+whereDiv);
+    let prevMetadataRightTop = document.getElementById(`${seriesInsUid}_rightTop`+whereDiv);
+    let prevMetadataRightBottom = document.getElementById(`${seriesInsUid}_rightBottom`+whereDiv);
     if (prevMetadataLeftTop) prevMetadataLeftTop.remove();
     if (prevMetadataRightTop) prevMetadataRightTop.remove();
     if (prevMetadataRightBottom) prevMetadataRightBottom.remove();
 
     let metadataLeftTop = document.createElement('div');
-    metadataLeftTop.id = `${seriesInsUid}_leftTop`;
+    metadataLeftTop.id = `${seriesInsUid}_leftTop`+whereDiv;
 
     metadataLeftTop.style.position = 'absolute';
     metadataLeftTop.style.top = '0px';
@@ -232,7 +233,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     existingDiv.appendChild(metadataLeftTop);
 
     let metadataRightTop = document.createElement('div');
-    metadataRightTop.id = `${seriesInsUid}_rightTop`;
+    metadataRightTop.id = `${seriesInsUid}_rightTop`+whereDiv;
 
     metadataRightTop.style.position = 'absolute';
     metadataRightTop.style.top = '0px';
@@ -246,7 +247,7 @@ function updateMetadata(metadataArray, existingDiv, seriesInsUid) {
     existingDiv.appendChild(metadataRightTop);
 
     let metadataRightBottom = document.createElement('div');
-    metadataRightBottom.id = `${seriesInsUid}_rightBottom`;
+    metadataRightBottom.id = `${seriesInsUid}_rightBottom`+whereDiv;
 
     metadataRightBottom.style.position = 'absolute';
     metadataRightBottom.style.bottom = '0px';
@@ -517,7 +518,9 @@ function ComparisonCss() {
         if (isThumbnailVisible) {
             $("#image-container").css({
                 "width": "45%",
-                "float": "left"
+                "float": "left",
+                "overflow": "auto"
+
             });
             $("#image-container2").css({
                 "width": "45%",
@@ -528,7 +531,8 @@ function ComparisonCss() {
         } else {
             $("#image-container").css({
                 "width": "40%",
-                "float": "left"
+                "float": "left",
+                "overflow": "auto"
             });
             $("#image-container2").css({
                 "width": "40%",
@@ -615,10 +619,11 @@ async function findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison) {
 }
 
 async function viewDicomBySeriesInsUidComparison(id, seriesInsUid, order) {
+    let whereDiv = 2;
     try {
         let response = await axiosInstance.get("/studies/getSeriesInsUidIndexComparison/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
         if (response.status === 200)
-            await displayDicomImage(response.data, id, seriesInsUid, order);
+            await displayDicomImage(response.data, id, seriesInsUid, order, whereDiv);
     } catch (error) {
         console.error(error);
     }
@@ -628,6 +633,7 @@ function handleComparisonTrueChangeEvent() {
     $("#image-container").css({
         "width": "",
         "float": ""
+
     });
     $("#image-container2").css({
         "display": "none",
@@ -638,11 +644,7 @@ function handleComparisonTrueChangeEvent() {
         "height": "100%"
     });
     comparisonFalse = true;
-}
-
-if (!comparisonFalse) {
-    alert("comparisonFalse가 아닐 떄" + comparisonFalse);
-    handleComparisonFalseChangeEvent();
+    imageDisplay();
 }
 
 function createWheelHandlerComparison(id, seriesInsUid) {

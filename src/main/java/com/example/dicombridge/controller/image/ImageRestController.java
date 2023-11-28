@@ -94,7 +94,6 @@ public class ImageRestController {
     /** Redis **/
     @PostMapping("/saveRedisValSeriesinsuid/{studyinsuid}")
     public List<String> saveRedisValSeriesinsuid (@PathVariable String studyinsuid) throws IOException {
-        long start = System.currentTimeMillis();
 
         List<String> list = imageService.saveRedisValSeriesinsuid(studyinsuid);
         String keyname = studyinsuid;
@@ -110,13 +109,6 @@ public class ImageRestController {
                 jedis.set(uniqueKey.getBytes(),data);
             }
         }
-        long end = System.currentTimeMillis();
-        System.out.println("한 시리즈에 대한 Redis 이미지 저장 소요 시간 : " + (end-start));
-        //키:studyinsuid 벨류:seriesinsuid의 종류를 ,로 나눠서 저장
-        // 저장된 값을 다시 리스트로 변환
-        //List<String> retrievedList = Arrays.asList(storedValue.split(","));
-        //키:seriesinsuid 벨류:seriesinsuid의 사진 갯수
-        //키:seriesinsuid:이미지번호.getBytes() 벨류:이미지 바이트
         return null;
     }
 
