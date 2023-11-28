@@ -182,21 +182,16 @@ public class ImageService {
 //        executor.shutdown();
         return thumbnailWithFileDtoMap;
     }
-
     /** Download **/
     public List<ByteArrayOutputStream> getFiles(int studyKey) throws IOException {
+        FileRead<Image> fileRead = new FileRead(imageConvert);
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
-        Map<String, Image> map = images.stream().collect(Collectors.toMap(
-                i -> i.getFname(),
-                i -> i
-        ));
 
         List<ByteArrayOutputStream> tempFiles = new ArrayList<>();
-        for (String fname : map.keySet()) {
-            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(map.get(fname));
-            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
+        for (Image image : images) {
+            ByteArrayOutputStream baos = fileRead.getBaos(image);
 
-            tempFiles.add(byteArrayOutputStream);
+            tempFiles.add(baos);
         }
         return tempFiles;
     }

@@ -8,6 +8,7 @@ import jcifs.smb.SmbFileInputStream;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -79,6 +80,12 @@ public class FileRead<T> {
         }
     }
 
+    public <T extends PathAndName> ByteArrayOutputStream getBaos(T t) throws IOException {
+        SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(t);
+        ByteArrayOutputStream byteArrayOutputStream = imageConvert.convert2ByteArrayOutputStream(smbFileInputStream);
+
+        return byteArrayOutputStream;
+    }
     public Map<String, T> getFiles(Map<String, Image> map) throws IOException {
         getBaos(map);
         for (String fname : baMap.keySet()) {
