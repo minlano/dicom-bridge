@@ -19,6 +19,10 @@ thumbnailBtn.addEventListener("click", () => {
         tbody.innerHTML = "";
     }
     isThumbnailVisible = !isThumbnailVisible;
+    ComparisonCss();
+    ComparisonChange();
+    ComparisonInnerCss();
+
 });
 
 toolbarBtn.addEventListener("click", () => {
@@ -107,6 +111,9 @@ function displayImages(images) {
 
 /** To Worklist **/
 document.getElementById("list_btn").addEventListener("click", function() {
+    window.location.href = "/list";
+})
+document.getElementById("title_btn").addEventListener("click", function() {
     window.location.href = "/list";
 })
 

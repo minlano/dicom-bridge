@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -56,9 +58,23 @@ public class ImageService {
     private final ImageConvert imageConvert;
     private CIFSContext cifsContext;
 
+    // Thread
+    private static final int NUMBER_OF_THREADS = 4;
+    private static ExecutorService executor;
+
     @PostConstruct
     private void initialize() {
         storageConnection();
+        createThread();
+    }
+
+    @PreDestroy
+    private void cleanup() {
+        executor.shutdown();
+    }
+
+    public static void createThread() {
+        executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     }
 
     private void storageConnection() {
@@ -134,7 +150,7 @@ public class ImageService {
     }
 
     /** Thumbnail **/
-    public Map<String, ThumbnailWithFileDto> getThumbnail(int studyKey) throws IOException {
+    public Map<String, ThumbnailWithFileDto> getThumbnail(int studyKey) throws IOException, ExecutionException, InterruptedException {
         Map<String, ThumbnailDto> map = new HashMap<>();
         List<ThumbnailDto> images = imageRepository.findImageAndSeriesDesc(studyKey);
 
@@ -147,19 +163,26 @@ public class ImageService {
         return getThumbnailFile(map);
     }
 
-    public Map<String, ThumbnailWithFileDto> getThumbnailFile(Map<String, ThumbnailDto> thumbnailDtoMap) throws IOException {
-        Map<String, ThumbnailWithFileDto> thumbnailWithFileDtoMap = new HashMap<>();
-        FileRead<Image> fileRead = new FileRead(imageConvert);
+    public Map<String, ThumbnailWithFileDto> getThumbnailFile(Map<String, ThumbnailDto> thumbnailDtoMap) throws ExecutionException, InterruptedException {
+        long start = System.currentTimeMillis();
 
+        FileRead<Image> fileRead = new FileRead(imageConvert);
+        List<Callable<ThumbnailWithFileDto>> tasks = new ArrayList<>();
         for (String fname : thumbnailDtoMap.keySet()) {
             ThumbnailDto thumbnailDto = thumbnailDtoMap.get(fname);
-            ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto(thumbnailDto);
-
-            String dcmByte = fileRead.getFileString(thumbnailDto);
-
-            thumbnailWithFileDto.setImage(dcmByte);
-            thumbnailWithFileDtoMap.put(fname, thumbnailWithFileDto);
+            Callable<ThumbnailWithFileDto> task = fileRead.getFileStringThread(fname, thumbnailDto);
+            tasks.add(task);
         }
+
+        // executor.invokeAll(tasks);
+        Map<String, ThumbnailWithFileDto> thumbnailWithFileDtoMap = new ConcurrentHashMap<>();
+        for(Callable<ThumbnailWithFileDto> task : tasks) {
+            Future<ThumbnailWithFileDto> future = executor.submit(task);
+            thumbnailWithFileDtoMap.put(future.get().getFname(), future.get());
+        }
+//        executor.shutdown();
+        long end = System.currentTimeMillis();
+        System.out.println("이미지 변환 총 시간 : " + (end-start));
         return thumbnailWithFileDtoMap;
     }
     FileRead <Image> fileRead = new FileRead<Image>(imageConvert);

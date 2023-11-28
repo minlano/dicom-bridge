@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/studies")
@@ -25,14 +26,13 @@ public class ImageRestController {
 
     /** Thumbnale **/
     @PostMapping("/getThumbnail/{studyKey}")
-    public ResponseEntity<Map<String, ThumbnailWithFileDto>> getThumbnailData(@PathVariable String studyKey) throws IOException {
+    public ResponseEntity<Map<String, ThumbnailWithFileDto>> getThumbnailData(@PathVariable String studyKey) throws IOException, ExecutionException, InterruptedException {
         Map<String, ThumbnailWithFileDto> images = imageService.getThumbnail(Integer.valueOf(studyKey));
 
-        if (!images.isEmpty()) {
+        if (!images.isEmpty())
             return new ResponseEntity<>(images, HttpStatus.OK);
-        } else {
+        else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     /** Seriesinsuid Count Check **/
