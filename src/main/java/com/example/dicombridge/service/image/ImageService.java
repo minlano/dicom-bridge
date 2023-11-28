@@ -164,7 +164,6 @@ public class ImageService {
     }
 
     public Map<String, ThumbnailWithFileDto> getThumbnailFile(Map<String, ThumbnailDto> thumbnailDtoMap) throws ExecutionException, InterruptedException {
-        long start = System.currentTimeMillis();
 
         FileRead<Image> fileRead = new FileRead(imageConvert);
         List<Callable<ThumbnailWithFileDto>> tasks = new ArrayList<>();
@@ -181,8 +180,6 @@ public class ImageService {
             thumbnailWithFileDtoMap.put(future.get().getFname(), future.get());
         }
 //        executor.shutdown();
-        long end = System.currentTimeMillis();
-        System.out.println("이미지 변환 총 시간 : " + (end-start));
         return thumbnailWithFileDtoMap;
     }
 
@@ -246,37 +243,13 @@ public class ImageService {
 
     /** Comparison **/
     public List<File> getComparisonImage(String seriesinsuid) throws IOException {
-        Map<String, Image> map = new LinkedHashMap<>();
         List<Image> images = imageRepository.findImagesBySeriesinsuidOrderedByInstancenum(seriesinsuid);
-
-        for (int i = 0; i < images.size(); i++) {
-            Image image = images.get(i);
-            map.put(image.getFname(), image);
-        }
-        return fileRead3(map);
-    }
-
-    public List<File> getcomparisonbyte(String seriesinsuid) throws IOException {
-        Map<String, Image> map = new HashMap<>();
-        List<Image> images = imageRepository.findByseriesinsuid(seriesinsuid);
-
-        for (int i = 0; i < images.size(); i++) {
-            Image image = images.get(i);
-            map.put(image.getFname(), image);
-        }
-        return fileRead3(map);
-    }
-
-    private List<File> fileRead3(Map<String, Image> imageMap) throws IOException {
+        FileRead<Image> fileRead = new FileRead(imageConvert);
         List<File> tempFiles = new ArrayList<>();
-
-        for (String fname : imageMap.keySet()) {
-            SmbFileInputStream smbFileInputStream = getSmbFileInputStream(imageMap.get(fname));
-            ByteArrayOutputStream byteArrayOutputStream = convert2ByteArrayOutputStream(smbFileInputStream);
-            File tempDcmFile = convert2DcmFile(byteArrayOutputStream.toByteArray());
-
-            tempFiles.add(tempDcmFile);
+        for (int i = 0; i < images.size(); i++) {
+            tempFiles.add(fileRead.getFile(images));
         }
         return tempFiles;
     }
+
 }
