@@ -185,9 +185,9 @@ public class ImageService {
         System.out.println("이미지 변환 총 시간 : " + (end-start));
         return thumbnailWithFileDtoMap;
     }
-    FileRead <Image> fileRead = new FileRead<Image>(imageConvert);
     /** Download **/
     public List<ByteArrayOutputStream> getFiles(int studyKey) throws IOException {
+        FileRead<Image> fileRead = new FileRead(imageConvert);
         List<Image> images = imageRepository.findByImageIdStudykey(studyKey);
 
         List<ByteArrayOutputStream> tempFiles = new ArrayList<>();
