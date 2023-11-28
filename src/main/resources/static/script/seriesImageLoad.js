@@ -375,11 +375,9 @@ function windowLevel() {
 
     if (isWwwcToolActive) {
         cornerstoneTools.setToolDisabled('Wwwc');
-        windowLvBtn.style.backgroundColor = "";
     } else {
         cornerstoneTools.addTool(WwwcTool);
         cornerstoneTools.setToolActive('Wwwc', {mouseButtonMask: 1});
-        windowLvBtn.style.backgroundColor = "red";
     }
     isWwwcToolActive = !isWwwcToolActive;
 }
