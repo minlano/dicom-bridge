@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor(force = true)
 //@RequiredArgsConstructor
-public class FileRead<T> implements Runnable {
+public class FileRead<T> {
     Map<String, byte[]> baMap = new HashMap<>();
     Map<String, T> baosMap = new HashMap<>();
     Map<String, T> returnMap = new HashMap<>();
@@ -29,10 +29,6 @@ public class FileRead<T> implements Runnable {
 
     public FileRead(ImageConvert imageConvert) {
         this.imageConvert = imageConvert;
-    }
-
-    @Override
-    public void run() {
     }
 
     /** 테스트 정훈 형님꺼 이거 사용해서 하면 좋을듯 **/
@@ -59,8 +55,7 @@ public class FileRead<T> implements Runnable {
         return imgString;
     }
 
-    public Callable<ThumbnailWithFileDto> getFileStringThread(String fname,
-                                              ThumbnailDto thumbnailDto) {
+    public Callable<ThumbnailWithFileDto> getFileStringThread(ThumbnailDto thumbnailDto) {
         Callable<ThumbnailWithFileDto> task = () -> {
             ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto(thumbnailDto);
             SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(thumbnailDto);
@@ -73,7 +68,6 @@ public class FileRead<T> implements Runnable {
             // System.out.println("현재 Thread 이름 : " + Thread.currentThread().getName());
             return thumbnailWithFileDto;
         };
-
         return task;
     }
 

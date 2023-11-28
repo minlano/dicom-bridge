@@ -170,7 +170,7 @@ public class ImageService {
         List<Callable<ThumbnailWithFileDto>> tasks = new ArrayList<>();
         for (String fname : thumbnailDtoMap.keySet()) {
             ThumbnailDto thumbnailDto = thumbnailDtoMap.get(fname);
-            Callable<ThumbnailWithFileDto> task = fileRead.getFileStringThread(fname, thumbnailDto);
+            Callable<ThumbnailWithFileDto> task = fileRead.getFileStringThread(thumbnailDto);
             tasks.add(task);
         }
 

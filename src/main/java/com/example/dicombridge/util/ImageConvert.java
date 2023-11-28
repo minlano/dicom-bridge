@@ -73,22 +73,22 @@ public class ImageConvert<T> {
         return null;
     }
 
-    //    public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
-//        ByteArrayOutputStream byteArrayOutputStream;
-//        byte[] buffer = new byte[1024 * 1024];
-//        try {
-//            byteArrayOutputStream = new ByteArrayOutputStream();
-//
-//            int bytesRead;
-//            while ((bytesRead = smbFileInputStream.read(buffer)) != -1) {
-//                byteArrayOutputStream.write(buffer, 0, bytesRead);
-//            }
-//            smbFileInputStream.close();
-//            byteArrayOutputStream.close();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return byteArrayOutputStream;
-//    }
+        public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
+        ByteArrayOutputStream byteArrayOutputStream;
+        byte[] buffer = new byte[1024 * 1024];
+        try {
+            byteArrayOutputStream = new ByteArrayOutputStream();
+
+            int bytesRead;
+            while ((bytesRead = smbFileInputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+            smbFileInputStream.close();
+            byteArrayOutputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return byteArrayOutputStream;
+    }
 
 }
