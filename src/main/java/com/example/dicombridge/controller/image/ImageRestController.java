@@ -85,6 +85,7 @@ public class ImageRestController {
     }
 
     /** Seriesinsuids By Studyinsuid **/
+    @CrossOrigin({"http://loaclhost:8080", "http://192.168.30.86:8080"})
     @GetMapping("/getSeriesInsUids/{studyInsUid}")
     public List<String> getSeriesInsUids(@PathVariable String studyInsUid) {
         List<String> images = imageService.getSeriesInsUids(studyInsUid);
