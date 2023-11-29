@@ -29,7 +29,6 @@ public class StudyController {
     @GetMapping("/getStudies/{studykey}")
     public ResponseEntity<List<StudyResponseDto>> getStudiesByStudyKey(@PathVariable int studykey) {
         List<StudyResponseDto> studies = studyService.getStudiesByStudyKey(studykey);
-        System.out.println("studies:" +studies);
         if (studies != null && !studies.isEmpty()) {
             return new ResponseEntity<>(studies, HttpStatus.OK);
         } else {

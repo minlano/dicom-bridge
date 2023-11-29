@@ -35,5 +35,4 @@ public class StudyResponseDto {
         this.pbirthdatetime = study.getPbirthdatetime();
         this.studytime = study.getStudytime();
     }
-
 }

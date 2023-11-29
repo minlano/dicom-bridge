@@ -30,5 +30,4 @@ public class Image implements PathAndName {
     public Image(String seriesinsuid) {
         this.seriesinsuid = seriesinsuid;
     }
-
 }
