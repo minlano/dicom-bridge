@@ -131,7 +131,7 @@ public class ImageService {
         Pageable pageable = PageRequest.of(order-1,1);
         List<Image> images = imageRepository.findNthImageBySeriesinsuid(seriesinsuid, pageable);
         FileRead<Image> fileRead = new FileRead(imageConvert);
-        return fileRead.getFile(images);
+        return fileRead.getFile(images, 0);
     }
 
     /** Series Count **/
@@ -156,7 +156,7 @@ public class ImageService {
         FileRead<Image> fileRead = new FileRead(imageConvert);
         List<File> tempFiles = new ArrayList<>();
         for (int i = 0; i < images.size(); i++) {
-            tempFiles.add(fileRead.getFile(images));
+            tempFiles.add(fileRead.getFile(images, i));
         }
         return tempFiles;
     }

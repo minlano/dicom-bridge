@@ -20,21 +20,17 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(force = true)
-//@RequiredArgsConstructor
 public class FileRead<T> {
     private final ImageConvert imageConvert;
-
     public FileRead(ImageConvert imageConvert) {
         this.imageConvert = imageConvert;
     }
-
-    public <T extends PathAndName> File getFile(List<T> image) throws IOException {
-        SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(image.get(0));
+    public <T extends PathAndName> File getFile(List<T> image, int idx) throws IOException {
+        SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(image.get(idx));
         byte[] byteArray = imageConvert.convert2ByteArray(smbFileInputStream);
         File tempDcmFile = imageConvert.convert2DcmFile(byteArray);
         return tempDcmFile;
     }
-
     public Callable<ThumbnailWithFileDto> getFileStringThread(ThumbnailDto thumbnailDto) {
         Callable<ThumbnailWithFileDto> task = () -> {
             ThumbnailWithFileDto thumbnailWithFileDto = new ThumbnailWithFileDto(thumbnailDto);
@@ -48,7 +44,6 @@ public class FileRead<T> {
         };
         return task;
     }
-
     public <T extends PathAndName> ByteArrayOutputStream getBaos(T t) throws IOException {
         SmbFileInputStream smbFileInputStream = imageConvert.getSmbFileInputStream(t);
         ByteArrayOutputStream byteArrayOutputStream = imageConvert.convert2ByteArrayOutputStream(smbFileInputStream);

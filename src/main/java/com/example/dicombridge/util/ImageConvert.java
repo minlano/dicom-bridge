@@ -20,7 +20,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ImageConvert<T> {
     private final Storage storage;
-
     public <T extends PathAndName> SmbFileInputStream getSmbFileInputStream(T t) throws MalformedURLException, SmbException {
         SmbFile file = new SmbFile(String.join("/",
                             storage.getPROTOCOL(),
@@ -30,7 +29,6 @@ public class ImageConvert<T> {
                             storage.getCifsContext());
         return new SmbFileInputStream(file);
     }
-
     public byte[] convert2ByteArray(SmbFileInputStream smbFileInputStream) {
         byte[] buffer = new byte[1024 * 1024];
         try(ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
@@ -44,7 +42,6 @@ public class ImageConvert<T> {
             throw new RuntimeException(e);
         }
     }
-
     public File convert2DcmFile(byte[] fileBytes) throws IOException {
         File tempFile = File.createTempFile("tempfile", ".dcm");
         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
@@ -54,7 +51,6 @@ public class ImageConvert<T> {
         }
         return tempFile;
     }
-
     public String convertDcm2Jpg(File file) {
         try {
             Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
@@ -71,7 +67,6 @@ public class ImageConvert<T> {
         }
         return null;
     }
-
     public ByteArrayOutputStream convert2ByteArrayOutputStream(SmbFileInputStream smbFileInputStream) {
         ByteArrayOutputStream byteArrayOutputStream;
         byte[] buffer = new byte[1024 * 1024];

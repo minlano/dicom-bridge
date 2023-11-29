@@ -338,6 +338,7 @@
 <script src="/script/cornerstone_invert.js"></script>
 <script src="/script/cornerstone_tool.js"></script>
 <script src="/script/comparison.js"></script>
+<script src="/script/seriesImageLoad.js"></script>
 <script src="/script/imageLoad.js"></script>
 <script src="/script/viewer.js"></script>
 <script src="/script/report.js"></script>

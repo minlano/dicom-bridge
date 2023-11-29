@@ -122,7 +122,6 @@ public class ImageRestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", seriesInsUid + ".jpg");
-
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
 
