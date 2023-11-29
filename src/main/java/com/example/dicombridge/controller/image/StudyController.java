@@ -21,9 +21,7 @@ public class StudyController {
 
     @GetMapping("/getReportStatus")
     public ResponseEntity<List<Integer>> getReportStatus(@RequestParam int studykey) {
-
         List<Integer> reportStatusList = studyService.getReportStatusByStudyKey(studykey);
-
         return new ResponseEntity<>(reportStatusList, HttpStatus.OK);
     }
 

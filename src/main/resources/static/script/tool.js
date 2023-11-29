@@ -1,6 +1,6 @@
 /* cornerstoneTool */
 cornerstoneTools.init();
-var toolBox = document.getElementById('toolBox');
+let toolBox = document.getElementById('toolBox');
 
 function showToolBox() {
     toolBox.style.display = 'inline-block';
@@ -42,9 +42,7 @@ function activateRotate() {
 }
 
 function activateFlipRotate(element) {
-    //cornerstone.reset(element);
 
-    // 이벤트 핸들러 등록
     document.getElementById('hFlip').onclick = function () {
         flipHandler('hflip');
     };

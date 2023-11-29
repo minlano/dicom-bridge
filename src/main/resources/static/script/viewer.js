@@ -120,7 +120,6 @@ document.getElementById("title_btn").addEventListener("click", function() {
 function activateReset(id) {
     const element = document.getElementById(id);
     document.getElementById('reset').addEventListener('click', function (e) {
-        console.log("리셋");
         cornerstone.reset(element);
         const toolStateManager = cornerstoneTools.globalImageIdSpecificToolStateManager; // Reset Annotations
         toolStateManager.clear(element);

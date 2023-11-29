@@ -101,9 +101,9 @@ async function imageDisplay() {
             var id = `image_${i}_${j}`;
             div.id = id;
             div.style.height = "100%";
-            div.style.maxWidth ="100%";
+            div.style.maxWidth = "100%";
             div.style.width = "100%";
-            div.style.maxHeight ="100%";
+            div.style.maxHeight = "100%";
             div.setAttribute('order', FIRST_ORDER);
             imageContainer.appendChild(div);
             createWheelHandler(id, seriesInsUids[index]);
