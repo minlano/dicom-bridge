@@ -14,17 +14,17 @@ public class DicomBridgeApplication {
         SpringApplication.run(DicomBridgeApplication.class, args);
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/greeting-javaconfig").allowedOrigins("http://localhost:8080", "http://192.168.30.93:8080");
-                registry.addMapping("stuides/**").allowedOrigins("http://localhost:8080", "http://192.168.30.93:8080")
-                        .allowedMethods("GET", "POST")
-                        .allowedHeaders("Origin", "Content-Type", "Accept")
-                        .allowCredentials(true);
-            }
-        };
-    }
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/greeting-javaconfig").allowedOrigins("http://localhost:8080", "http://192.168.30.93:8080");
+//                registry.addMapping("stuides/**").allowedOrigins("http://localhost:8080", "http://192.168.30.93:8080")
+//                        .allowedMethods("GET", "POST")
+//                        .allowedHeaders("Origin", "Content-Type", "Accept")
+//                        .allowCredentials(true);
+//            }
+//        };
+//    }
 }

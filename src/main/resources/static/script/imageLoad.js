@@ -145,7 +145,8 @@ async function imageDisplayBySeriesInsUid(seriesInsUid) {
 
 async function findSeriesInsUidByStudyInsUid() {
     try {
-        let response = await axiosInstance.get("http://192.168.30.93:8080/studies/getSeriesInsUids/" + studyInsUid);
+        // let response = await axiosInstance.get("http://192.168.30.93:8080/studies/getSeriesInsUids/" + studyInsUid);
+        let response = await axiosInstance.get("/studies/getSeriesInsUids/" + studyInsUid);
         if (response.status === 200) {
             return response.data;
         }
@@ -157,7 +158,8 @@ async function findSeriesInsUidByStudyInsUid() {
 async function viewDicomBySeriesInsUid(id, seriesInsUid, order) {
     let whereDiv = 1;
     try {
-        let response = await axiosInstance.get("http://192.168.30.93:8080/studies/getSeriesInsUidIndex/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
+        // let response = await axiosInstance.get("http://192.168.30.93:8080/studies/getSeriesInsUidIndex/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
+        let response = await axiosInstance.get("/studies/getSeriesInsUidIndex/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
         if (response.status === 200)
             await displayDicomImage(response.data, id, seriesInsUid, order, whereDiv);
     } catch (error) {
@@ -289,7 +291,8 @@ async function handleScroll(event, id, seriesInsUid) {
 
 async function countBySeriesInsUid(seriesInsUid) {
     try {
-        let response = await axiosInstance.get("http://192.168.30.86:8080/studies/getSeriesInsUidCount/" + seriesInsUid);
+        // let response = await axiosInstance.get("http://192.168.30.86:8080/studies/getSeriesInsUidCount/" + seriesInsUid);
+        let response = await axiosInstance.get("/studies/getSeriesInsUidCount/" + seriesInsUid);
         if (response.status === 200)
             return response.data;
     } catch (error) {
