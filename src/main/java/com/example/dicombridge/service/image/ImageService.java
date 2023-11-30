@@ -43,7 +43,7 @@ import java.util.zip.ZipOutputStream;
 public class ImageService {
     private final ImageRepository imageRepository;
     private final ImageConvert imageConvert;
-    private static final int NUMBER_OF_THREADS = 4;
+    private static final int NUMBER_OF_THREADS = 10;
     private static ExecutorService executor;
 
     @PostConstruct

@@ -615,7 +615,7 @@ async function imageDisplayComparison(studyinsuidComparison) {
 
 async function findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison) {
     try {
-        let response = await axiosInstance.get("http://192.168.30.93:8080/studies/getSeriesInsUidsComparison/" + studyinsuidComparison);
+        let response = await axiosInstance.get("/studies/getSeriesInsUidsComparison/" + studyinsuidComparison);
         if (response.status === 200) {
             return response.data;
         }
@@ -627,7 +627,7 @@ async function findSeriesInsUidByStudyInsUidComparison(studyinsuidComparison) {
 async function viewDicomBySeriesInsUidComparison(id, seriesInsUid, order) {
     var wherediv = "second";
     try {
-        let response = await axiosInstance.get("http://192.168.30.93:8080/studies/getSeriesInsUidIndexComparison/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
+        let response = await axiosInstance.get("/studies/getSeriesInsUidIndexComparison/" + seriesInsUid + "/" + order, {responseType: 'arraybuffer'});
         if (response.status === 200)
             // console.log(response.data);
             await displayDicomImage(response.data, id, seriesInsUid, order, wherediv);

@@ -37,18 +37,18 @@
                 </div>
                 <div>Report</div>
             </li>
-            <li id="settings_btn">
-                <div class="image-container">
-                    <img class="normal-image" src="/images/settings.png"  alt="settings">
-                    <img class="hover-image" src="/images/settings_click.png"  alt="settings">
-                </div>
-            </li>
-            <li id="logout_btn">
-                <div class="image-container">
-                    <img class="normal-image" src="/images/logout.png"  alt="logout">
-                    <img class="hover-image" src="/images/logout_click.png"  alt="logout">
-                </div>
-            </li>
+<%--            <li id="settings_btn">--%>
+<%--                <div class="image-container">--%>
+<%--                    <img class="normal-image" src="/images/settings.png"  alt="settings">--%>
+<%--                    <img class="hover-image" src="/images/settings_click.png"  alt="settings">--%>
+<%--                </div>--%>
+<%--            </li>--%>
+<%--            <li id="logout_btn">--%>
+<%--                <div class="image-container">--%>
+<%--                    <img class="normal-image" src="/images/logout.png"  alt="logout">--%>
+<%--                    <img class="hover-image" src="/images/logout_click.png"  alt="logout">--%>
+<%--                </div>--%>
+<%--            </li>--%>
         </ul>
     </nav>
     <section id="viewer-contents">
